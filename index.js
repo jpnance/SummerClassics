@@ -9,8 +9,16 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('view engine', 'pug');
 
 app.get('/', function(request, response) {
-	response.render('placeholder');
+	var Team = require('./models/Team');
+
+	var teams = Team.find().exec(function(error, teams) {
+		response.render('placeholder', { teams: teams });
+	});
 });
+
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_URI);
 
 process.env.PORT = process.env.PORT || 3333;
 app.listen(process.env.PORT, function() { console.log('yes, listening on port ' + process.env.PORT) });
