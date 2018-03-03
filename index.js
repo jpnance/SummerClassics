@@ -9,10 +9,10 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('view engine', 'pug');
 
 app.get('/', function(request, response) {
-	var Team = require('./models/Team');
+	var Game = require('./models/Game');
 
-	var teams = Team.find().exec(function(error, teams) {
-		response.render('placeholder', { teams: teams });
+	var games = Game.find().populate('away.team').populate('home.team').exec(function(error, games) {
+		response.render('placeholder', { games: games });
 	});
 });
 
