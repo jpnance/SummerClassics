@@ -6,7 +6,9 @@ var teamSchema = new Schema({
 	name: { type: String, required: true },
 	abbreviation: { type: String, required: true },
 	locationName: { type: String, required: true },
-	teamName: { type: String, required: true }
+	teamName: { type: String, required: true },
+	league: { type: String, required: true },
+	division: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Team', teamSchema);

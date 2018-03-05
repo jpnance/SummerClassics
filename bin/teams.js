@@ -28,6 +28,15 @@ request.get('https://statsapi.mlb.com/api/v1/teams', function(error, response) {
 				teamName: team.teamName
 			};
 
+			if (team.league.id == 103) {
+				newTeam.league = 'AL';
+			}
+			else if (team.league.id == 104) {
+				newTeam.league = 'NL';
+			}
+
+			newTeam.division = team.division.name.split(' ')[2];
+
 			teamPromises.push(Team.findByIdAndUpdate(team.id, newTeam, { upsert: true }));
 		}
 	});
