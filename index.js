@@ -8,6 +8,8 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 app.set('view engine', 'pug');
 
+app.locals.dateFormat = require('dateformat');
+
 require('./routes')(app);
 
 var mongoose = require('mongoose');
