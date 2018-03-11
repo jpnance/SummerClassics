@@ -9,7 +9,7 @@ mongoose.connect(process.env.MONGODB_URI);
 
 var dateRange = {
 	start: new Date('2018-03-29 00:00:00'),
-	end: new Date('2018-03-29 00:00:00')
+	end: new Date('2018-09-30 00:00:00')
 };
 
 var days = (dateRange.end - dateRange.start) / 86400000;
