@@ -9,10 +9,16 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('view engine', 'pug');
 
 app.get('/', function(request, response) {
-	var Game = require('./models/Game');
+	var Team = require('./models/Team');
 
-	var games = Game.find().populate('away.team').populate('home.team').exec(function(error, games) {
-		response.render('placeholder', { games: games });
+	var data = [
+		Team.find().sort('league division teamName')
+	];
+
+	Promise.all(data).then(function(values) {
+		var teams = values[0];
+
+		response.render('placeholder', { teams: teams });
 	});
 });
 
