@@ -18,7 +18,7 @@ html
 			p.lead For real, gonna be good.
 
 		div.col-8.offset-2
-			table.table
-				each team in teams
-					tr
-						td #{team.name}
+			each game in games
+				div.col-8
+					h6 #{game.startTime}
+					h5 #{game.away.team.teamName} at #{game.home.team.teamName}
