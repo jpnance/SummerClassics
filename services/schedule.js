@@ -9,7 +9,7 @@ module.exports.showAll = function(request, response) {
 	Promise.all(data).then(function(values) {
 		var games = values[0];
 
-		response.render('placeholder', { games: games });
+		response.render('index', { games: games });
 	});
 };
 
@@ -25,6 +25,6 @@ module.exports.showAllForTeam = function(request, response) {
 	Promise.all(data).then(function(values) {
 		var games = values[0];
 
-		response.render('placeholder', { games: games });
+		response.render('index', { games: games });
 	});
 };
