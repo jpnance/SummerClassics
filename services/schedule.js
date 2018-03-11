@@ -25,6 +25,6 @@ module.exports.showAllForTeam = function(request, response) {
 	Promise.all(data).then(function(values) {
 		var games = values[0];
 
-		response.render('placeholder', { games: games });
+		response.render('placeholder', { dateFormat: require('dateformat'), games: games });
 	});
 };

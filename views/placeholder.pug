@@ -20,5 +20,5 @@ html
 		div.col-8.offset-2
 			each game in games
 				div.col-8
-					h6 #{game.startTime}
+					h6 #{dateFormat(game.startTime, 'mmmm dS', true)}
 					h5 #{game.away.team.teamName} at #{game.home.team.teamName}
