@@ -8,19 +8,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 app.set('view engine', 'pug');
 
-app.get('/', function(request, response) {
-	var Team = require('./models/Team');
-
-	var data = [
-		Team.find().sort('league division teamName')
-	];
-
-	Promise.all(data).then(function(values) {
-		var teams = values[0];
-
-		response.render('placeholder', { teams: teams });
-	});
-});
+require('./routes')(app);
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
