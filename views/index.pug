@@ -4,15 +4,8 @@ block title
 	+title('Big Board')
 
 block content
-	div.jumbotron.col-8.offset-2
-		h1.display-4 Summer Classics!
-		p.lead This is going to be an excellent game. Really the greatest the nation has ever seen, maybe even the best the world has ever seen. Just tremendous.
-		hr.my-4
-		p.lead For real, gonna be good.
-
-	div.col-8.offset-2
-		div.row
-			each game in games
-				div.col-3
-					h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
-					h5 #{game.away.team.teamName} at #{game.home.team.teamName}
+	div.row
+		each game in games
+			div.col-xs-12.col-sm-6.col-md-3
+				h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
+				h5 #{game.away.team.teamName} at #{game.home.team.teamName}
