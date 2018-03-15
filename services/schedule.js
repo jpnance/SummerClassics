@@ -34,7 +34,7 @@ module.exports.showAllForDate = function(request, response) {
 	var dateString;
 
 	if (!request.params.date) {
-		dateString = dateFormat('yyyy-mm-dd', true);
+		dateString = dateFormat(new Date(), 'yyyy-mm-dd', true);
 	}
 	else {
 		dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
