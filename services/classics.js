@@ -1,13 +1,24 @@
+var Team = require('../models/Team');
 var Classic = require('../models/Classic');
 
 module.exports.showAllForUser = function(request, response) {
 	var data = [
-		Classic.find().populate('team')
+		Team.find().sort('division league teamName'),
+		Classic.find().populate('team picks')
 	];
 
 	Promise.all(data).then(function(values) {
-		var classics = values[0];
+		var teams = values[0];
+		var classics = values[1];
 
-		response.render('classics', { classics: classics });
+		teams.forEach(function(team) {
+			classics.forEach(function(classic) {
+				if (classic.team.abbreviation == team.abbreviation) {
+					team.classic = classic;
+				}
+			});
+		});
+
+		response.render('classics', { teams: teams });
 	});
 };

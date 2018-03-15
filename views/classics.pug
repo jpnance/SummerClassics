@@ -4,5 +4,7 @@ block title
 	+title('Picks')
 
 block content
-	each classic in classics
-		h1 #{classic.team.teamName}
+	each team in teams
+		h4 #{team.teamName}
+		if team.classic
+			h5 #{team.classic.picks[0]}
