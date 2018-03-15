@@ -14,5 +14,5 @@ block content
 		div.row
 			each game in games
 				div.col-3
-					h6 #{dateFormat(game.startTime, 'mmmm dS')} at #{dateFormat(game.startTime, 'h:MMtt')} ET
+					h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
 					h5 #{game.away.team.teamName} at #{game.home.team.teamName}
