@@ -39,22 +39,32 @@ module.exports.showAllForUser = function(request, response) {
 module.exports.pick = function(request, response) {
 	var season = (new Date()).getFullYear();
 	var data = [
+		Classic.findOne({ season: season, picks: request.params.gameId }),
 		Classic.findOne({ season: season, team: request.params.teamId }),
 		Game.findById(request.params.gameId)
 	];
 
 	Promise.all(data).then(function(values) {
-		var classic = values[0];
-		var game = values[1];
+		var classicCollision = values[0];
+		var classic = values[1];
+		var game = values[2];
 
-		if (!classic) {
-			classic = new Classic({ season: season, team: request.params.teamId });
+		if (classicCollision) {
+			response.sendStatus(500);
 		}
+		else if (game.hasStarted()) {
+			response.sendStatus(500);
+		}
+		else {
+			if (!classic) {
+				classic = new Classic({ season: season, team: request.params.teamId });
+			}
 
-		classic.pick(game._id);
+			classic.pick(game._id);
 
-		classic.save(function() {
-			response.redirect('/picks');
-		});
+			classic.save(function() {
+				response.redirect('/picks');
+			});
+		}
 	});
 };
