@@ -46,6 +46,9 @@ module.exports.showAllForDate = function(request, response) {
 	var tomorrow = new Date(today);
 	tomorrow.setHours(today.getHours() + 18);
 
+	var yesterday = new Date(today);
+	yesterday.setHours(today.getHours() - 18);
+
 	var data = [
 		Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team')
 	];
@@ -53,6 +56,6 @@ module.exports.showAllForDate = function(request, response) {
 	Promise.all(data).then(function(values) {
 		var games = values[0];
 
-		response.render('index', { games: games });
+		response.render('index', { games: games, yesterday: yesterday, today: today, tomorrow: tomorrow });
 	});
 };

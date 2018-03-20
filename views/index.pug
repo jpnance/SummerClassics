@@ -5,6 +5,14 @@ block title
 
 block content
 	div.row
+		div.col-12
+			ul.nav.justify-content-center
+				li.nav-item
+					a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd')) #{dateFormat(yesterday, 'mmmm dS')}
+				li.nav-item
+					a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd')) #{dateFormat(today, 'mmmm dS')}
+				li.nav-item
+					a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd')) #{dateFormat(tomorrow, 'mmmm dS')}
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-3.mb-3
 				h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
