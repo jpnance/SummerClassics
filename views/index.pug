@@ -6,6 +6,8 @@ block title
 block content
 	div.row
 		each game in games
-			div.col-xs-12.col-sm-6.col-md-3
+			div.col-xs-12.col-sm-6.col-md-3.mb-3
 				h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
 				h5 #{game.away.team.teamName} at #{game.home.team.teamName}
+				a(href='/pick/' + game.away.team._id + '/' + game._id) #{game.away.team.abbreviation}
+				a(href='/pick/' + game.home.team._id + '/' + game._id) #{game.home.team.abbreviation}

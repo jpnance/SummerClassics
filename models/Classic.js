@@ -23,4 +23,14 @@ var classicSchema = new Schema({
 	}
 });
 
+classicSchema.methods.pick = function(gameId) {
+	if (this.picks.indexOf(gameId) > -1) {
+		return false;
+	}
+
+	this.picks.push(gameId);
+
+	return true;
+};
+
 module.exports = mongoose.model('Classic', classicSchema);

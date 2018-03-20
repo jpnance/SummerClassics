@@ -4,7 +4,20 @@ block title
 	+title('Picks')
 
 block content
-	each team in teams
-		h4 #{team.teamName}
-		if team.classic
-			h5 #{team.classic.picks[0]}
+	table
+		tr
+			th
+
+			each i in [1, 2, 3, 4, 5, 6, 7]
+				th.px-2
+					span.d-none.d-sm-inline Game #{i}
+					span.d-sm-none G#{i}
+
+		each team in teams
+			tr
+				td.py-2 #{team.teamName}
+				if team.classic
+					each i in [0, 1, 2, 3, 4, 5, 6]
+						td
+							if team.classic.picks[i]
+								| #{team.classic.picks[i].opponent.abbreviation}

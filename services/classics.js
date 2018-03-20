@@ -1,10 +1,11 @@
+var Game = require('../models/Game');
 var Team = require('../models/Team');
 var Classic = require('../models/Classic');
 
 module.exports.showAllForUser = function(request, response) {
 	var data = [
 		Team.find().sort('division league teamName'),
-		Classic.find().populate('team picks')
+		Classic.find().populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
 	];
 
 	Promise.all(data).then(function(values) {
@@ -15,10 +16,45 @@ module.exports.showAllForUser = function(request, response) {
 			classics.forEach(function(classic) {
 				if (classic.team.abbreviation == team.abbreviation) {
 					team.classic = classic;
+					return;
+				}
+			});
+		});
+
+		classics.forEach(function(classic) {
+			classic.picks.forEach(function(pick) {
+				if (pick.away.team._id == classic.team._id) {
+					pick.opponent = pick.home.team;
+				}
+				else if (pick.home.team._id == classic.team._id) {
+					pick.opponent = pick.away.team;
 				}
 			});
 		});
 
 		response.render('classics', { teams: teams });
+	});
+};
+
+module.exports.pick = function(request, response) {
+	var season = (new Date()).getFullYear();
+	var data = [
+		Classic.findOne({ season: season, team: request.params.teamId }),
+		Game.findById(request.params.gameId)
+	];
+
+	Promise.all(data).then(function(values) {
+		var classic = values[0];
+		var game = values[1];
+
+		if (!classic) {
+			classic = new Classic({ season: season, team: request.params.teamId });
+		}
+
+		classic.pick(game._id);
+
+		classic.save(function() {
+			response.redirect('/picks');
+		});
 	});
 };
