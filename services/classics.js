@@ -60,11 +60,19 @@ module.exports.pick = function(request, response) {
 				classic = new Classic({ season: season, team: request.params.teamId });
 			}
 
-			classic.pick(game._id);
+			if (classic.isFinal()) {
+				response.sendStatus(500);
+			}
+			else if (classic.picks.length >= 7) {
+				response.sendStatus(500);
+			}
+			else {
+				classic.pick(game._id);
 
-			classic.save(function() {
-				response.redirect('/picks');
-			});
+				classic.save(function() {
+					response.redirect('/picks');
+				});
+			}
 		}
 	});
 };

@@ -1,7 +1,7 @@
 var request = require('superagent');
 
 var Game = require('../models/Game');
-var Team = require('../models/Team');
+var Classic = require('../models/Classic');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -60,6 +60,75 @@ Game.find().sort('startTime').exec(function(error, games) {
 	});
 
 	Promise.all(gamePromises).then(function() {
-		mongoose.disconnect();
+		Classic.find().populate('picks').exec(function(error, classics) {
+			var classicPromises = [];
+
+			classics.forEach(function(classic) {
+				classicPromises.push(new Promise(function(resolve, reject) {
+					classic.record.wins = 0;
+					classic.record.losses = 0;
+
+					classic.picks.forEach(function(pick) {
+						if (pick.isFinal()) {
+							if ((pick.away.team == classic.team && pick.away.winner) || (pick.home.team == classic.team && pick.home.winner)) {
+								classic.record.wins++;
+							}
+							else if ((pick.away.team == classic.team && !pick.away.winner) || (pick.home.team == classic.team && !pick.home.winner)) {
+								classic.record.losses++;
+							}
+						}
+					});
+
+					if (classic.record.wins == 4 || classic.record.losses == 4) {
+						switch (classic.record.wins - classic.record.losses) {
+							case 4:
+								classic.score.final = 16;
+								break;
+
+							case 3:
+								classic.score.final = 8;
+								break;
+
+							case 2:
+								classic.score.final = 4;
+								break;
+
+							case 1:
+								classic.score.final = 2;
+								break;
+
+							case -1:
+								classic.score.final = -1;
+								break;
+
+							case -2:
+								classic.score.final = -2;
+								break;
+
+							case -3:
+								classic.score.final = -4;
+								break;
+
+							case -4:
+								classic.score.final = -8;
+								break;
+						}
+					}
+					else {
+						classic.score.potential = Math.pow(2, 4 - classic.record.losses);
+					}
+
+					classic.save(function(error) {
+						if (!error) {
+							resolve('good');
+						}
+					});
+				}));
+			});
+
+			Promise.all(classicPromises).then(function() {
+				mongoose.disconnect();
+			});
+		});
 	});
 });

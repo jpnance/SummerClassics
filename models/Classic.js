@@ -23,6 +23,10 @@ var classicSchema = new Schema({
 	}
 });
 
+classicSchema.methods.isFinal = function() {
+	return this.record.wins == 4 || this.record.losses == 4;
+};
+
 classicSchema.methods.pick = function(gameId) {
 	if (this.picks.indexOf(gameId) > -1) {
 		return false;
