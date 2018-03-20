@@ -51,3 +51,13 @@
     "abstractGameCode": "P"
 
 },
+
+
+"status": {
+
+	"abstractGameState": "Final",
+	"codedGameState": "FT",
+	"detailedState": "Final",
+	"statusCode": "FT"
+
+},
