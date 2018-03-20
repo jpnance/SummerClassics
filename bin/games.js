@@ -7,21 +7,18 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
-Game.find().sort('startTime').exec(function(error, games) {
+Game.find({ status: { '$ne': 'F' }, startTime: { '$lt': new Date() } }).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
 	games.forEach(function(game) {
 		gamePromises.push(new Promise(function(resolve, reject) {
-			request.get('https://statsapi.mlb.com/api/v1/game/' + game._id + '/feed/live', function(error, response) {
+			request.get('https://statsapi.mlb.com/api/v1.1/game/' + game._id + '/feed/live', function(error, response) {
 				var data = JSON.parse(response.text);
 
-				if (!data.liveData || !data.liveData.boxscore || !data.liveData.boxscore.teams) {
+				if (!data.liveData || !data.liveData.linescore || !data.liveData.linescore.teams) {
 					resolve('fine');
 					return;
 				}
-
-				var awayTeam = data.liveData.boxscore.teams.away;
-				var homeTeam = data.liveData.boxscore.teams.home;
 
 				if (data.gameData.probablePitchers) {
 					if (data.gameData.probablePitchers.away) {
@@ -35,8 +32,8 @@ Game.find().sort('startTime').exec(function(error, games) {
 				game.status = data.gameData.status.statusCode;
 
 				if (game.status == 'I' || game.status == 'F') {
-					game.away.score = data.liveData.linescore.away.runs;
-					game.home.score = data.liveData.linescore.home.runs;
+					game.away.score = data.liveData.linescore.teams.away.runs;
+					game.home.score = data.liveData.linescore.teams.home.runs;
 				}
 
 				if (game.status == 'F') {
