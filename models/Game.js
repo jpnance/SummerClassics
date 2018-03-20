@@ -9,11 +9,15 @@ var gameSchema = new Schema({
 	startTime: { type: Date },
 	away: {
 		team: { type: Number, ref: 'Team', required: true },
-		probablePitcher: { type: Number, ref: 'Player' }
+		probablePitcher: { type: Number, ref: 'Player' },
+		score: { type: Number, default: 0 },
+		winner: { type: Boolean }
 	},
 	home: {
 		team: { type: Number, ref: 'Team', required: true },
-		probablePitcher: { type: Number, ref: 'Player' }
+		probablePitcher: { type: Number, ref: 'Player' },
+		score: { type: Number, default: 0 },
+		winner: { type: Boolean }
 	},
 	status: { type: String, required: true }
 });

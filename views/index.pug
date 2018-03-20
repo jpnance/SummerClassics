@@ -15,10 +15,25 @@ block content
 					a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd')) #{dateFormat(tomorrow, 'mmmm dS')}
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-3.mb-4
-				h6 #{dateFormat(game.startTime, 'mmmm dS', true)} at #{dateFormat(game.startTime, 'h:MMtt')} ET
-				h5 #{game.away.team.teamName} at #{game.home.team.teamName}
-				ul.nav
-					li.nav-item
-						a.nav-link(href='/pick/' + game.away.team._id + '/' + game._id) #{game.away.team.abbreviation}
-					li.nav-item
-						a.nav-link(href='/pick/' + game.home.team._id + '/' + game._id) #{game.home.team.abbreviation}
+				if !game.hasStarted()
+					h6 #{dateFormat(game.startTime, 'h:MMtt')} ET
+				else if game.isFinal()
+					h6 Final
+				else
+					h6 Live
+				h5
+					| #{game.away.team.teamName}
+					if game.hasStarted()
+						|
+						| #{game.away.score}
+				h5
+					| #{game.home.team.teamName}
+					if game.hasStarted()
+						|
+						| #{game.home.score}
+				if !game.hasStarted()
+					ul.nav
+						li.nav-item
+							a.nav-link(href='/pick/' + game.away.team._id + '/' + game._id) #{game.away.team.abbreviation}
+						li.nav-item
+							a.nav-link(href='/pick/' + game.home.team._id + '/' + game._id) #{game.home.team.abbreviation}
