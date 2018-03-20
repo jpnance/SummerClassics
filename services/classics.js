@@ -24,10 +24,10 @@ module.exports.showAllForUser = function(request, response) {
 		classics.forEach(function(classic) {
 			classic.picks.forEach(function(pick) {
 				if (pick.away.team._id == classic.team._id) {
-					pick.opponent = pick.home.team;
+					pick.opponent = pick.home;
 				}
 				else if (pick.home.team._id == classic.team._id) {
-					pick.opponent = pick.away.team;
+					pick.opponent = pick.away;
 				}
 			});
 		});

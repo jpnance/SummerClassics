@@ -20,4 +20,9 @@ block content
 					each i in [0, 1, 2, 3, 4, 5, 6]
 						td
 							if team.classic.picks[i]
-								| #{team.classic.picks[i].opponent.abbreviation}
+								if !team.classic.picks[i].isFinal()
+									| #{team.classic.picks[i].opponent.team.abbreviation}
+								else if !team.classic.picks[i].opponent.winner
+									strong #{team.classic.picks[i].opponent.team.abbreviation}
+								else
+									strike #{team.classic.picks[i].opponent.team.abbreviation}
