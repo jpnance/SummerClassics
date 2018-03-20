@@ -37,4 +37,14 @@ classicSchema.methods.pick = function(gameId) {
 	return true;
 };
 
+classicSchema.methods.unpick = function(gameId) {
+	if (this.picks.indexOf(gameId) == -1) {
+		return false;
+	}
+
+	this.picks.splice(this.picks.indexOf(gameId), 1);
+
+	return true;
+};
+
 module.exports = mongoose.model('Classic', classicSchema);

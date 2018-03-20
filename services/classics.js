@@ -39,40 +39,47 @@ module.exports.showAllForUser = function(request, response) {
 module.exports.pick = function(request, response) {
 	var season = (new Date()).getFullYear();
 	var data = [
-		Classic.findOne({ season: season, picks: request.params.gameId }),
 		Classic.findOne({ season: season, team: request.params.teamId }),
+		Classic.findOne({ season: season, picks: request.params.gameId }),
 		Game.findById(request.params.gameId)
 	];
 
 	Promise.all(data).then(function(values) {
-		var classicCollision = values[0];
-		var classic = values[1];
+		var classic = values[0];
+		var classicCollision = values[1];
 		var game = values[2];
 
-		if (classicCollision) {
+		var classicPromises = [];
+
+		if (game.hasStarted()) {
 			response.sendStatus(500);
+			return;
 		}
-		else if (game.hasStarted()) {
+
+		if (!classic) {
+			classic = new Classic({ season: season, team: request.params.teamId });
+		}
+
+		if (classic.isFinal()) {
 			response.sendStatus(500);
+			return;
+		}
+		else if (classic.picks.length >= 7) {
+			response.sendStatus(500);
+			return;
 		}
 		else {
-			if (!classic) {
-				classic = new Classic({ season: season, team: request.params.teamId });
-			}
-
-			if (classic.isFinal()) {
-				response.sendStatus(500);
-			}
-			else if (classic.picks.length >= 7) {
-				response.sendStatus(500);
-			}
-			else {
-				classic.pick(game._id);
-
-				classic.save(function() {
-					response.redirect('/picks');
-				});
-			}
+			classic.pick(game._id);
+			classicPromises.push(classic.save());
 		}
+
+		if (classicCollision) {
+			classicCollision.unpick(game._id);
+			classicPromises.push(classicCollision.save());
+		}
+
+		Promise.all(classicPromises).then(function() {
+			response.redirect('/picks');
+		});
 	});
 };
