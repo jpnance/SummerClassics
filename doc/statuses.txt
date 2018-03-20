@@ -1,0 +1,53 @@
+"status": {
+
+    "abstractGameState": "Final",
+    "codedGameState": "F",
+    "detailedState": "Final",
+    "statusCode": "F",
+    "abstractGameCode": "F"
+
+},
+
+
+"status": {
+
+    "abstractGameState": "Live",
+    "codedGameState": "I",
+    "detailedState": "In Progress",
+    "statusCode": "I",
+    "abstractGameCode": "L"
+
+},
+
+
+"status": {
+
+    "abstractGameState": "Live",
+    "codedGameState": "P",
+    "detailedState": "Warmup",
+    "statusCode": "PW",
+    "abstractGameCode": "L"
+
+},
+
+
+"status": {
+
+    "abstractGameState": "Preview",
+    "codedGameState": "P",
+    "detailedState": "Pre-Game",
+    "statusCode": "P",
+    "abstractGameCode": "P"
+
+},
+
+
+"status": {
+
+    "abstractGameState": "Preview",
+    "codedGameState": "S",
+    "detailedState": "Scheduled",
+    "statusCode": "S",
+    "abstractGameCode": "P"
+
+},
