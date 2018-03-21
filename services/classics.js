@@ -40,55 +40,56 @@ module.exports.showAllForUser = function(request, response) {
 };
 
 module.exports.pick = function(request, response) {
-	var season = (new Date()).getFullYear();
-	var data = [
-		Classic.findOne({ season: season, team: request.params.teamId }),
-		Classic.findOne({ season: season, team: { '$ne': request.params.teamId }, picks: request.params.gameId }),
-		Game.findById(request.params.gameId)
-	];
+	Session.withActiveSession(request, function(error, session) {
+		var data = [
+			Classic.findOne({ season: process.env.SEASON, user: session.user._id, team: request.params.teamId }),
+			Classic.findOne({ season: process.env.SEASON, user: session.user._id, team: { '$ne': request.params.teamId }, picks: request.params.gameId }),
+			Game.findById(request.params.gameId)
+		];
 
-	Promise.all(data).then(function(values) {
-		var classic = values[0];
-		var classicCollision = values[1];
-		var game = values[2];
+		Promise.all(data).then(function(values) {
+			var classic = values[0];
+			var classicCollision = values[1];
+			var game = values[2];
 
-		var classicPromises = [];
+			var classicPromises = [];
 
-		if (game.hasStarted()) {
-			response.sendStatus(500);
-			return;
-		}
-
-		if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
-			response.sendStatus(500);
-			return;
-		}
-
-		if (!classic) {
-			classic = new Classic({ season: season, team: request.params.teamId });
-		}
-
-		if (classicCollision) {
-			classicCollision.unpick(game._id);
-			classicPromises.push(classicCollision.save());
-		}
-
-		Promise.all(classicPromises).then(function() {
-			if (classic.isFinal()) {
+			if (game.hasStarted()) {
 				response.sendStatus(500);
 				return;
 			}
-			else if (classic.picks.length >= 7) {
+
+			if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
 				response.sendStatus(500);
 				return;
 			}
-			else {
-				classic.pick(game._id);
-				classicPromises.push(classic.save());
+
+			if (!classic) {
+				classic = new Classic({ season: process.env.SEASON, user: session.user._id, team: request.params.teamId });
+			}
+
+			if (classicCollision) {
+				classicCollision.unpick(game._id);
+				classicPromises.push(classicCollision.save());
 			}
 
 			Promise.all(classicPromises).then(function() {
-				response.redirect('/picks');
+				if (classic.isFinal()) {
+					response.sendStatus(500);
+					return;
+				}
+				else if (classic.picks.length >= 7) {
+					response.sendStatus(500);
+					return;
+				}
+				else {
+					classic.pick(game._id);
+					classicPromises.push(classic.save());
+				}
+
+				Promise.all(classicPromises).then(function() {
+					response.redirect('/picks');
+				});
 			});
 		});
 	});
