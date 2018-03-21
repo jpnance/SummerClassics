@@ -94,3 +94,45 @@ module.exports.pick = function(request, response) {
 		});
 	});
 };
+
+module.exports.unpick = function(request, response) {
+	Session.withActiveSession(request, function(error, session) {
+		var data = [
+			Classic.findOne({ season: process.env.SEASON, user: session.user._id, team: request.params.teamId }),
+			Game.findById(request.params.gameId)
+		];
+
+		Promise.all(data).then(function(values) {
+			var classic = values[0];
+			var game = values[1];
+
+			var classicPromises = [];
+
+			if (game.hasStarted()) {
+				response.sendStatus(500);
+				return;
+			}
+
+			if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
+				response.sendStatus(500);
+				return;
+			}
+
+			if (!classic) {
+				response.redirect('/picks');
+			}
+
+			if (classic.isFinal()) {
+				response.sendStatus(500);
+				return;
+			}
+
+			classic.unpick(game._id);
+			classicPromises.push(classic.save());
+
+			Promise.all(classicPromises).then(function() {
+				response.redirect('/picks');
+			});
+		});
+	});
+};

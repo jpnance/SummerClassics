@@ -1,6 +1,8 @@
 var Session = require('../models/Session');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
+var Classic = require('../models/Classic');
+
 var dateFormat = require('dateformat');
 
 module.exports.showAll = function(request, response) {
@@ -52,13 +54,39 @@ module.exports.showAllForDate = function(request, response) {
 		yesterday.setHours(today.getHours() - 18);
 
 		var data = [
-			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team')
+			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team'),
+			Classic.find({ season: process.env.SEASON, user: session.user._id }).populate('team')
 		];
 
 		Promise.all(data).then(function(values) {
 			var games = values[0];
+			var classics = values[1];
 
-			response.render('index', { session: session, games: games, yesterday: yesterday, today: today, tomorrow: tomorrow });
+			games.forEach(function(game) {
+				classics.forEach(function(classic) {
+					if (classic.picks.indexOf(game._id) > -1) {
+						game.classic = classic;
+					}
+
+					if (classic.team._id == game.away.team._id) {
+						game.away.team.classic = classic;
+					}
+
+					if (classic.team._id == game.home.team._id) {
+						game.home.team.classic = classic;
+					}
+				});
+			});
+
+			var responseData = {
+				session: session,
+				games: games,
+				yesterday: yesterday,
+				today: today,
+				tomorrow: tomorrow
+			};
+
+			response.render('index', responseData);
 		});
 	});
 };

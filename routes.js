@@ -22,4 +22,5 @@ module.exports = function(app) {
 
 	app.get('/picks', classics.showAllForUser);
 	app.get('/pick/:teamId/:gameId', classics.pick);
+	app.get('/unpick/:teamId/:gameId', classics.unpick);
 };
