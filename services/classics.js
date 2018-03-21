@@ -40,7 +40,7 @@ module.exports.pick = function(request, response) {
 	var season = (new Date()).getFullYear();
 	var data = [
 		Classic.findOne({ season: season, team: request.params.teamId }),
-		Classic.findOne({ season: season, picks: request.params.gameId }),
+		Classic.findOne({ season: season, team: { '$ne': request.params.teamId }, picks: request.params.gameId }),
 		Game.findById(request.params.gameId)
 	];
 
@@ -56,21 +56,13 @@ module.exports.pick = function(request, response) {
 			return;
 		}
 
-		if (!classic) {
-			classic = new Classic({ season: season, team: request.params.teamId });
+		if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
+			response.sendStatus(500);
+			return;
 		}
 
-		if (classic.isFinal()) {
-			response.sendStatus(500);
-			return;
-		}
-		else if (classic.picks.length >= 7) {
-			response.sendStatus(500);
-			return;
-		}
-		else {
-			classic.pick(game._id);
-			classicPromises.push(classic.save());
+		if (!classic) {
+			classic = new Classic({ season: season, team: request.params.teamId });
 		}
 
 		if (classicCollision) {
@@ -79,7 +71,22 @@ module.exports.pick = function(request, response) {
 		}
 
 		Promise.all(classicPromises).then(function() {
-			response.redirect('/picks');
+			if (classic.isFinal()) {
+				response.sendStatus(500);
+				return;
+			}
+			else if (classic.picks.length >= 7) {
+				response.sendStatus(500);
+				return;
+			}
+			else {
+				classic.pick(game._id);
+				classicPromises.push(classic.save());
+			}
+
+			Promise.all(classicPromises).then(function() {
+				response.redirect('/picks');
+			});
 		});
 	});
 };
