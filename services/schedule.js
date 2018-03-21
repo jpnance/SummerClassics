@@ -1,3 +1,4 @@
+var Session = require('../models/Session');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
 var dateFormat = require('dateformat');
@@ -31,31 +32,33 @@ module.exports.showAllForTeam = function(request, response) {
 };
 
 module.exports.showAllForDate = function(request, response) {
-	var dateString;
+	Session.withActiveSession(request, function(error, session) {
+		var dateString;
 
-	if (!request.params.date) {
-		dateString = dateFormat(new Date(), 'yyyy-mm-dd', true);
-	}
-	else {
-		dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
-	}
+		if (!request.params.date) {
+			dateString = dateFormat(new Date(), 'yyyy-mm-dd', true);
+		}
+		else {
+			dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
+		}
 
-	var today = new Date(dateString);
-	today.setHours(today.getHours() + 14);
+		var today = new Date(dateString);
+		today.setHours(today.getHours() + 14);
 
-	var tomorrow = new Date(today);
-	tomorrow.setHours(today.getHours() + 18);
+		var tomorrow = new Date(today);
+		tomorrow.setHours(today.getHours() + 18);
 
-	var yesterday = new Date(today);
-	yesterday.setHours(today.getHours() - 18);
+		var yesterday = new Date(today);
+		yesterday.setHours(today.getHours() - 18);
 
-	var data = [
-		Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team')
-	];
+		var data = [
+			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team')
+		];
 
-	Promise.all(data).then(function(values) {
-		var games = values[0];
+		Promise.all(data).then(function(values) {
+			var games = values[0];
 
-		response.render('index', { games: games, yesterday: yesterday, today: today, tomorrow: tomorrow });
+			response.render('index', { session: session, games: games, yesterday: yesterday, today: today, tomorrow: tomorrow });
+		});
 	});
 };
