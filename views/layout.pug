@@ -23,16 +23,18 @@ html
 				h2.mt-2
 					strong Summer Classics
 				ul
+					li
+						a(href='/schedule') Schedule
+					li
+						a(href='/picks') Picks
+					li
+						a(href='/users/edit/' + session.username) Settings
 					if session
 						li
 							a(href='/logout') Log Out
 					else
 						li
 							a(href='/login') Log In
-					li
-						a(href='/schedule') Games
-					li
-						a(href='/picks') Picks
 
 		div.container.pb-3
 			block content
