@@ -54,13 +54,16 @@ module.exports.showAllForDate = function(request, response) {
 		yesterday.setHours(today.getHours() - 18);
 
 		var data = [
-			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team'),
-			Classic.find({ season: process.env.SEASON, user: session.user._id }).populate('team')
+			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team home.team')
 		];
+
+		if (session) {
+			data.push(Classic.find({ season: process.env.SEASON, user: session.user._id }).populate('team'))
+		}
 
 		Promise.all(data).then(function(values) {
 			var games = values[0];
-			var classics = values[1];
+			var classics = values[1] || [];
 
 			games.forEach(function(game) {
 				classics.forEach(function(classic) {

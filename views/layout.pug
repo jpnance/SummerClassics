@@ -26,11 +26,11 @@ html
 				ul
 					li
 						a(href='/schedule') Schedule
-					li
-						a(href='/picks') Picks
-					li
-						a(href='/users/edit/' + session.username) Settings
 					if session
+						li
+							a(href='/picks') Picks
+						li
+							a(href='/users/edit/' + session.username) Settings
 						li
 							a(href='/logout') Log Out
 					else

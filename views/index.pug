@@ -36,8 +36,12 @@ block content
 							|
 							| #{game.home.score}
 				else if !game.hasStarted()
-					+teamButton(game, game.away.team)
-					|
-					| at
-					|
-					+teamButton(game, game.home.team)
+					if session
+						+teamButton(game, game.away.team)
+						|
+						| at
+						|
+						+teamButton(game, game.home.team)
+					else
+						h5 #{game.away.team.teamName}
+						h5 #{game.home.team.teamName}
