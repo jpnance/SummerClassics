@@ -9,3 +9,15 @@
 .pitcher {
 	font-size: 70%;
 }
+
+.score {
+	font-size: 80%;
+}
+
+th.team {
+	line-height: 1.0rem;
+}
+
+th.team span.record {
+	font-weight: normal;
+}

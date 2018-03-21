@@ -8,16 +8,18 @@ mixin teamButton(game, team)
 	if game.classic && game.classic.team._id == team._id
 		a.btn.btn-outline-success(href='/unpick/' + team._id + '/' + game._id)
 			| #{team.teamName}
-			+record(team.classic)
+			|
+			span.record
+				+record(team.classic)
 	else
 		a.btn.btn-outline-secondary(href='/pick/' + team._id + '/' + game._id)
 			| #{team.teamName}
-			+record(team.classic)
+			|
+			span.record
+				+record(team.classic)
 
 mixin record(classic)
-	|
-	|
 	if classic
-		span.record (#{classic.record.wins}-#{classic.record.losses})
+		| (#{classic.record.wins}-#{classic.record.losses})
 	else
-		span.record (0-0)
+		| (0-0)

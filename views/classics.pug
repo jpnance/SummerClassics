@@ -9,20 +9,26 @@ block content
 			th
 
 			each i in [1, 2, 3, 4, 5, 6, 7]
-				th.px-2
-					span.d-none.d-sm-inline Game #{i}
-					span.d-sm-none G#{i}
+				th.text-nowrap.px-2
+					span.d-none.d-md-inline Game #{i}
+					span.d-md-none G#{i}
 
 		each team in teams
 			tr
-				td.py-2 #{team.teamName}
+				th.team.text-nowrap.text-right.py-2
+					span.team-name #{team.teamName}
+					br
+					span.record
+						+record(team.classic)
+
 				if team.classic
 					each i in [0, 1, 2, 3, 4, 5, 6]
-						td
+						td.text-center
 							if team.classic.picks[i]
-								if !team.classic.picks[i].isFinal()
-									| #{team.classic.picks[i].opponent.team.abbreviation}
-								else if !team.classic.picks[i].opponent.winner
-									strong #{team.classic.picks[i].opponent.team.abbreviation}
+								- var game = team.classic.picks[i];
+								if !game.isFinal()
+									| #{game.opponent.team.abbreviation}
+								else if !game.opponent.winner
+									strong #{game.opponent.team.abbreviation}
 								else
-									strike #{team.classic.picks[i].opponent.team.abbreviation}
+									strike #{game.opponent.team.abbreviation}
