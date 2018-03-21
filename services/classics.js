@@ -1,38 +1,41 @@
+var Session = require('../models/Session');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
 var Classic = require('../models/Classic');
 
 module.exports.showAllForUser = function(request, response) {
-	var data = [
-		Team.find().sort('division league teamName'),
-		Classic.find().populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
-	];
+	Session.withActiveSession(request, function(error, session) {
+		var data = [
+			Team.find().sort('division league teamName'),
+			Classic.find({ user: session.user._id, season: process.env.SEASON }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+		];
 
-	Promise.all(data).then(function(values) {
-		var teams = values[0];
-		var classics = values[1];
+		Promise.all(data).then(function(values) {
+			var teams = values[0];
+			var classics = values[1];
 
-		teams.forEach(function(team) {
+			teams.forEach(function(team) {
+				classics.forEach(function(classic) {
+					if (classic.team.abbreviation == team.abbreviation) {
+						team.classic = classic;
+						return;
+					}
+				});
+			});
+
 			classics.forEach(function(classic) {
-				if (classic.team.abbreviation == team.abbreviation) {
-					team.classic = classic;
-					return;
-				}
+				classic.picks.forEach(function(pick) {
+					if (pick.away.team._id == classic.team._id) {
+						pick.opponent = pick.home;
+					}
+					else if (pick.home.team._id == classic.team._id) {
+						pick.opponent = pick.away;
+					}
+				});
 			});
-		});
 
-		classics.forEach(function(classic) {
-			classic.picks.forEach(function(pick) {
-				if (pick.away.team._id == classic.team._id) {
-					pick.opponent = pick.home;
-				}
-				else if (pick.home.team._id == classic.team._id) {
-					pick.opponent = pick.away;
-				}
-			});
+			response.render('classics', { session: session, teams: teams });
 		});
-
-		response.render('classics', { teams: teams });
 	});
 };
 

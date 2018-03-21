@@ -6,7 +6,7 @@ var Game = require('../models/Game');
 
 var classicSchema = new Schema({
 	season: { type: Number, required: true, default: (new Date()).getFullYear() },
-	//user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 	team: { type: Number, ref: 'Team', required: true },
 	picks: [{ type: Number, ref: 'Game' }],
 	score: {
