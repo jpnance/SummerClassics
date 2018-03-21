@@ -29,22 +29,18 @@ classicSchema.methods.isFinal = function() {
 
 classicSchema.methods.pick = function(gameId) {
 	if (this.picks.indexOf(gameId) > -1) {
-		return false;
+		return;
 	}
 
 	this.picks.push(gameId);
-
-	return true;
 };
 
 classicSchema.methods.unpick = function(gameId) {
 	if (this.picks.indexOf(gameId) == -1) {
-		return false;
+		return;
 	}
 
 	this.picks.splice(this.picks.indexOf(gameId), 1);
-
-	return true;
 };
 
 module.exports = mongoose.model('Classic', classicSchema);
