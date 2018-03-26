@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
-Game.find({ status: { '$ne': 'F' }, startTime: { '$lt': new Date() } }).sort('startTime').exec(function(error, games) {
+Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI'] }, startTime: { '$lt': new Date() } }).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
 	games.forEach(function(game) {
