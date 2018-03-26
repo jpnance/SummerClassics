@@ -8,11 +8,17 @@ block content
 		div.col-12.pb-3
 			ul.nav.justify-content-center
 				li.nav-item
-					a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd')) #{dateFormat(yesterday, 'mmmm dS')}
+					a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
+						span.d-none.d-sm-inline #{dateFormat(yesterday, 'mmmm dS')}
+						span.d-sm-none #{dateFormat(yesterday, 'm/d')}
 				li.nav-item
-					a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd')) #{dateFormat(today, 'mmmm dS')}
+					a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
+						span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
+						span.d-sm-none #{dateFormat(today, 'm/d')}
 				li.nav-item
-					a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd')) #{dateFormat(tomorrow, 'mmmm dS')}
+					a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
+						span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')}
+						span.d-sm-none #{dateFormat(tomorrow, 'm/d')}
 
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-3.mb-4
