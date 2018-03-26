@@ -6,12 +6,15 @@ mixin title(title)
 
 mixin teamButton(game, team)
 	- var buttonClass = '';
+	- var actionLink = ''
 	if game.classic && game.classic.team._id == team._id
 		- buttonClass = 'btn-outline-success';
+		- actionLink = '/unpick/' + team._id + '/' + game._id;
 	else
 		- buttonClass = 'btn-outline-secondary';
+		- actionLink = '/pick/' + team._id + '/' + game._id;
 
-	a.btn.btn-outline-secondary.btn-block.col-xs-12(href='/pick/' + team._id + '/' + game._id class=buttonClass)
+	a.btn.btn-outline-secondary.btn-block.col-xs-12(href=actionLink class=buttonClass)
 		| #{team.teamName}
 		|
 		span.record
