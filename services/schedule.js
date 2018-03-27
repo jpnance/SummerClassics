@@ -69,6 +69,13 @@ module.exports.showAllForDate = function(request, response) {
 				classics.forEach(function(classic) {
 					if (classic.picks.indexOf(game._id) > -1) {
 						game.classic = classic;
+
+						if (classic.team._id == game.away.team._id) {
+							game.away.picked = true;
+						}
+						else if (classic.team._id == game.home.team._id) {
+							game.home.picked = true;
+						}
 					}
 
 					if (classic.team._id == game.away.team._id) {

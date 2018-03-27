@@ -21,3 +21,8 @@ th.team {
 th.team span.record {
 	font-weight: normal;
 }
+
+div.team.picked a.team-button.pick,
+div.team.unpicked a.team-button.unpick {
+	display: none;
+}

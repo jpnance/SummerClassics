@@ -4,21 +4,15 @@ mixin title(title)
 	else
 		title Summer Classics &laquo; Coinflipper
 
-mixin teamButton(game, team)
-	- var buttonClass = '';
-	- var actionLink = ''
-	if game.classic && game.classic.team._id == team._id
-		- buttonClass = 'btn-outline-success';
-		- actionLink = '/unpick/' + team._id + '/' + game._id;
-	else
-		- buttonClass = 'btn-outline-secondary';
-		- actionLink = '/pick/' + team._id + '/' + game._id;
+mixin teamButtons(game, team)
+	- var buttons = [ { actionLink: '/pick/' + team._id + '/' + game._id, buttonClass: 'btn-outline-secondary pick' }, { actionLink: '/unpick/' + team._id + '/' + game._id, buttonClass: 'btn-outline-success unpick' } ];
 
-	a.btn.btn-outline-secondary.btn-block.col-xs-12(href=actionLink class=buttonClass)
-		| #{team.teamName}
-		|
-		span.record
-			+record(team.classic)
+	each button in buttons
+		a.team-button.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
+			| #{team.teamName}
+			|
+			span.record
+				+record(team.classic)
 
 mixin record(classic)
 	if classic

@@ -88,7 +88,11 @@ module.exports.pick = function(request, response) {
 				}
 
 				Promise.all(classicPromises).then(function() {
-					response.redirect('/picks');
+					response.send({
+						success: true,
+						gameId: game._id,
+						teamId: classic.team
+					});
 				});
 			});
 		});
@@ -131,7 +135,10 @@ module.exports.unpick = function(request, response) {
 			classicPromises.push(classic.save());
 
 			Promise.all(classicPromises).then(function() {
-				response.redirect('/picks');
+				response.send({
+					success: true,
+					gameId: game._id
+				});
 			});
 		});
 	});

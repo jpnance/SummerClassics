@@ -21,7 +21,7 @@ block content
 						span.d-sm-none #{dateFormat(tomorrow, 'm/d')}
 
 		each game in games
-			div.col-xs-12.col-sm-6.col-md-3.mb-4
+			div.col-xs-12.col-sm-6.col-md-3.mb-4(id='game-' + game._id)
 				h6.game-status.text-muted
 					if !game.hasStarted()
 						| #{dateFormat(game.startTime, 'h:MMtt')} ET
@@ -43,8 +43,10 @@ block content
 							| #{game.home.score}
 				else if !game.hasStarted()
 					if session
-						+teamButton(game, game.away.team)
-						+teamButton(game, game.home.team)
+						div.team.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
+							+teamButtons(game, game.away.team)
+						div.team.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
+							+teamButtons(game, game.home.team)
 					else
 						h5 #{game.away.team.teamName}
 						h5 #{game.home.team.teamName}
