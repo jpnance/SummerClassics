@@ -31,16 +31,15 @@ block content
 						| Live
 
 				if game.hasStarted()
-					h5
-						| #{game.away.team.teamName}
+					div.row
+						h5.col-4.col-sm-6.col-md-9 #{game.away.team.teamName}
 						if game.hasStarted()
-							|
-							| #{game.away.score}
-					h5
-						| #{game.home.team.teamName}
+							h5.col-2.col-sm-3.col-md-3.text-right #{game.away.score}
+
+					div.row
+						h5.col-4.col-sm-6.col-md-9 #{game.home.team.teamName}
 						if game.hasStarted()
-							|
-							| #{game.home.score}
+							h5.col-2.col-sm-3.col-md-3.text-right #{game.home.score}
 				else if !game.hasStarted()
 					if session
 						div.team.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
