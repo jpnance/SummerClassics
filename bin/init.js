@@ -1,6 +1,7 @@
 var crypto = require('crypto');
 
 var User = require('../models/User');
+var Classic = require('../models/Classic');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -21,5 +22,7 @@ user.save(function(error) {
 		console.log(error);
 	}
 
-	mongoose.disconnect();
+	Classic.initialize(user, process.env.SEASON).then(function() {
+		mongoose.disconnect();
+	});
 });
