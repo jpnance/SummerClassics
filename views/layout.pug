@@ -20,29 +20,34 @@ html
 		link(href='/images/favicon.ico' rel='icon')
 
 	body
-		div.container
+		div.container.pb-3
 			div.col-xs-12
 				h2.mt-2
-					strong Summer Classics
-				ul
-					li
-						a(href='/schedule') Schedule
-					li
-						a(href='/standings') Standings
+					strong
+						a.text-dark(href='/') Summer Classics
 
-					if session
-						li
-							a(href='/picks') Picks
-						li
-							a(href='/users/edit/' + session.username) Settings
-						li
-							a(href='/logout') Log Out
-					else
-						li
-							a(href='/login') Log In
+				-
+					var navItems = [];
+
+					navItems.push({ name: 'Schedule', href: '/schedule' });
+					navItems.push({ name: 'Standings', href: '/standings', });
+
+					if (session) {
+						navItems.push({ name: 'Picks', href: '/picks' });
+						navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
+						navItems.push({ name: 'Log Out', href: '/logout' });
+					}
+					else {
+						navItems.push({ name: 'Log In', href: '/login' });
+					}
+
+				ul.nav.nav-pills
+					each navItem in navItems
+						li.nav-item
+							a.nav-link.py-0.pl-0.pr-2(href=navItem.href) #{navItem.name}
 
 		if session && session.user.admin
-			div.container
+			div.container.pb-3
 				div.d-block.d-sm-none xs
 				div.d-none.d-sm-block.d-md-none sm
 				div.d-none.d-md-block.d-lg-none md
