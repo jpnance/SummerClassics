@@ -2,6 +2,7 @@ var crypto = require('crypto');
 
 var Session = require('../models/Session');
 var User = require('../models/User');
+var Classic = require('../models/Classic');
 
 module.exports.loginPrompt = function(request, response) {
 	response.render('users/login');
@@ -83,7 +84,9 @@ module.exports.signUp = function(request, response) {
 
 				user.save(function(error) {
 					if (!error) {
-						response.redirect('/');
+						Classic.initialize(user, process.env.SEASON).then(function() {
+							response.redirect('/');
+						});
 					}
 					else {
 						response.status(400).send(error);

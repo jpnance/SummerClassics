@@ -43,4 +43,29 @@ classicSchema.methods.unpick = function(gameId) {
 	this.picks.splice(this.picks.indexOf(gameId), 1);
 };
 
+classicSchema.statics.initialize = function(user, season) {
+	return new Promise(function(resolve, reject) {
+		var dataPromises = [
+			Team.find()
+		];
+
+		Promise.all(dataPromises).then(function(values) {
+			var teams = values[0];
+
+			var Classic = mongoose.model('Classic');
+			var classicPromises = [];
+
+			teams.forEach(function(team) {
+				var classic = new Classic({ season: process.env.SEASON, user: user._id, team: team._id });
+
+				classicPromises.push(classic.save());
+			});
+
+			Promise.all(classicPromises).then(function() {
+				resolve('done');
+			});
+		});
+	});
+};
+
 module.exports = mongoose.model('Classic', classicSchema);
