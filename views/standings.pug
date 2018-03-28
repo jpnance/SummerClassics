@@ -4,13 +4,17 @@ block title
 	+title('Standings')
 
 block content
-	table.table
+	table.table.table-sm
 		tr
 			th
-			th Potential
-			th Total
+			th.text-center Available
+			th.text-center Best
+			th.text-center Worst
+			th.text-center Final
 		each standing in standings
 			tr
-				td #{standing.user.displayName}
-				td #{standing.score.potential}
-				td #{standing.score.total}
+				td.text-right #{standing.user.displayName}
+				td.text-center #{standing.score.available}
+				td.text-center #{standing.score.potential.best}
+				td.text-center #{standing.score.potential.worst}
+				td.text-center #{standing.score.final}

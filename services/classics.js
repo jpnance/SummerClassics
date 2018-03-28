@@ -56,18 +56,26 @@ module.exports.showStandings = function(request, response) {
 					standingsMap[classic.user.username] = {
 						user: classic.user,
 						score: {
-							potential: 0,
-							total: 0
+							available: 0,
+							final: 0,
+							potential: {
+								best: 0,
+								worst: 0
+							}
 						}
 					};
 				}
 
 				if (classic.score.potential) {
-					standingsMap[classic.user.username].score.potential += classic.score.potential;
+					standingsMap[classic.user.username].score.potential.best += classic.score.potential.best;
+					standingsMap[classic.user.username].score.potential.worst += classic.score.potential.worst;
+					standingsMap[classic.user.username].score.available += classic.score.potential.best;
 				}
 
 				if (classic.score.final) {
-					standingsMap[classic.user.username].score.total += classic.score.final;
+					standingsMap[classic.user.username].score.potential.best += classic.score.final;
+					standingsMap[classic.user.username].score.potential.worst += classic.score.final;
+					standingsMap[classic.user.username].score.final += classic.score.final;
 				}
 			});
 
@@ -75,33 +83,7 @@ module.exports.showStandings = function(request, response) {
 				standings.push(standingsMap[key]);
 			});
 
-			standings = standings.sort(function(a, b) {
-				if (a.score.total > b.score.total) {
-					return -1;
-				}
-				else if (b.score.total > a.score.total) {
-					return 1;
-				}
-				else {
-					if (a.score.potential > b.score.potential) {
-						return -1;
-					}
-					else if (b.score.potential > a.score.potential) {
-						return 1;
-					}
-					else {
-						if (a.user.displayName < b.user.displayName) {
-							return -1;
-						}
-						else if (b.user.displayName < a.user.displayName) {
-							return 1;
-						}
-						else {
-							return 0;
-						}
-					}
-				}
-			});
+			standings = standings.sort(Classic.standingsSort);
 
 			response.render('standings', { session: session, standings: standings });
 		});

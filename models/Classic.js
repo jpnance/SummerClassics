@@ -10,9 +10,14 @@ var classicSchema = new Schema({
 	team: { type: Number, ref: 'Team', required: true },
 	picks: [{ type: Number, ref: 'Game', default: [] }],
 	score: {
-		potential: { type: Number, required: function() {
-			return this.record.wins < 4 && this.record.losses < 4;
-		}, default: 16 },
+		potential: {
+			best: { type: Number, required: function() {
+				return this.record.wins < 4 && this.record.losses < 4;
+			}, default: 16 },
+			worst: { type: Number, required: function() {
+				return this.record.wins < 4 && this.record.losses < 4;
+			}, default: -8 },
+		},
 		final: { type: Number, required: function() {
 			return this.record.wins == 4 || this.record.losses == 4;
 		}}
@@ -46,8 +51,7 @@ classicSchema.methods.unpick = function(gameId) {
 classicSchema.methods.tally = function() {
 	var classic = this;
 
-	classic.record.wins = 0;
-	classic.record.losses = 0;
+	classic.record = { wins: 0, losses: 0 };
 
 	classic.picks.forEach(function(pick) {
 		if (!classic.isFinal()) {
@@ -98,7 +102,9 @@ classicSchema.methods.tally = function() {
 		}
 	}
 	else {
-		classic.score.potential = Math.pow(2, 4 - classic.record.losses);
+		classic.score.potential = { best: 0, worst: 0 };
+		classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
+		classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
 	}
 };
 
@@ -125,6 +131,34 @@ classicSchema.statics.initialize = function(user, season) {
 			});
 		});
 	});
+};
+
+classicSchema.statics.standingsSort = function(a, b) {
+	if (a.score.final > b.score.final) {
+		return -1;
+	}
+	else if (b.score.final > a.score.final) {
+		return 1;
+	}
+	else {
+		if (a.score.potential.best > b.score.potential.best) {
+			return -1;
+		}
+		else if (b.score.potential.best > a.score.potential.best) {
+			return 1;
+		}
+		else {
+			if (a.user.displayName < b.user.displayName) {
+				return -1;
+			}
+			else if (b.user.displayName < a.user.displayName) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
 };
 
 module.exports = mongoose.model('Classic', classicSchema);
