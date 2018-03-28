@@ -39,6 +39,75 @@ module.exports.showAllForUser = function(request, response) {
 	});
 };
 
+module.exports.showStandings = function(request, response) {
+	Session.withActiveSession(request, function(error, session) {
+		var dataPromises = [
+			Classic.find({ season: process.env.SEASON }).populate('user')
+		];
+
+		Promise.all(dataPromises).then(function(values) {
+			var classics = values[0];
+
+			var standingsMap = {};
+			var standings = [];
+
+			classics.forEach(function(classic) {
+				if (!standingsMap[classic.user.username]) {
+					standingsMap[classic.user.username] = {
+						user: classic.user,
+						score: {
+							potential: 0,
+							total: 0
+						}
+					};
+				}
+
+				if (classic.score.potential) {
+					standingsMap[classic.user.username].score.potential += classic.score.potential;
+				}
+
+				if (classic.score.final) {
+					standingsMap[classic.user.username].score.total += classic.score.final;
+				}
+			});
+
+			Object.keys(standingsMap).forEach(function(key) {
+				standings.push(standingsMap[key]);
+			});
+
+			standings = standings.sort(function(a, b) {
+				if (a.score.total > b.score.total) {
+					return -1;
+				}
+				else if (b.score.total > a.score.total) {
+					return 1;
+				}
+				else {
+					if (a.score.potential > b.score.potential) {
+						return -1;
+					}
+					else if (b.score.potential > a.score.potential) {
+						return 1;
+					}
+					else {
+						if (a.user.displayName < b.user.displayName) {
+							return -1;
+						}
+						else if (b.user.displayName < a.user.displayName) {
+							return 1;
+						}
+						else {
+							return 0;
+						}
+					}
+				}
+			});
+
+			response.render('standings', { session: session, standings: standings });
+		});
+	});
+};
+
 module.exports.pick = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		var data = [

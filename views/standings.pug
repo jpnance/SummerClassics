@@ -1,0 +1,16 @@
+extends layout.pug
+
+block title
+	+title('Standings')
+
+block content
+	table.table
+		tr
+			th
+			th Potential
+			th Total
+		each standing in standings
+			tr
+				td #{standing.user.displayName}
+				td #{standing.score.potential}
+				td #{standing.score.total}
