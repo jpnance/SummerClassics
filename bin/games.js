@@ -27,39 +27,24 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 				}
 
 				if (data.gameData.probablePitchers) {
+					var pitcherIds = [];
+
 					if (data.gameData.probablePitchers.away) {
 						game.away.probablePitcher = data.gameData.probablePitchers.away.id;
-
-						playerPromises.push(new Promise(function(resolve2, reject2) {
-							request.get('https://statsapi.mlb.com/api/v1/people/' + game.away.probablePitcher, function(error, response) {
-								var playerData = JSON.parse(response.text);
-								var player = playerData.people[0];
-
-								var newPlayer = {
-									team: data.gameData.teams.away.id,
-									number: player.primaryNumber,
-									name: player.fullName,
-									position: player.primaryPosition.abbreviation,
-									bats: player.batSide.code,
-									throws: player.pitchHand.code
-								};
-
-								Player.findByIdAndUpdate(player.id, newPlayer, { upsert: true }).then(function() {
-									resolve2('good');
-								});
-							});
-						}));
+						pitcherIds.push(data.gameData.probablePitchers.away.id);
 					}
 					if (data.gameData.probablePitchers.home) {
 						game.home.probablePitcher = data.gameData.probablePitchers.home.id;
+						pitcherIds.push(data.gameData.probablePitchers.home.id);
+					}
 
+					pitcherIds.forEach(function(pitcherId) {
 						playerPromises.push(new Promise(function(resolve2, reject2) {
-							request.get('https://statsapi.mlb.com/api/v1/people/' + game.home.probablePitcher, function(error, response) {
+							request.get('https://statsapi.mlb.com/api/v1/people/' + pitcherId, function(error, response) {
 								var playerData = JSON.parse(response.text);
 								var player = playerData.people[0];
 
 								var newPlayer = {
-									team: data.gameData.teams.home.id,
 									number: player.primaryNumber,
 									name: player.fullName,
 									position: player.primaryPosition.abbreviation,
@@ -72,7 +57,7 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 								});
 							});
 						}));
-					}
+					});
 				}
 
 				game.status = data.gameData.status.statusCode;
