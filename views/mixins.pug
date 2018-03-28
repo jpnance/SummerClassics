@@ -4,15 +4,21 @@ mixin title(title)
 	else
 		title Summer Classics &laquo; Coinflipper
 
-mixin teamButtons(game, team)
+mixin teamButtons(game, team, pitcher)
 	- var buttons = [ { actionLink: '/pick/' + team._id + '/' + game._id, buttonClass: 'btn-outline-secondary pick' }, { actionLink: '/unpick/' + team._id + '/' + game._id, buttonClass: 'btn-outline-success unpick' } ];
 
 	each button in buttons
-		a.team-button.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
+		a.team-button.text-left.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
 			| #{team.teamName}
 			|
 			span.record
 				+record(team.classic)
+			br
+			span.pitcher
+				if pitcher
+					| #{pitcher.name}
+				else
+					| TBD
 
 mixin record(classic)
 	if classic
