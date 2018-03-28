@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
-Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI'] }, startTime: { '$lt': new Date() } }).sort('startTime').exec(function(error, games) {
+Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: { '$lt': new Date() } }).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
 	games.forEach(function(game) {
@@ -62,62 +62,14 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI'] }, startTime: { '$lt
 
 			classics.forEach(function(classic) {
 				classicPromises.push(new Promise(function(resolve, reject) {
-					classic.record.wins = 0;
-					classic.record.losses = 0;
-
-					classic.picks.forEach(function(pick) {
-						if (pick.isFinal()) {
-							if ((pick.away.team == classic.team && pick.away.winner) || (pick.home.team == classic.team && pick.home.winner)) {
-								classic.record.wins++;
-							}
-							else if ((pick.away.team == classic.team && !pick.away.winner) || (pick.home.team == classic.team && !pick.home.winner)) {
-								classic.record.losses++;
-							}
-						}
-					});
-
-					if (classic.record.wins == 4 || classic.record.losses == 4) {
-						switch (classic.record.wins - classic.record.losses) {
-							case 4:
-								classic.score.final = 16;
-								break;
-
-							case 3:
-								classic.score.final = 8;
-								break;
-
-							case 2:
-								classic.score.final = 4;
-								break;
-
-							case 1:
-								classic.score.final = 2;
-								break;
-
-							case -1:
-								classic.score.final = -1;
-								break;
-
-							case -2:
-								classic.score.final = -2;
-								break;
-
-							case -3:
-								classic.score.final = -4;
-								break;
-
-							case -4:
-								classic.score.final = -8;
-								break;
-						}
-					}
-					else {
-						classic.score.potential = Math.pow(2, 4 - classic.record.losses);
-					}
+					classic.tally();
 
 					classic.save(function(error) {
 						if (!error) {
 							resolve('good');
+						}
+						else {
+							reject(error);
 						}
 					});
 				}));

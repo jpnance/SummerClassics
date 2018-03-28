@@ -43,6 +43,65 @@ classicSchema.methods.unpick = function(gameId) {
 	this.picks.splice(this.picks.indexOf(gameId), 1);
 };
 
+classicSchema.methods.tally = function() {
+	var classic = this;
+
+	classic.record.wins = 0;
+	classic.record.losses = 0;
+
+	classic.picks.forEach(function(pick) {
+		if (!classic.isFinal()) {
+			if (pick.isFinal()) {
+				if ((pick.away.team == classic.team && pick.away.winner) || (pick.home.team == classic.team && pick.home.winner)) {
+					classic.record.wins++;
+				}
+				else if ((pick.away.team == classic.team && !pick.away.winner) || (pick.home.team == classic.team && !pick.home.winner)) {
+					classic.record.losses++;
+				}
+			}
+		}
+	});
+
+	if (classic.record.wins == 4 || classic.record.losses == 4) {
+		switch (classic.record.wins - classic.record.losses) {
+			case 4:
+				classic.score.final = 16;
+				break;
+
+			case 3:
+				classic.score.final = 8;
+				break;
+
+			case 2:
+				classic.score.final = 4;
+				break;
+
+			case 1:
+				classic.score.final = 2;
+				break;
+
+			case -1:
+				classic.score.final = -1;
+				break;
+
+			case -2:
+				classic.score.final = -2;
+				break;
+
+			case -3:
+				classic.score.final = -4;
+				break;
+
+			case -4:
+				classic.score.final = -8;
+				break;
+		}
+	}
+	else {
+		classic.score.potential = Math.pow(2, 4 - classic.record.losses);
+	}
+};
+
 classicSchema.statics.initialize = function(user, season) {
 	return new Promise(function(resolve, reject) {
 		var dataPromises = [
