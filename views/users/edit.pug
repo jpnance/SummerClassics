@@ -4,7 +4,7 @@ block title
 	+title('Add User')
 
 block content
-	form(action='/users/edit/'+user.username method='POST')
+	form.col-12.col-md-8.col-lg-6.col-xl-4(action='/users/edit/' + user.username method='POST')
 		if session && session.user.admin
 			div.form-group
 				label(for='username') Username
