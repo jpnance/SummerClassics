@@ -44,6 +44,14 @@ module.exports.showAllForDate = function(request, response) {
 			dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
 		}
 
+		if (dateString < '2018-03-29') {
+			dateString = '2018-03-29';
+		}
+
+		if (dateString > '2018-09-30') {
+			dateString = '2018-09-30';
+		}
+
 		var today = new Date(dateString);
 		today.setHours(today.getHours() + 14);
 
