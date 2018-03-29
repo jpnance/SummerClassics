@@ -62,36 +62,50 @@ module.exports.showAllForDate = function(request, response) {
 		yesterday.setHours(today.getHours() - 18);
 
 		var data = [
-			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher')
+			Game.find({ startTime: { '$gte': today, '$lte': tomorrow } }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher'),
+			Classic.find({ season: process.env.SEASON }).populate('user team')
 		];
-
-		if (session) {
-			data.push(Classic.find({ season: process.env.SEASON, user: session.user._id }).populate('team'))
-		}
 
 		Promise.all(data).then(function(values) {
 			var games = values[0];
-			var classics = values[1] || [];
+			var classics = values[1];
 
 			games.forEach(function(game) {
 				classics.forEach(function(classic) {
-					if (classic.picks.indexOf(game._id) > -1) {
-						game.classic = classic;
-
+					if (session && session.user.username == classic.user.username) {
 						if (classic.team._id == game.away.team._id) {
-							game.away.picked = true;
+							game.away.team.classic = classic;
 						}
-						else if (classic.team._id == game.home.team._id) {
-							game.home.picked = true;
+
+						if (classic.team._id == game.home.team._id) {
+							game.home.team.classic = classic;
 						}
 					}
 
-					if (classic.team._id == game.away.team._id) {
-						game.away.team.classic = classic;
-					}
+					if (classic.picks.indexOf(game._id) > -1) {
+						if (session && session.user.username == classic.user.username) {
+							game.classic = classic;
 
-					if (classic.team._id == game.home.team._id) {
-						game.home.team.classic = classic;
+							if (classic.team._id == game.away.team._id) {
+								game.away.picked = true;
+							}
+							else if (classic.team._id == game.home.team._id) {
+								game.home.picked = true;
+							}
+						}
+
+						if (game.hasStarted()) {
+							game.away.picks = [];
+							game.home.picks = [];
+
+							if (classic.team._id == game.away.team._id) {
+								game.away.picks.push(classic.user);
+							}
+
+							if (classic.team._id == game.home.team._id) {
+								game.home.picks.push(classic.user);
+							}
+						}
 					}
 				});
 			});
