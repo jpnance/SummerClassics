@@ -20,15 +20,20 @@ mixin teamButtons(game, team, pitcher)
 	each button in buttons
 		a.team-button.text-left.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
 			| #{team.teamName}
-			|
-			span.record
-				+record(team.classic)
+			if session
+				|
+				|
+				span.record
+					+record(team.classic)
 			br
 			span.pitcher
-				if pitcher
-					| #{pitcher.name}
-				else
-					| TBD
+				+pitcher(pitcher)
+
+mixin pitcher(pitcher)
+	if pitcher
+		| #{pitcher.name}
+	else
+		| TBD
 
 mixin record(classic)
 	if classic
