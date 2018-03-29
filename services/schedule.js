@@ -71,7 +71,7 @@ module.exports.showAllForDate = function(request, response) {
 			var classics = values[1];
 
 			games.forEach(function(game) {
-				if (game.hasStarted() {
+				if (game.hasStarted()) {
 					game.away.picks = [];
 					game.home.picks = [];
 				}
