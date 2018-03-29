@@ -44,7 +44,7 @@ html
 				ul.nav.nav-pills
 					each navItem in navItems
 						li.nav-item
-							a.nav-link.py-0.pl-0.pr-2(href=navItem.href) #{navItem.name}
+							a.nav-link.p-0.mr-2(href=navItem.href) #{navItem.name}
 
 		if session && session.user.admin
 			div.container.pb-3
