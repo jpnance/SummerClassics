@@ -71,6 +71,11 @@ module.exports.showAllForDate = function(request, response) {
 			var classics = values[1];
 
 			games.forEach(function(game) {
+				if (game.hasStarted() {
+					game.away.picks = [];
+					game.home.picks = [];
+				}
+
 				classics.forEach(function(classic) {
 					if (session && session.user.username == classic.user.username) {
 						if (classic.team._id == game.away.team._id) {
@@ -95,9 +100,6 @@ module.exports.showAllForDate = function(request, response) {
 						}
 
 						if (game.hasStarted()) {
-							game.away.picks = [];
-							game.home.picks = [];
-
 							if (classic.team._id == game.away.team._id) {
 								game.away.picks.push(classic.user);
 							}
