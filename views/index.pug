@@ -45,9 +45,9 @@ block content
 				else if !game.hasStarted()
 					if session
 						div.team.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
-							+teamButtons(game, game.away.team, game.away.probablePitcher)
+							+teamButtons(session, game, game.away.team, game.away.probablePitcher)
 						div.team.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
-							+teamButtons(game, game.home.team, game.home.probablePitcher)
+							+teamButtons(session, game, game.home.team, game.home.probablePitcher)
 					else
 						h5 #{game.away.team.teamName}
 						h5 #{game.home.team.teamName}
