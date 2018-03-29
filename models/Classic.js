@@ -141,21 +141,29 @@ classicSchema.statics.standingsSort = function(a, b) {
 		return 1;
 	}
 	else {
-		if (a.score.potential.best > b.score.potential.best) {
+		if (a.score.potential.worst > b.score.potential.worst) {
 			return -1;
 		}
-		else if (b.score.potential.best > a.score.potential.best) {
+		else if (b.score.potential.worst > a.score.potential.worst) {
 			return 1;
 		}
 		else {
-			if (a.user.displayName < b.user.displayName) {
+			if (a.score.potential.best > b.score.potential.best) {
 				return -1;
 			}
-			else if (b.user.displayName < a.user.displayName) {
+			else if (b.score.potential.best > a.score.potential.best) {
 				return 1;
 			}
 			else {
-				return 0;
+				if (a.user.displayName < b.user.displayName) {
+					return -1;
+				}
+				else if (b.user.displayName < a.user.displayName) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
 			}
 		}
 	}
