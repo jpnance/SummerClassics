@@ -35,21 +35,45 @@ block content
 
 				if game.hasStarted()
 					div.live-game
+						-
+							var picksClass = 'text-muted';
+
+							if (game.isFinal()) {
+								if (game.away.score > game.home.score) {
+									picksClass = 'text-success';
+								}
+								else if (game.home.score > game.away.score) {
+									picksClass = 'text-danger';
+								}
+							}
+
 						div.row
 							h5.col-4.col-sm-6.col-md-9.mb-0 #{game.away.team.teamName}
 							h5.col-2.col-sm-3.col-md-3.text-right.mb-0 #{game.away.score}
 						div.row.mb-1
-							div.picks.text-muted.col-6.col-sm-9.col-md-12
+							div.picks.col-6.col-sm-9.col-md-12(class=picksClass)
 								if game.away.picks
 									each pick in game.away.picks
 										| #{pick.displayName}
 										|
 
+						-
+							var picksClass = 'text-muted';
+
+							if (game.isFinal()) {
+								if (game.home.score > game.away.score) {
+									picksClass = 'text-success';
+								}
+								else if (game.away.score > game.home.score) {
+									picksClass = 'text-danger';
+								}
+							}
+
 						div.row
 							h5.col-4.col-sm-6.col-md-9.mb-0 #{game.home.team.teamName}
 							h5.col-2.col-sm-3.col-md-3.text-right.mb-0 #{game.home.score}
 						div.row
-							div.picks.text-muted.col-6.col-sm-9.col-md-12
+							div.picks.col-6.col-sm-9.col-md-12(class=picksClass)
 								if game.home.picks
 									each pick in game.home.picks
 										| #{pick.displayName}
