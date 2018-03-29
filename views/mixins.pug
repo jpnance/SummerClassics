@@ -9,11 +9,11 @@ mixin teamButtons(game, team, pitcher)
 		var buttons = [
 			{
 				actionLink: '/pick/' + team._id + '/' + game._id,
-				buttonClass: 'btn-outline-secondary pick'
+				buttonClass: ['btn-outline-secondary', 'pick']
 			},
 			{
 				actionLink: '/unpick/' + team._id + '/' + game._id,
-				buttonClass: 'btn-outline-success unpick'
+				buttonClass: ['btn-outline-success', 'unpick']
 			}
 		];
 
