@@ -53,7 +53,20 @@ html
 				div.d-none.d-md-block.d-lg-none md
 				div.d-none.d-lg-block.d-xl-none lg
 				div.d-none.d-xl-block xl
-			div.container.pb-3 #{dateFormat()}
+			div.container.pb-1 Now: #{dateFormat()}
+			div.container.pb-1 Now UTC: #{dateFormat(new Date(), 'default', true)}
+
+			if yesterday
+				div.container.pb-1 Yesterday: #{dateFormat(yesterday)}
+				div.container.pb-1 Yesterday UTC: #{dateFormat(yesterday, 'default', true)}
+
+			if today
+				div.container.pb-1 Today: #{dateFormat(today)}
+				div.container.pb-1 Today UTC: #{dateFormat(today, 'default', true)}
+
+			if tomorrow
+				div.container.pb-1 Tomorrow: #{dateFormat(tomorrow)}
+				div.container.pb-1 Tomorrow UTC: #{dateFormat(tomorrow, 'default', true)}
 
 		div.container.pb-3
 			block content
