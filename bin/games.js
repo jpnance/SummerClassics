@@ -65,6 +65,11 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 				if (game.status == 'I' || game.status == 'MA' || game.status == 'F') {
 					game.away.score = data.liveData.linescore.teams.away.runs;
 					game.home.score = data.liveData.linescore.teams.home.runs;
+
+					game.inning.number = data.liveData.linescore.currentInning;
+					game.inning.ordinal = data.liveData.linescore.currentInningOrdinal;
+					game.inning.state = data.liveData.linescore.inningState;
+					game.inning.half = data.liveData.linescore.inningHalf;
 				}
 
 				if (game.status == 'F') {

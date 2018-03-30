@@ -31,7 +31,7 @@ block content
 						else if game.isFinal()
 							| Final
 						else
-							| Live
+							| #{game.inning.state} of the #{game.inning.ordinal}
 
 				if game.hasStarted()
 					div.live-game

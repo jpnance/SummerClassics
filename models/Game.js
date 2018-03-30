@@ -19,7 +19,13 @@ var gameSchema = new Schema({
 		score: { type: Number, default: 0 },
 		winner: { type: Boolean }
 	},
-	status: { type: String, required: true }
+	status: { type: String, required: true },
+	inning: {
+		number: { type: Number },
+		ordinal: { type: String },
+		state: { type: String },
+		half: { type: String }
+	}
 });
 
 gameSchema.methods.hasStarted = function() {
