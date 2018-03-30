@@ -43,6 +43,10 @@ gameSchema.methods.hasStarted = function() {
 	return !rainDelayed && pastStartTime;
 };
 
+gameSchema.methods.isActuallyHappening = function() {
+	return this.hasStarted() && this.inning;
+};
+
 gameSchema.methods.isCool = function(hours) {
 	var later = new Date(this.startTime);
 	later.setHours(later.getHours() + 6);
