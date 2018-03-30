@@ -39,7 +39,10 @@ module.exports.showAllForDate = function(request, response) {
 		var dateString;
 
 		if (!request.params.date) {
-			dateString = dateFormat(new Date(), 'yyyy-mm-dd', true);
+			var now = new Date();
+			now.setMinutes(now.getMinutes() - now.getTimezoneOffset() - 180);
+
+			dateString = dateFormat(now, 'yyyy-mm-dd', true);
 		}
 		else {
 			dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
