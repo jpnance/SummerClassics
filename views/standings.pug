@@ -7,14 +7,12 @@ block content
 	table.table.table-sm
 		tr
 			th
-			th.text-center Available
 			th.text-center Best
 			th.text-center Worst
-			th.text-center Final
+			th.text-center Points
 		each standing in standings
 			tr
 				td.text-right #{standing.user.displayName}
-				td.text-center.text-muted #{standing.score.available}
 				td.text-center.text-muted #{standing.score.potential.best}
 				td.text-center.text-muted #{standing.score.potential.worst}
 				td.text-center #{standing.score.final}
