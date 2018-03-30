@@ -44,7 +44,7 @@ gameSchema.methods.hasStarted = function() {
 };
 
 gameSchema.methods.isActuallyHappening = function() {
-	return this.hasStarted() && this.inning;
+	return this.hasStarted() && this.inning.number;
 };
 
 gameSchema.methods.isCool = function(hours) {
