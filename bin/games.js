@@ -62,7 +62,7 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 
 				game.status = data.gameData.status.statusCode;
 
-				if (game.status == 'I' || game.status == 'F') {
+				if (game.status == 'I' || game.status == 'MA' || game.status == 'F') {
 					game.away.score = data.liveData.linescore.teams.away.runs;
 					game.home.score = data.liveData.linescore.teams.home.runs;
 				}
