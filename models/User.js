@@ -41,4 +41,16 @@ userSchema.methods.makeUneligibleFor = function(season) {
 	this.seasons = seasons;
 };
 
+userSchema.statics.displayNameSort = function(a, b) {
+	if (a.displayName < b.displayName) {
+		return -1;
+	}
+	else if (b.displayName < a.displayName) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+};
+
 module.exports = mongoose.model('User', userSchema);

@@ -1,3 +1,4 @@
+var User = require('../models/User');
 var Session = require('../models/Session');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
@@ -71,10 +72,8 @@ module.exports.showAllForDate = function(request, response) {
 			var classics = values[1];
 
 			games.forEach(function(game) {
-				if (game.hasStarted()) {
-					game.away.picks = [];
-					game.home.picks = [];
-				}
+				game.away.picks = [];
+				game.home.picks = [];
 
 				classics.forEach(function(classic) {
 					if (session && session.user.username == classic.user.username) {
@@ -110,6 +109,9 @@ module.exports.showAllForDate = function(request, response) {
 						}
 					}
 				});
+
+				game.away.picks.sort(User.displayNameSort);
+				game.home.picks.sort(User.displayNameSort);
 			});
 
 			var responseData = {
