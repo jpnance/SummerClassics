@@ -16,8 +16,8 @@ block content
 		each team in teams
 			tr
 				th.team.text-nowrap.text-right.py-2
-					span.team-name.d-none.d-md-inline #{team.teamName}
-					span.team-name.d-md-none #{team.abbreviation}
+					span.team-name.d-none.d-sm-inline #{team.teamName}
+					span.team-name.d-sm-none #{team.abbreviation}
 					br
 					span.record
 						+record(team.classic)
