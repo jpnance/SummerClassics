@@ -66,4 +66,32 @@ gameSchema.methods.isOver = function() {
 	return this.status == 'O' || this.status == 'F';
 };
 
+gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
+	if (a.isFinalAndCool() && !b.isFinalAndCool()) {
+		return 1;
+	}
+	else if (!a.isFinalAndCool() && b.isFinalAndCool()) {
+		return -1;
+	}
+	else {
+		if (a.startTime < b.startTime) {
+			return -1;
+		}
+		else if (a.startTime > b.startTime) {
+			return 1;
+		}
+		else {
+			if (a.away.team.teamName < b.away.team.teamName) {
+				return -1;
+			}
+			else if (a.away.team.teamName > b.away.team.teamName) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+};
+
 module.exports = mongoose.model('Game', gameSchema);

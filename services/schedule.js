@@ -117,6 +117,8 @@ module.exports.showAllForDate = function(request, response) {
 				game.home.picks.sort(User.displayNameSort);
 			});
 
+			games.sort(Game.progressSortWithPopulatedTeams);
+
 			var responseData = {
 				session: session,
 				games: games,
