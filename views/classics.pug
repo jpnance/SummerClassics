@@ -26,9 +26,10 @@ block content
 						td.text-center
 							if team.classic.picks[i]
 								- var game = team.classic.picks[i];
-								if !game.isFinal()
-									| #{game.opponent.team.abbreviation}
-								else if !game.opponent.winner
-									strong #{game.opponent.team.abbreviation}
-								else
-									strike #{game.opponent.team.abbreviation}
+								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd'))
+									if !game.isFinal()
+										| #{game.opponent.team.abbreviation}
+									else if !game.opponent.winner
+										strong #{game.opponent.team.abbreviation}
+									else
+										strike #{game.opponent.team.abbreviation}

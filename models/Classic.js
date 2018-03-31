@@ -169,4 +169,16 @@ classicSchema.statics.standingsSort = function(a, b) {
 	}
 };
 
+classicSchema.statics.populatedPicksStartTimeSort = function(a, b) {
+	if (a.startTime < b.startTime) {
+		return -1;
+	}
+	else if (b.startTime < a.startTime) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+};
+
 module.exports = mongoose.model('Classic', classicSchema);

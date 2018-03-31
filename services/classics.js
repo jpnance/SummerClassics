@@ -32,6 +32,8 @@ module.exports.showAllForUser = function(request, response) {
 						pick.opponent = pick.away;
 					}
 				});
+
+				classic.picks.sort(Classic.populatedPicksStartTimeSort);
 			});
 
 			response.render('classics', { session: session, teams: teams });
