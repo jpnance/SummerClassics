@@ -30,6 +30,9 @@ block content
 							| #{dateFormat(game.startTime, 'h:MMtt')} ET
 						else if game.isFinal()
 							| Final
+							if game.inning.number != 9
+								|
+								| (#{game.inning.number})
 						else if game.isActuallyHappening()
 							| #{game.inning.state} of the #{game.inning.ordinal}
 						else
