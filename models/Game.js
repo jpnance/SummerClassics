@@ -49,7 +49,7 @@ gameSchema.methods.isActuallyHappening = function() {
 
 gameSchema.methods.isCool = function(hours) {
 	var later = new Date(this.startTime);
-	later.setHours(later.getHours() + 6);
+	later.setMinutes(later.getMinutes() + 270);
 
 	return Date.now() >= later;
 };
