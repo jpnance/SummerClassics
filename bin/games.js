@@ -98,7 +98,7 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 	});
 
 	Promise.all(gamePromises).then(function() {
-		Classic.find().populate('picks').exec(function(error, classics) {
+		Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
 			var classicPromises = [];
 
 			classics.forEach(function(classic) {
