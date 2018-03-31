@@ -1,5 +1,6 @@
 var request = require('superagent');
 
+var Status = require('../models/Status');
 var Game = require('../models/Game');
 var Player = require('../models/Player');
 var Classic = require('../models/Classic');
@@ -61,6 +62,8 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 				}
 
 				game.status = data.gameData.status.statusCode;
+
+				playerPromises.push(Status.update(data.gameData.status, { '$set': { example: game._id } }, { upsert: true }));
 
 				if (game.status == 'I' || game.status == 'MA' || game.status == 'F') {
 					game.away.score = data.liveData.linescore.teams.away.runs;
