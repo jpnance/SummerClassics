@@ -57,6 +57,11 @@ module.exports.showStandings = function(request, response) {
 				if (!standingsMap[classic.user.username]) {
 					standingsMap[classic.user.username] = {
 						user: classic.user,
+						record: {
+							wins: 0,
+							losses: 0,
+							winningPercentage: null
+						},
 						score: {
 							available: 0,
 							final: 0,
@@ -66,6 +71,13 @@ module.exports.showStandings = function(request, response) {
 							}
 						}
 					};
+				}
+
+				standingsMap[classic.user.username].record.wins += classic.record.wins;
+				standingsMap[classic.user.username].record.losses += classic.record.losses;
+
+				if (standingsMap[classic.user.username].record.wins + standingsMap[classic.user.username].record.losses > 0) {
+					standingsMap[classic.user.username].record.winningPercentage = standingsMap[classic.user.username].record.wins / (standingsMap[classic.user.username].record.wins + standingsMap[classic.user.username].record.losses);
 				}
 
 				if (classic.score.potential) {
