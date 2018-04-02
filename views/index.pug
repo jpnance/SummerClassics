@@ -28,7 +28,7 @@ block content
 					a(href='https://www.mlb.com/gameday/' + game._id)
 						if !game.hasStarted()
 							| #{dateFormat(game.startTime, 'h:MMtt')} ET
-						else if game.isFinal()
+						else if game.isOver()
 							| Final
 							if game.inning.number != 9
 								|
