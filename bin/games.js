@@ -65,7 +65,7 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 
 				playerPromises.push(Status.update(data.gameData.status, { '$set': { example: game._id } }, { upsert: true }));
 
-				if (game.status == 'I' || game.status == 'MA' || game.status == 'F') {
+				if (game.status == 'I' || game.status == 'MA' || game.status == 'O' || game.status == 'F') {
 					game.away.score = data.liveData.linescore.teams.away.runs;
 					game.home.score = data.liveData.linescore.teams.home.runs;
 
