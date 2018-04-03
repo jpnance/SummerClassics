@@ -29,18 +29,17 @@ var gameSchema = new Schema({
 });
 
 gameSchema.methods.hasStarted = function() {
-	var rainDelayed = false;
 	var pastStartTime = false;
-
-	if (this.status && this.status == 'PR') {
-		rainDelayed = true;
-	}
 
 	if (this.startTime && Date.now() >= this.startTime) {
 		pastStartTime = true;
 	}
 
-	return !rainDelayed && pastStartTime;
+	return !this.isRainDelayed() && pastStartTime;
+};
+
+gameSchema.methods.isRainDelayed = function() {
+	return this.status && this.status == 'PR';
 };
 
 gameSchema.methods.isActuallyHappening = function() {
