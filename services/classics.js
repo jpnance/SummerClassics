@@ -63,11 +63,10 @@ module.exports.showStandings = function(request, response) {
 							winningPercentage: null
 						},
 						score: {
-							available: 0,
 							final: 0,
 							potential: {
-								best: 0,
-								worst: 0
+								maximum: 0,
+								minimum: 0
 							}
 						}
 					};
@@ -81,14 +80,13 @@ module.exports.showStandings = function(request, response) {
 				}
 
 				if (classic.score.potential) {
-					standingsMap[classic.user.username].score.potential.best += classic.score.potential.best;
-					standingsMap[classic.user.username].score.potential.worst += classic.score.potential.worst;
-					standingsMap[classic.user.username].score.available += classic.score.potential.best;
+					standingsMap[classic.user.username].score.potential.maximum += classic.score.potential.best;
+					standingsMap[classic.user.username].score.potential.minimum += classic.score.potential.worst;
 				}
 
 				if (classic.score.final) {
-					standingsMap[classic.user.username].score.potential.best += classic.score.final;
-					standingsMap[classic.user.username].score.potential.worst += classic.score.final;
+					standingsMap[classic.user.username].score.potential.maximum += classic.score.final;
+					standingsMap[classic.user.username].score.potential.minimum += classic.score.final;
 					standingsMap[classic.user.username].score.final += classic.score.final;
 				}
 			});

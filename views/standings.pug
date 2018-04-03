@@ -7,14 +7,14 @@ block content
 	table.table.table-sm
 		tr
 			th
-			th.text-center Record
-			th.text-center Best
-			th.text-center Worst
+			th.text-center.text-muted Record
+			th.text-center.text-muted Maximum
+			th.text-center.text-muted Minimum
 			th.text-center Points
 		each standing in standings
 			tr
 				td.text-right #{standing.user.displayName}
 				td.text-center.text-muted #{standing.record.wins}-#{standing.record.losses}
-				td.text-center.text-muted #{standing.score.potential.best}
-				td.text-center.text-muted #{standing.score.potential.worst}
+				td.text-center.text-muted #{standing.score.potential.maximum}
+				td.text-center.text-muted #{standing.score.potential.minimum}
 				td.text-center #{standing.score.final}
