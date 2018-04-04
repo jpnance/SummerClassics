@@ -110,7 +110,9 @@ block content
 								if game.away.picks
 									each pick in game.away.picks
 										| #{pick.displayName}
-										|
+										if pick != game.away.picks[game.away.picks.length - 1]
+											| ,
+											|
 
 						-
 							var picksClass = 'text-muted';
@@ -132,7 +134,9 @@ block content
 								if game.home.picks
 									each pick in game.home.picks
 										| #{pick.displayName}
-										|
+										if pick != game.home.picks[game.home.picks.length - 1]
+											| ,
+											|
 
 				else if !game.hasStarted()
 					div.team.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
