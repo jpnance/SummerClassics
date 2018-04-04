@@ -35,11 +35,11 @@ gameSchema.methods.hasStarted = function() {
 		pastStartTime = true;
 	}
 
-	return !this.isRainDelayed() && pastStartTime;
+	return !this.isDelayed() && pastStartTime;
 };
 
-gameSchema.methods.isRainDelayed = function() {
-	return this.status && this.status == 'PR';
+gameSchema.methods.isDelayed = function() {
+	return this.status && (this.status == 'PR' || this.status == 'PI');
 };
 
 gameSchema.methods.isActuallyHappening = function() {

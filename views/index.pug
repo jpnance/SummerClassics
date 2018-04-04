@@ -74,8 +74,8 @@ block content
 			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)
 				h6.game-status
 					a(href='https://www.mlb.com/gameday/' + game._id)
-						if game.isRainDelayed()
-							| Rain Delay
+						if game.isDelayed()
+							| Delayed
 						else if !game.hasStarted()
 							| #{dateFormat(game.startTime, 'h:MMtt')} ET
 						else if game.isOver()
