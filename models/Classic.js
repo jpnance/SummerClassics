@@ -141,17 +141,17 @@ classicSchema.statics.standingsSort = function(a, b) {
 		return 1;
 	}
 	else {
-		if (a.score.potential.worst > b.score.potential.worst) {
+		if (a.score.potential.minimum > b.score.potential.minimum) {
 			return -1;
 		}
-		else if (b.score.potential.worst > a.score.potential.worst) {
+		else if (b.score.potential.minimum > a.score.potential.minimum) {
 			return 1;
 		}
 		else {
-			if (a.score.potential.best > b.score.potential.best) {
+			if (a.score.potential.maximum > b.score.potential.maximum) {
 				return -1;
 			}
-			else if (b.score.potential.best > a.score.potential.best) {
+			else if (b.score.potential.maximum > a.score.potential.maximum) {
 				return 1;
 			}
 			else {
