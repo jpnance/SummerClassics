@@ -31,6 +31,6 @@ block content
 									if !game.isFinal()
 										| #{game.opponent.team.abbreviation}
 									else if !game.opponent.winner
-										strong #{game.opponent.team.abbreviation}
+										strong.text-success #{game.opponent.team.abbreviation}
 									else
-										strike #{game.opponent.team.abbreviation}
+										strike.text-danger #{game.opponent.team.abbreviation}
