@@ -24,6 +24,54 @@ block content
 
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)
+				div.card
+					div.card-header
+						a(href='https://www.mlb.com/gameday/' + game._id)
+							if game.isRainDelayed()
+								| Rain Delay
+							else if !game.hasStarted()
+								| #{dateFormat(game.startTime, 'h:MMtt')} ET
+							else if game.isOver()
+								| Final
+								if game.inning.number != 9
+									|
+									| (#{game.inning.number})
+							else if game.isActuallyHappening()
+								| #{game.inning.state} of the #{game.inning.ordinal}
+							else
+								| Live
+
+					ul.list-group.list-group-flush
+						li.list-group-item
+							div.row.justify-content-center
+								div.col-5.col-sm-6.col-md-8
+										h5.mb-0.text-nowrap
+											a(href='/schedule/' + game.away.team.abbreviation) #{game.away.team.teamName}
+										div.pitcher.mb-0.text-nowrap #{game.away.probablePitcher.name}
+								h3.col-4.col-sm-4.col-md-4.text-right.mb-0 #{game.away.score}
+						li.list-group-item
+							div.row.justify-content-center
+								div.col-5.col-sm-6.col-md-8
+										h5.mb-0.text-nowrap
+											a(href='/schedule/' + game.home.team.abbreviation) #{game.home.team.teamName}
+										div.pitcher.mb-0.text-nowrap #{game.home.probablePitcher.name}
+								h3.col-4.col-sm-4.col-md-4.text-right.mb-0 #{game.home.score}
+
+					div.card-footer.text-center
+						div.btn-group
+							button.btn.btn-outline-secondary
+								| #{game.away.team.abbreviation}
+								br
+								span.record
+									+record(game.away.classic)
+							button.btn.btn-outline-secondary
+								| #{game.home.team.abbreviation}
+								br
+								span.record
+									+record(game.home.classic)
+
+		each game in games
+			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)
 				h6.game-status
 					a(href='https://www.mlb.com/gameday/' + game._id)
 						if game.isRainDelayed()
