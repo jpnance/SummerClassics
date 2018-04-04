@@ -4,7 +4,7 @@ mixin title(title)
 	else
 		title Summer Classics &laquo; Coinflipper
 
-mixin teamButtons(session, game, team, pitcher)
+mixin teamButtons(session, game, team)
 	-
 		var buttons = [
 			{
@@ -23,16 +23,13 @@ mixin teamButtons(session, game, team, pitcher)
 				button.buttonClass.push('disabled');
 			}
 
-		a.team-button.text-left.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
-			| #{team.teamName}
+		a.team-button.text-center.btn(href=button.actionLink class=button.buttonClass)
+			| #{team.abbreviation}
 			if session
 				|
 				|
 				span.record
 					+record(team.classic)
-			br
-			span.pitcher
-				+pitcher(pitcher)
 
 mixin pitcher(pitcher)
 	if pitcher

@@ -22,53 +22,102 @@ block content
 							span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')}
 							span.d-sm-none #{dateFormat(tomorrow, 'm/d')}
 
-		each game in games
-			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)
-				div.card
-					div.card-header
-						a(href='https://www.mlb.com/gameday/' + game._id)
-							if game.isRainDelayed()
-								| Rain Delay
-							else if !game.hasStarted()
-								| #{dateFormat(game.startTime, 'h:MMtt')} ET
-							else if game.isOver()
-								| Final
-								if game.inning.number != 9
-									|
-									| (#{game.inning.number})
-							else if game.isActuallyHappening()
-								| #{game.inning.state} of the #{game.inning.ordinal}
-							else
-								| Live
-
-					ul.list-group.list-group-flush
-						li.list-group-item
+		if session && session.user.admin
+			each game in games
+				div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
+					div.card
+						div.card-header.py-1
 							div.row.justify-content-center
-								div.col-5.col-sm-6.col-md-8
-										h5.mb-0.text-nowrap
-											a(href='/schedule/' + game.away.team.abbreviation) #{game.away.team.teamName}
-										div.pitcher.mb-0.text-nowrap #{game.away.probablePitcher.name}
-								h3.col-4.col-sm-4.col-md-4.text-right.mb-0 #{game.away.score}
-						li.list-group-item
-							div.row.justify-content-center
-								div.col-5.col-sm-6.col-md-8
-										h5.mb-0.text-nowrap
-											a(href='/schedule/' + game.home.team.abbreviation) #{game.home.team.teamName}
-										div.pitcher.mb-0.text-nowrap #{game.home.probablePitcher.name}
-								h3.col-4.col-sm-4.col-md-4.text-right.mb-0 #{game.home.score}
+								div.col-10.col-sm-12.col-md-12
+									a(href='https://www.mlb.com/gameday/' + game._id)
+										if game.isDelayed()
+											| Delayed
+										else if !game.hasStarted()
+											| #{dateFormat(game.startTime, 'h:MMtt')} ET
+										else if game.isOver()
+											| Final
+											if game.inning.number != 9
+												|
+												| (#{game.inning.number})
+										else if game.isActuallyHappening()
+											| #{game.inning.state} of the #{game.inning.ordinal}
+										else
+											| Live
 
-					div.card-footer.text-center
-						div.btn-group
-							button.btn.btn-outline-secondary
-								| #{game.away.team.abbreviation}
-								br
-								span.record
-									+record(game.away.classic)
-							button.btn.btn-outline-secondary
-								| #{game.home.team.abbreviation}
-								br
-								span.record
-									+record(game.home.classic)
+						ul.list-group.list-group-flush
+							li.list-group-item.py-1
+								div.row.justify-content-center
+									div.col-6.col-sm-8.col-md-8
+											h5.mb-0.text-nowrap
+												a(href='/schedule/' + game.away.team.abbreviation) #{game.away.team.teamName}
+											div.pitcher.mb-0.text-nowrap
+												+pitcher(game.away.probablePitcher)
+									h2.col-4.col-sm-4.col-md-4.text-center.font-weight-normal.mb-0
+										if game.isActuallyHappening()
+											| #{game.away.score}
+							li.list-group-item.py-1
+								div.row.justify-content-center
+									div.col-6.col-sm-8.col-md-8
+											h5.mb-0.text-nowrap
+												a(href='/schedule/' + game.home.team.abbreviation) #{game.home.team.teamName}
+											div.pitcher.mb-0.text-nowrap
+												+pitcher(game.home.probablePitcher)
+									h2.col-4.col-sm-4.col-md-4.text-center.font-weight-normal.mb-0
+										if game.isActuallyHappening()
+											| #{game.home.score}
+
+						if !game.isActuallyHappening()
+							div.card-footer.text-center
+								div.btn-group
+									div.team.btn-group.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
+										+teamButtons(session, game, game.away.team)
+									div.team.btn-group.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
+										+teamButtons(session, game, game.home.team)
+						else if game.away.picks.length > 0 || game.home.picks.length > 0
+							div.card-footer
+								div.picks.row.justify-content-center
+									div.col-2.col-sm-3.col-md-2.pr-0 #{game.away.team.abbreviation}
+									-
+										var picksClass = 'text-muted';
+
+										if (game.isFinal()) {
+											if (game.away.score > game.home.score) {
+												picksClass = 'text-success';
+											}
+											else if (game.home.score > game.away.score) {
+												picksClass = 'text-danger';
+											}
+										}
+
+									div.col-8.col-sm-9.col-md-10(class=picksClass)
+										if game.away.picks
+											span.align-text-bottom
+												each pick in game.away.picks
+													| #{pick.displayName}
+													if pick != game.away.picks[game.away.picks.length - 1]
+														| ,
+														|
+								div.picks.row.justify-content-center
+									div.col-2.col-sm-3.col-md-2.pr-0 #{game.home.team.abbreviation}
+									-
+										var picksClass = 'text-muted';
+
+										if (game.isFinal()) {
+											if (game.home.score > game.home.score) {
+												picksClass = 'text-success';
+											}
+											else if (game.home.score > game.home.score) {
+												picksClass = 'text-danger';
+											}
+										}
+
+									div.col-8.col-sm-9.col-md-10(class=picksClass)
+										if game.home.picks
+											each pick in game.home.picks
+												| #{pick.displayName}
+												if pick != game.home.picks[game.home.picks.length - 1]
+													| ,
+													|
 
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)

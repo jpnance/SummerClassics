@@ -1,5 +1,5 @@
-a.team-button {
-	line-height: 1;
+a.team-button, button.btn {
+	line-height: 0.9;
 }
 
 .game-status {
@@ -7,7 +7,7 @@ a.team-button {
 }
 
 .record {
-	font-size: 80%;
+	font-size: 70%;
 }
 
 .pitcher {
@@ -19,7 +19,7 @@ a.team-button {
 }
 
 .picks {
-	font-size: 70%;
+	font-size: 80%;
 }
 
 th.team {
