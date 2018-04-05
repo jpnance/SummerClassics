@@ -7,7 +7,7 @@ a.team-button, button.btn {
 }
 
 .record {
-	font-size: 70%;
+	font-size: 80%;
 }
 
 .pitcher {
@@ -34,8 +34,4 @@ th.team span.record {
 div.team.picked a.team-button.pick,
 div.team.unpicked a.team-button.unpick {
 	display: none;
-}
-
-.bg-correct-pick {
-	background-color: #c4f9bb !important;
 }

@@ -42,3 +42,174 @@ mixin record(classic)
 		| (#{classic.record.wins}-#{classic.record.losses})
 	else
 		| (0-0)
+
+mixin gameCard(game)
+	-
+		var classes = {
+			header: { background: [], linkText: [] },
+			away: { background: [], linkText: [], pitcherText: [], scoreText: [], picksText: [] },
+			home: { background: [], linkText: [], pitcherText: [], scoreText: [], picksText: [] }
+		}
+
+		if (game.isActuallyHappening() && !game.isFinal()) {
+			classes.header.background.push('bg-primary');
+			classes.header.linkText.push('text-white');
+
+			if (game.classic) {
+				if (game.classic.team._id == game.away.team._id) {
+					classes.away.background.push('bg-light');
+				}
+				else if (game.classic.team._id == game.home.team._id) {
+					classes.home.background.push('bg-light');
+				}
+			}
+		}
+
+		if (game.isFinal()) {
+			if (game.classic) {
+				if (game.classic.team._id == game.away.team._id) {
+					classes.away.linkText.push('text-white');
+					classes.away.pitcherText.push('text-light');
+					classes.away.scoreText.push('text-white');
+					classes.away.picksText.push('text-white');
+
+					if (game.away.winner) {
+						classes.home.picksText.push('text-danger');
+						classes.away.background.push('bg-success');
+					}
+					else if (game.home.winner) {
+						classes.home.picksText.push('text-success');
+						classes.away.background.push('bg-danger');
+					}
+					else {
+						classes.away.background.push('bg-light');
+					}
+				}
+				else if (game.classic.team._id == game.home.team._id) {
+					classes.home.linkText.push('text-white');
+					classes.home.pitcherText.push('text-light');
+					classes.home.scoreText.push('text-white');
+					classes.home.picksText.push('text-white');
+
+					if (game.home.winner) {
+						classes.away.picksText.push('text-danger');
+						classes.home.background.push('bg-success');
+					}
+					else if (game.away.winner) {
+						classes.away.picksText.push('text-success');
+						classes.home.background.push('bg-danger');
+					}
+					else {
+						classes.away.background.push('bg-light');
+					}
+				}
+			}
+			else {
+				if (game.away.winner) {
+					classes.away.picksText.push('text-success');
+					classes.home.picksText.push('text-danger');
+				}
+				else if (game.home.winner) {
+					classes.home.picksText.push('text-success');
+					classes.away.picksText.push('text-danger');
+				}
+			}
+		}
+
+	div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
+		div.card
+			div.card-header.py-1(class=classes.header.background)
+				div.row.justify-content-center
+					div.col-10.col-sm-12.col-md-12.text-center
+						a(href='https://www.mlb.com/gameday/' + game._id class=classes.header.linkText)
+							if game.isDelayed()
+								| Delayed
+							else if !game.hasStarted()
+								| #{dateFormat(game.startTime, 'h:MMtt')} ET
+							else if game.isOver()
+								| Final
+								if game.inning.number != 9
+									|
+									| (#{game.inning.number})
+							else if game.isActuallyHappening()
+								| #{game.inning.state} of the #{game.inning.ordinal}
+							else
+								| Live
+
+			ul.list-group.list-group-flush
+				+teamRow(game, 'away', classes.away)
+				+teamRow(game, 'home', classes.home)
+
+			if !game.isActuallyHappening()
+				div.card-footer.text-center
+					div.btn-group
+						div.team.btn-group.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
+							+teamButtons(session, game, game.away.team)
+						div.team.btn-group.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
+							+teamButtons(session, game, game.home.team)
+			else if false && (game.away.picks.length > 0 || game.home.picks.length > 0)
+				div.card-footer
+					div.picks.row.justify-content-center
+						div.col-2.col-sm-3.col-md-2.pr-0 #{game.away.team.abbreviation}
+						-
+							var picksClass = 'text-muted';
+
+							if (game.isFinal()) {
+								if (game.away.score > game.home.score) {
+									picksClass = 'text-success';
+								}
+								else if (game.home.score > game.away.score) {
+									picksClass = 'text-danger';
+								}
+							}
+
+						div.col-8.col-sm-9.col-md-10(class=picksClass)
+							if game.away.picks
+								span.align-text-bottom
+									each pick in game.away.picks
+										| #{pick.displayName}
+										if pick != game.away.picks[game.away.picks.length - 1]
+											| ,
+											|
+									| Patrick, Schex, Kevin
+					div.picks.row.justify-content-center
+						div.col-2.col-sm-3.col-md-2.pr-0 #{game.home.team.abbreviation}
+						-
+							var picksClass = 'text-muted';
+
+							if (game.isFinal()) {
+								if (game.home.score > game.home.score) {
+									picksClass = 'text-success';
+								}
+								else if (game.home.score > game.home.score) {
+									picksClass = 'text-danger';
+								}
+							}
+
+						div.col-8.col-sm-9.col-md-10(class=picksClass)
+							if game.home.picks
+								each pick in game.home.picks
+									| #{pick.displayName}
+									if pick != game.home.picks[game.home.picks.length - 1]
+										| ,
+										|
+
+mixin teamRow(game, side, classes)
+	li.list-group-item.py-1(class=classes.background)
+		div.row
+			div.col-6.offset-2.col-sm-8.offset-sm-1.col-md-8.p-0
+					h5.mb-0.text-nowrap
+						a.font-weight-bold(href='/schedule/' + game[side].team.abbreviation class=classes.linkText) #{game[side].team.teamName}
+					div.pitcher.mb-0.text-nowrap(class=classes.pitcherText)
+						+pitcher(game[side].probablePitcher)
+			h2.col-2.text-center.font-weight-normal.p-0.mb-0(class=classes.scoreText)
+				if game.isActuallyHappening()
+					| #{game[side].score}
+		div.row
+			if game.isActuallyHappening() && game[side].picks && game[side].picks.length > 0
+				div.picks.col-6.offset-2.col-sm-8.offset-sm-1.p-0.mb-1.mt-2(class=classes.picksText)
+					each pick in game[side].picks
+						| #{pick.displayName}
+						if pick != game[side].picks[game[side].picks.length - 1]
+							| ,
+							|
