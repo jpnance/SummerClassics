@@ -17,7 +17,8 @@ block content
 			th.text-center Points
 		each standing in standings
 			tr
-				td.text-right #{standing.user.displayName}
+				td.text-right
+					a(href='/picks/' + standing.user.username) #{standing.user.displayName}
 				td.text-center.text-muted #{standing.record.wins}-#{standing.record.losses}
 				td.text-center.text-muted #{standing.score.potential.maximum}
 				td.text-center.text-muted #{standing.score.potential.minimum}
