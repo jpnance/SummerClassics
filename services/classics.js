@@ -6,7 +6,7 @@ var Classic = require('../models/Classic');
 module.exports.showAllForUser = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		var data = [
-			Team.find().sort('league division teamName'),
+			Team.find().sort('teamName'),
 			Classic.find({ user: session.user._id, season: process.env.SEASON }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
 		];
 
