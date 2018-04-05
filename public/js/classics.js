@@ -14,8 +14,17 @@ $(document).ready(function() {
 						$this.removeClass('unpicked').addClass('picked');
 					}
 				});
+
+				$('#game-' + data.gameId).find('li.team-row').each(function(i, teamRow) {
+					var $this = $(teamRow);
+
+					$this.removeClass('bg-light-gray');
+
+					if ($this.attr('id') == 'team-row-' + data.teamId) {
+						$this.addClass('bg-light-gray');
+					}
+				});
 			}
-			console.log(data);
 		});
 
 		e.preventDefault();

@@ -35,3 +35,7 @@ div.team.picked a.team-button.pick,
 div.team.unpicked a.team-button.unpick {
 	display: none;
 }
+
+.bg-light-gray {
+	background-color: #efefef !important;
+}

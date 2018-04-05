@@ -51,16 +51,27 @@ mixin gameCard(game)
 			home: { background: [], linkText: [], pitcherText: [], scoreText: [], picksText: [] }
 		}
 
+		if (!game.isActuallyHappening()) {
+			if (game.classic) {
+				if (game.classic.team._id == game.away.team._id) {
+					classes.away.background.push('bg-light-gray');
+				}
+				else if (game.classic.team._id == game.home.team._id) {
+					classes.home.background.push('bg-light-gray');
+				}
+			}
+		}
+
 		if (game.isActuallyHappening() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
 
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
-					classes.away.background.push('bg-light');
+					classes.away.background.push('bg-light-gray');
 				}
 				else if (game.classic.team._id == game.home.team._id) {
-					classes.home.background.push('bg-light');
+					classes.home.background.push('bg-light-gray');
 				}
 			}
 		}
@@ -82,7 +93,7 @@ mixin gameCard(game)
 						classes.away.background.push('bg-danger');
 					}
 					else {
-						classes.away.background.push('bg-light');
+						classes.away.background.push('bg-light-gray');
 					}
 				}
 				else if (game.classic.team._id == game.home.team._id) {
@@ -100,7 +111,7 @@ mixin gameCard(game)
 						classes.home.background.push('bg-danger');
 					}
 					else {
-						classes.away.background.push('bg-light');
+						classes.home.background.push('bg-light-gray');
 					}
 				}
 			}
@@ -195,7 +206,7 @@ mixin gameCard(game)
 										|
 
 mixin teamRow(game, side, classes)
-	li.list-group-item.py-1(class=classes.background)
+	li.team-row.list-group-item.py-1(id='team-row-' + game[side].team._id class=classes.background)
 		div.row
 			div.col-6.offset-2.col-sm-8.offset-sm-1.col-md-8.p-0
 					h5.mb-0.text-nowrap
