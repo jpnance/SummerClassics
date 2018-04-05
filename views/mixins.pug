@@ -52,6 +52,9 @@ mixin gameCard(game)
 		}
 
 		if (!game.isActuallyHappening()) {
+			classes.away.pitcherText.push('text-muted');
+			classes.home.pitcherText.push('text-muted');
+
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
 					classes.away.background.push('bg-light-gray');
@@ -65,6 +68,8 @@ mixin gameCard(game)
 		if (game.isActuallyHappening() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
+			classes.away.pitcherText.push('text-muted');
+			classes.home.pitcherText.push('text-muted');
 
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
