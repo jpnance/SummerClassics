@@ -1,42 +1,74 @@
 var Session = require('../models/Session');
+var User = require('../models/User');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
 var Classic = require('../models/Classic');
 
 module.exports.showAllForUser = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
-		var data = [
-			Team.find().sort('teamName'),
-			Classic.find({ user: session.user._id, season: process.env.SEASON }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
-		];
+		var verifyUser = new Promise(function(resolve, reject) {
+			if (!request.params.username) {
+				if (session) {
+					resolve(session.user);
+				}
+				else {
+					reject({ error: 'not querying for anything' });
+				}
+			}
+			else {
+				User.findOne({ username: request.params.username }).exec(function(error, user) {
+					if (user) {
+						resolve(user);
+					}
+					else {
+						reject({ error: 'who' });
+					}
+				});
+			}
+		});
 
-		Promise.all(data).then(function(values) {
-			var teams = values[0];
-			var classics = values[1];
+		verifyUser.then(function(user) {
+			var data = [
+				Team.find().sort('teamName'),
+				Classic.find({ user: user._id, season: process.env.SEASON }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+			];
 
-			teams.forEach(function(team) {
+			Promise.all(data).then(function(values) {
+				var teams = values[0];
+				var classics = values[1];
+
+				teams.forEach(function(team) {
+					classics.forEach(function(classic) {
+						if (classic.team.abbreviation == team.abbreviation) {
+							team.classic = classic;
+							return;
+						}
+					});
+				});
+
 				classics.forEach(function(classic) {
-					if (classic.team.abbreviation == team.abbreviation) {
-						team.classic = classic;
-						return;
+					classic.picks.forEach(function(pick) {
+						if (pick.away.team._id == classic.team._id) {
+							pick.opponent = pick.home;
+						}
+						else if (pick.home.team._id == classic.team._id) {
+							pick.opponent = pick.away;
+						}
+					});
+
+					if (!session || session.username != user.username) {
+						classic.picks = classic.picks.filter(function(game) {
+							return game.isActuallyHappening();
+						});
 					}
+
+					classic.picks.sort(Classic.populatedPicksStartTimeSort);
 				});
+
+				response.render('classics', { session: session, teams: teams });
 			});
-
-			classics.forEach(function(classic) {
-				classic.picks.forEach(function(pick) {
-					if (pick.away.team._id == classic.team._id) {
-						pick.opponent = pick.home;
-					}
-					else if (pick.home.team._id == classic.team._id) {
-						pick.opponent = pick.away;
-					}
-				});
-
-				classic.picks.sort(Classic.populatedPicksStartTimeSort);
-			});
-
-			response.render('classics', { session: session, teams: teams });
+		}).catch(function(error) {
+			response.send(error);
 		});
 	});
 };
