@@ -26,10 +26,10 @@ block content
 			each game in games
 				div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
 					div.card
-						div.card-header.py-1
+						div.card-header.py-1(class=game.isActuallyHappening() && !game.isFinal() ? 'bg-primary' : '')
 							div.row.justify-content-center
-								div.col-10.col-sm-12.col-md-12
-									a(href='https://www.mlb.com/gameday/' + game._id)
+								div.col-10.col-sm-12.col-md-12.text-center
+									a(href='https://www.mlb.com/gameday/' + game._id class=game.isActuallyHappening() && !game.isFinal() ? 'text-white' : '')
 										if game.isDelayed()
 											| Delayed
 										else if !game.hasStarted()
@@ -45,21 +45,26 @@ block content
 											| Live
 
 						ul.list-group.list-group-flush
-							li.list-group-item.py-1
+							li.list-group-item.py-1(class=game.away.winner ? '' : '')
 								div.row.justify-content-center
 									div.col-6.col-sm-8.col-md-8
 											h5.mb-0.text-nowrap
-												a(href='/schedule/' + game.away.team.abbreviation) #{game.away.team.teamName}
+												a.font-weight-bold(href='/schedule/' + game.away.team.abbreviation) #{game.away.team.teamName}
 											div.pitcher.mb-0.text-nowrap
 												+pitcher(game.away.probablePitcher)
 									h2.col-4.col-sm-4.col-md-4.text-center.font-weight-normal.mb-0
 										if game.isActuallyHappening()
 											| #{game.away.score}
-							li.list-group-item.py-1
+								div.row
+									if game.isActuallyHappening()
+										div.picks.col-8.offset-1.pt-2.pb-1
+											| Patrick, David S., Kevin
+											//| , Brett, Luke, Anthony, Adam
+							li.list-group-item.py-1(class=game.home.winner ? '' : '')
 								div.row.justify-content-center
 									div.col-6.col-sm-8.col-md-8
 											h5.mb-0.text-nowrap
-												a(href='/schedule/' + game.home.team.abbreviation) #{game.home.team.teamName}
+												a.font-weight-bold(href='/schedule/' + game.home.team.abbreviation) #{game.home.team.teamName}
 											div.pitcher.mb-0.text-nowrap
 												+pitcher(game.home.probablePitcher)
 									h2.col-4.col-sm-4.col-md-4.text-center.font-weight-normal.mb-0
@@ -97,6 +102,7 @@ block content
 													if pick != game.away.picks[game.away.picks.length - 1]
 														| ,
 														|
+												| Patrick, Schex, Kevin
 								div.picks.row.justify-content-center
 									div.col-2.col-sm-3.col-md-2.pr-0 #{game.home.team.abbreviation}
 									-

@@ -20,6 +20,7 @@ a.team-button, button.btn {
 
 .picks {
 	font-size: 80%;
+	line-height: 1.1;
 }
 
 th.team {
@@ -33,4 +34,8 @@ th.team span.record {
 div.team.picked a.team-button.pick,
 div.team.unpicked a.team-button.unpick {
 	display: none;
+}
+
+.bg-correct-pick {
+	background-color: #c4f9bb !important;
 }
