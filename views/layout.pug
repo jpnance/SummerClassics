@@ -46,13 +46,14 @@ html
 						li.nav-item
 							a.nav-link.p-0.mr-2(href=navItem.href) #{navItem.name}
 
-		if session && session.user.admin
-			div.container.pb-3
-				div.d-block.d-sm-none xs
-				div.d-none.d-sm-block.d-md-none sm
-				div.d-none.d-md-block.d-lg-none md
-				div.d-none.d-lg-block.d-xl-none lg
-				div.d-none.d-xl-block xl
+		//-
+			if session && session.user.admin
+				div.container.pb-3
+					div.d-block.d-sm-none xs
+					div.d-none.d-sm-block.d-md-none sm
+					div.d-none.d-md-block.d-lg-none md
+					div.d-none.d-lg-block.d-xl-none lg
+					div.d-none.d-xl-block xl
 
 		div.container.pb-3
 			block content
