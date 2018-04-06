@@ -28,6 +28,10 @@ request.get('https://statsapi.mlb.com/api/v1/teams', function(error, response) {
 				teamName: team.teamName
 			};
 
+			if (newTeam.teamName == 'D-backs') {
+				newTeam.teamName = 'Diamondbacks';
+			}
+
 			if (team.league.id == 103) {
 				newTeam.league = 'AL';
 			}
