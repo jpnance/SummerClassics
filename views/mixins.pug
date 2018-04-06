@@ -154,9 +154,9 @@ mixin gameCard(game)
 			if session && !game.isActuallyHappening()
 				div.card-footer.text-center
 					div.btn-group
-						div.team.btn-group.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
+						div.team.btn-group(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
 							+teamButtons2(session, game, game.away.team)
-						div.team.btn-group.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
+						div.team.btn-group(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
 							+teamButtons2(session, game, game.home.team)
 			else if false && (game.away.picks.length > 0 || game.home.picks.length > 0)
 				div.card-footer
