@@ -46,6 +46,8 @@ $(document).ready(function() {
 						$this.removeClass('btn-outline-secondary').addClass('btn-primary');
 						$this.attr('href', '/unpick/' + $this.data('teamId') + '/' + data.gameId);
 					}
+
+					$this.blur();
 				});
 
 				$('#game-' + data.gameId).find('li.team-row').each(function(i, teamRow) {
