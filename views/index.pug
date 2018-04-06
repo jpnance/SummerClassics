@@ -47,7 +47,7 @@ block content
 							div.picks.col-6.col-sm-9.col-md-12(class=picksClass)
 								if game.away.picks
 									each pick in game.away.picks
-										| #{pick.displayName}
+										| #{pick.user.displayName}
 										if pick != game.away.picks[game.away.picks.length - 1]
 											| ,
 											|
@@ -71,7 +71,7 @@ block content
 							div.picks.col-6.col-sm-9.col-md-12(class=picksClass)
 								if game.home.picks
 									each pick in game.home.picks
-										| #{pick.displayName}
+										| #{pick.user.displayName}
 										if pick != game.home.picks[game.home.picks.length - 1]
 											| ,
 											|

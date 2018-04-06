@@ -181,4 +181,16 @@ classicSchema.statics.populatedPicksStartTimeSort = function(a, b) {
 	}
 };
 
+classicSchema.statics.populatedUserDisplayNameSort = function(a, b) {
+	if (a.user.displayName < b.user.displayName) {
+		return -1;
+	}
+	else if (b.user.displayName < a.user.displayName) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+};
+
 module.exports = mongoose.model('Classic', classicSchema);

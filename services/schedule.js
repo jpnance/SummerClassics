@@ -153,18 +153,18 @@ module.exports.showAllForDate = function(request, response) {
 
 						if (game.hasStarted()) {
 							if (classic.team._id == game.away.team._id) {
-								game.away.picks.push(classic.user);
+								game.away.picks.push(classic);
 							}
 
 							if (classic.team._id == game.home.team._id) {
-								game.home.picks.push(classic.user);
+								game.home.picks.push(classic);
 							}
 						}
 					}
 				});
 
-				game.away.picks.sort(User.displayNameSort);
-				game.home.picks.sort(User.displayNameSort);
+				game.away.picks.sort(Classic.populatedUserDisplayNameSort);
+				game.home.picks.sort(Classic.populatedUserDisplayNameSort);
 			});
 
 			games.sort(Game.progressSortWithPopulatedTeams);
