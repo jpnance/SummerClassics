@@ -121,7 +121,7 @@ gameSchema.methods.syncWithApi = function() {
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status == 'I' || thisGame.status == 'MA' || thisGame.status == 'O' || thisGame.status == 'F') {
+			if (thisGame.status == 'I' || thisGame.status == 'MA' || thisGame.status == 'MF' || thisGame.status == 'MI' || thisGame.status == 'O' || thisGame.status == 'F') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 

@@ -29,6 +29,7 @@ module.exports = function(app) {
 	app.get('/schedule/:teamAbbreviation(\\w+)', schedule.showAllForTeam);
 
 	app.get('/picks', classics.showAllForUser);
+	app.get('/picks/:username', classics.showAllForUser);
 	app.get('/pick/:teamId/:gameId', classics.pick);
 	app.get('/unpick/:teamId/:gameId', classics.unpick);
 	app.get('/standings', classics.showStandings);
