@@ -1,0 +1,9 @@
+extends ../layout.pug
+
+block title
+	+title('Big Board')
+
+block content
+	div.row
+		each game in games
+			+gameCard(game)

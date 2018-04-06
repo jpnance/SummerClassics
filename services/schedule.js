@@ -19,18 +19,68 @@ module.exports.showAll = function(request, response) {
 };
 
 module.exports.showAllForTeam = function(request, response) {
-	var data = [
-		new Promise(function(resolve, reject) {
-			Team.findOne({ abbreviation: request.params.teamAbbreviation }, function(error, team) {
-				resolve(Game.find({ '$or': [ { 'home.team': team._id }, { 'away.team': team._id } ]}).sort('startTime').populate('away.team home.team'));
+	Session.withActiveSession(request, function(error, session) {
+		Team.findOne({ abbreviation: request.params.teamAbbreviation }, function(error, team) {
+			var dataPromises = [
+				Game.find({ '$or': [ { 'home.team': team._id }, { 'away.team': team._id } ]}).sort('startTime').populate('away.team away.probablePitcher home.team home.probablePitcher'),
+				Classic.find({ season: process.env.SEASON }).populate('user team')
+			];
+
+			Promise.all(dataPromises).then(function(values) {
+				var games = values[0];
+				var classics = values[1];
+
+				games.forEach(function(game) {
+					game.away.picks = [];
+					game.home.picks = [];
+
+					classics.forEach(function(classic) {
+						if (session && session.user.username == classic.user.username) {
+							if (classic.team._id == game.away.team._id) {
+								game.away.team.classic = classic;
+							}
+
+							if (classic.team._id == game.home.team._id) {
+								game.home.team.classic = classic;
+							}
+						}
+
+						if (classic.picks.indexOf(game._id) > -1) {
+							if (session && session.user.username == classic.user.username) {
+								game.classic = classic;
+
+								if (classic.team._id == game.away.team._id) {
+									game.away.picked = true;
+								}
+								else if (classic.team._id == game.home.team._id) {
+									game.home.picked = true;
+								}
+							}
+
+							if (game.hasStarted()) {
+								if (classic.team._id == game.away.team._id) {
+									game.away.picks.push(classic.user);
+								}
+
+								if (classic.team._id == game.home.team._id) {
+									game.home.picks.push(classic.user);
+								}
+							}
+						}
+					});
+
+					game.away.picks.sort(User.displayNameSort);
+					game.home.picks.sort(User.displayNameSort);
+				});
+
+				var responseData = {
+					session: session,
+					games: games
+				};
+
+				response.render('schedule/team', responseData);
 			});
-		})
-	];
-
-	Promise.all(data).then(function(values) {
-		var games = values[0];
-
-		response.render('index', { games: games });
+		});
 	});
 };
 
@@ -127,7 +177,7 @@ module.exports.showAllForDate = function(request, response) {
 				tomorrow: tomorrow
 			};
 
-			var template = request.cookies && request.cookies.preview ? 'preview' : 'index';
+			var template = request.cookies && request.cookies.preview ? 'schedule/all' : 'index';
 
 			response.render(template, responseData);
 		});
