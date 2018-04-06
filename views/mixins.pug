@@ -48,6 +48,11 @@ mixin gameCard(game)
 			home: { background: [], linkText: [], pitcherText: ['text-muted'], scoreText: [], picksText: [] }
 		}
 
+		if (game.isDelayed()) {
+			classes.header.background.push('bg-warning');
+			classes.header.linkText.push('text-dark');
+		}
+
 		if (!game.isActuallyHappening()) {
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
