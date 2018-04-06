@@ -158,7 +158,7 @@ mixin gameCard(game)
 							+teamButtons2(session, game, game.away.team)
 						div.team.btn-group(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
 							+teamButtons2(session, game, game.home.team)
-			else if false && (game.away.picks.length > 0 || game.home.picks.length > 0)
+			else if game.away.picks.length > 0 || game.home.picks.length > 0
 				div.card-footer
 					div.picks.row.justify-content-center
 						div.col-2.col-sm-3.col-md-2.pr-0 #{game.away.team.abbreviation}
