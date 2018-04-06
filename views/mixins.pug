@@ -68,15 +68,15 @@ mixin gameCard(game)
 		if (game.isActuallyHappening() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
+			classes.away.picksText.push('text-dark');
+			classes.home.picksText.push('text-dark');
 
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
 					classes.away.background.push('bg-light-gray');
-					classes.away.picksText.push('text-dark');
 				}
 				else if (game.classic.team._id == game.home.team._id) {
 					classes.home.background.push('bg-light-gray');
-					classes.home.picksText.push('text-dark');
 				}
 			}
 		}
