@@ -147,48 +147,72 @@ module.exports.pick = function(request, response) {
 			var classicCollision = values[1];
 			var game = values[2];
 
-			var classicPromises = [];
+			var verificationPromises = [];
 
-			if (game.hasStarted()) {
-				response.sendStatus(500);
-				return;
+			if (game.isDelayed()) {
+				verificationPromises.push(new Promise(function(resolve, reject) {
+					game.syncWithApi().then(function(syncedGame) {
+						if (syncedGame.isDelayed()) {
+							resolve(syncedGame);
+						}
+						else {
+							reject('nope');
+						}
+					});
+				}));
 			}
 
-			if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
-				response.sendStatus(500);
-				return;
-			}
+			Promise.all(verificationPromises).then(function(values) {
+				if (values.length > 0) {
+					game = values[0];
+				}
 
-			if (!classic) {
-				classic = new Classic({ season: process.env.SEASON, user: session.user._id, team: request.params.teamId });
-			}
+				var classicPromises = [];
 
-			if (classicCollision) {
-				classicCollision.unpick(game._id);
-				classicPromises.push(classicCollision.save());
-			}
-
-			Promise.all(classicPromises).then(function() {
-				if (classic.isFinal()) {
+				if (game.hasStarted()) {
 					response.sendStatus(500);
 					return;
 				}
-				else if (classic.picks.length >= 7) {
+
+				if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
 					response.sendStatus(500);
 					return;
 				}
-				else {
-					classic.pick(game._id);
-					classicPromises.push(classic.save());
+
+				if (!classic) {
+					classic = new Classic({ season: process.env.SEASON, user: session.user._id, team: request.params.teamId });
+				}
+
+				if (classicCollision) {
+					classicCollision.unpick(game._id);
+					classicPromises.push(classicCollision.save());
 				}
 
 				Promise.all(classicPromises).then(function() {
-					response.send({
-						success: true,
-						gameId: game._id,
-						teamId: classic.team
+					if (classic.isFinal()) {
+						response.sendStatus(500);
+						return;
+					}
+					else if (classic.picks.length >= 7) {
+						response.sendStatus(500);
+						return;
+					}
+					else {
+						classic.pick(game._id);
+						classicPromises.push(classic.save());
+					}
+
+					Promise.all(classicPromises).then(function() {
+						response.send({
+							success: true,
+							gameId: game._id,
+							teamId: classic.team
+						});
 					});
 				});
+			}).catch(function() {
+				response.sendStatus(500);
+				return;
 			});
 		});
 	});
@@ -205,35 +229,59 @@ module.exports.unpick = function(request, response) {
 			var classic = values[0];
 			var game = values[1];
 
-			var classicPromises = [];
+			var verificationPromises = [];
 
-			if (game.hasStarted()) {
-				response.sendStatus(500);
-				return;
+			if (game.isDelayed()) {
+				verificationPromises.push(new Promise(function(resolve, reject) {
+					game.syncWithApi().then(function(syncedGame) {
+						if (syncedGame.isDelayed()) {
+							resolve(syncedGame);
+						}
+						else {
+							reject('nope');
+						}
+					});
+				}));
 			}
 
-			if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
-				response.sendStatus(500);
-				return;
-			}
+			Promise.all(verificationPromises).then(function(values) {
+				if (values.length > 0) {
+					game = values[0];
+				}
 
-			if (!classic) {
-				response.redirect('/picks');
-			}
+				var classicPromises = [];
 
-			if (classic.isFinal()) {
-				response.sendStatus(500);
-				return;
-			}
+				if (game.hasStarted()) {
+					response.sendStatus(500);
+					return;
+				}
 
-			classic.unpick(game._id);
-			classicPromises.push(classic.save());
+				if (game.away.team != request.params.teamId && game.home.team != request.params.teamId) {
+					response.sendStatus(500);
+					return;
+				}
 
-			Promise.all(classicPromises).then(function() {
-				response.send({
-					success: true,
-					gameId: game._id
+				if (!classic) {
+					response.redirect('/picks');
+				}
+
+				if (classic.isFinal()) {
+					response.sendStatus(500);
+					return;
+				}
+
+				classic.unpick(game._id);
+				classicPromises.push(classic.save());
+
+				Promise.all(classicPromises).then(function() {
+					response.send({
+						success: true,
+						gameId: game._id
+					});
 				});
+			}).catch(function() {
+				response.sendStatus(500);
+				return;
 			});
 		});
 	});

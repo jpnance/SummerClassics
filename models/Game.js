@@ -145,7 +145,7 @@ gameSchema.methods.syncWithApi = function() {
 			Promise.all(playerPromises).then(function() {
 				thisGame.save(function(error) {
 					if (!error) {
-						resolve('good');
+						resolve(thisGame);
 					}
 				});
 			});
