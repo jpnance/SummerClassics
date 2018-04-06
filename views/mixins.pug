@@ -72,9 +72,11 @@ mixin gameCard(game)
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
 					classes.away.background.push('bg-light-gray');
+					classes.away.picksText.push('text-dark');
 				}
 				else if (game.classic.team._id == game.home.team._id) {
 					classes.home.background.push('bg-light-gray');
+					classes.home.picksText.push('text-dark');
 				}
 			}
 		}
