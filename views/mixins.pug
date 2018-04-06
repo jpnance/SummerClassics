@@ -47,14 +47,11 @@ mixin gameCard(game)
 	-
 		var classes = {
 			header: { background: [], linkText: [] },
-			away: { background: [], linkText: [], pitcherText: [], scoreText: [], picksText: [] },
-			home: { background: [], linkText: [], pitcherText: [], scoreText: [], picksText: [] }
+			away: { background: [], linkText: [], pitcherText: ['text-muted'], scoreText: [], picksText: [] },
+			home: { background: [], linkText: [], pitcherText: ['text-muted'], scoreText: [], picksText: [] }
 		}
 
 		if (!game.isActuallyHappening()) {
-			classes.away.pitcherText.push('text-muted');
-			classes.home.pitcherText.push('text-muted');
-
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
 					classes.away.background.push('bg-light-gray');
@@ -68,8 +65,6 @@ mixin gameCard(game)
 		if (game.isActuallyHappening() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
-			classes.away.pitcherText.push('text-muted');
-			classes.home.pitcherText.push('text-muted');
 
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
@@ -85,7 +80,7 @@ mixin gameCard(game)
 			if (game.classic) {
 				if (game.classic.team._id == game.away.team._id) {
 					classes.away.linkText.push('text-white');
-					classes.away.pitcherText.push('text-light');
+					classes.away.pitcherText = ['text-light'];
 					classes.away.scoreText.push('text-white');
 					classes.away.picksText.push('text-white');
 
@@ -103,7 +98,7 @@ mixin gameCard(game)
 				}
 				else if (game.classic.team._id == game.home.team._id) {
 					classes.home.linkText.push('text-white');
-					classes.home.pitcherText.push('text-light');
+					classes.home.pitcherText = ['text-light'];
 					classes.home.scoreText.push('text-white');
 					classes.home.picksText.push('text-white');
 
