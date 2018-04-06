@@ -169,7 +169,7 @@ mixin teamRow(game, side, classes)
 			if game.isActuallyHappening() && game[side].picks && game[side].picks.length > 0
 				div.picks.col-6.offset-2.col-sm-8.offset-sm-1.p-0.mb-1.mt-2(class=classes.picksText)
 					each pick in game[side].picks
-						| #{pick.displayName}
+						a(href='/picks/' + pick.username class=classes.picksText) #{pick.displayName}
 						if pick != game[side].picks[game[side].picks.length - 1]
 							| ,
 							|
