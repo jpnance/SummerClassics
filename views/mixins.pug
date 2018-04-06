@@ -156,7 +156,7 @@ mixin gameCard(game)
 				+teamRow(game, 'away', classes.away)
 				+teamRow(game, 'home', classes.home)
 
-			if session && !game.isActuallyHappening()
+			if session && !game.hasStarted()
 				div.card-footer.text-center
 					div.btn-group
 						+teamButton(session, game, game.away)
