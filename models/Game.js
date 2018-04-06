@@ -39,7 +39,7 @@ gameSchema.methods.hasStarted = function() {
 };
 
 gameSchema.methods.isDelayed = function() {
-	return this.status && (this.status == 'PR' || this.status == 'PI');
+	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS');
 };
 
 gameSchema.methods.isActuallyHappening = function() {
