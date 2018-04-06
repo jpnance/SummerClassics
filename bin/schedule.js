@@ -46,9 +46,6 @@ for (var i = 0; i <= days; i++) {
 						status: game.status.statusCode
 					};
 
-					gamePromises.push(Team.findByIdAndUpdate(awayTeam.id, { name: awayTeam.name, abbreviation: awayTeam.abbreviation, locationName: awayTeam.locationName, teamName: awayTeam.teamName }, { upsert: true }));
-					gamePromises.push(Team.findByIdAndUpdate(homeTeam.id, { name: homeTeam.name, abbreviation: homeTeam.abbreviation, locationName: homeTeam.locationName, teamName: homeTeam.teamName }, { upsert: true }));
-
 					gamePromises.push(Game.findByIdAndUpdate(game.gamePk, newGame, { upsert: true }));
 				});
 			});
