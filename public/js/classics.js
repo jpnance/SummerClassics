@@ -29,4 +29,37 @@ $(document).ready(function() {
 
 		e.preventDefault();
 	});
+
+	$('body').on('click', 'a.team-button2', function(e) {
+		var $this = $(e.currentTarget);
+		var actionLink = $this.attr('href');
+
+		$.get(actionLink, function(data) {
+			if (data.success) {
+				$('#game-' + data.gameId).find('a.team-button2').each(function(i, teamButton) {
+					var $this = $(teamButton);
+
+					$this.removeClass('btn-primary').addClass('btn-outline-secondary');
+					$this.attr('href', '/pick/' + $this.data('teamId') + '/' + data.gameId);
+
+					if ($this.data('teamId') == data.teamId) {
+						$this.removeClass('btn-outline-secondary').addClass('btn-primary');
+						$this.attr('href', '/unpick/' + $this.data('teamId') + '/' + data.gameId);
+					}
+				});
+
+				$('#game-' + data.gameId).find('li.team-row').each(function(i, teamRow) {
+					var $this = $(teamRow);
+
+					$this.removeClass('bg-light-gray');
+
+					if ($this.attr('id') == 'team-row-' + data.teamId) {
+						$this.addClass('bg-light-gray');
+					}
+				});
+			}
+		});
+
+		e.preventDefault();
+	});
 });

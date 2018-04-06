@@ -4,32 +4,29 @@ mixin title(title)
 	else
 		title Summer Classics &laquo; Coinflipper
 
-mixin teamButtons2(session, game, team)
+mixin teamButton(session, game, side)
 	-
-		var buttons = [
-			{
-				actionLink: '/pick/' + team._id + '/' + game._id,
-				buttonClass: ['btn-outline-secondary', 'pick']
-			},
-			{
-				actionLink: '/unpick/' + team._id + '/' + game._id,
-				buttonClass: ['btn-primary', 'unpick']
-			}
-		];
+		var button = { classes: [], actionLink: null };
 
-	each button in buttons
-		-
-			if (!team.classic || team.classic.isFinal() || game.hasStarted()) {
-				button.buttonClass.push('disabled');
-			}
+		if (!side.team.classic || side.team.classic.isFinal() || game.hasStarted()) {
+			button.classes.push('disabled');
+			button.actionLink = '#';
+		}
+		else if (side.picked) {
+			button.actionLink = '/unpick/' + side.team._id + '/' + game._id;
+			button.classes.push('btn-primary');
+		}
+		else {
+			button.actionLink = '/pick/' + side.team._id + '/' + game._id;
+			button.classes.push('btn-outline-secondary');
+		}
 
-		a.team-button.text-center.btn(href=button.actionLink class=button.buttonClass)
-			| #{team.abbreviation}
-			if session
-				|
-				|
-				span.record
-					+record(team.classic)
+	a.team-button2.text-center.btn(href=button.actionLink class=button.classes data-team-id=side.team._id)
+		| #{side.team.abbreviation}
+		if session
+			br
+			span.record
+				+record(side.team.classic)
 
 mixin pitcher(pitcher)
 	if pitcher
@@ -154,10 +151,8 @@ mixin gameCard(game)
 			if session && !game.isActuallyHappening()
 				div.card-footer.text-center
 					div.btn-group
-						div.team.btn-group(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
-							+teamButtons2(session, game, game.away.team)
-						div.team.btn-group(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
-							+teamButtons2(session, game, game.home.team)
+						+teamButton(session, game, game.away)
+						+teamButton(session, game, game.home)
 
 mixin teamRow(game, side, classes)
 	li.team-row.list-group-item.py-1(id='team-row-' + game[side].team._id class=classes.background)
