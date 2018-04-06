@@ -6,21 +6,7 @@ block title
 block content
 	div.row
 		div.col-12.pb-3
-			ul.nav.justify-content-center
-				if dateFormat(yesterday, 'yyyy-mm-dd') >= '2018-03-29'
-					li.nav-item
-						a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
-							span.d-none.d-sm-inline #{dateFormat(yesterday, 'mmmm dS')}
-							span.d-sm-none #{dateFormat(yesterday, 'm/d')}
-				li.nav-item
-					a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
-						span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
-						span.d-sm-none #{dateFormat(today, 'm/d')}
-				if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2018-09-30'
-					li.nav-item
-						a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
-							span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')}
-							span.d-sm-none #{dateFormat(tomorrow, 'm/d')}
+			+scheduleNav(yesterday, today, tomorrow)
 
 		each game in games
 			div.col-xs-12.col-sm-6.col-md-4.col-lg-3.mb-4(id='game-' + game._id)

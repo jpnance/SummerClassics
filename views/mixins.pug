@@ -211,3 +211,20 @@ mixin teamButtons(session, game, team, pitcher)
 			br
 			span.pitcher
 				+pitcher(pitcher)
+
+mixin scheduleNav(yesterday, today, tomorrow)
+	ul.nav.justify-content-center
+		if dateFormat(yesterday, 'yyyy-mm-dd') >= '2018-03-29'
+			li.nav-item
+				a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
+					span.d-none.d-sm-inline #{dateFormat(yesterday, 'mmmm dS')}
+					span.d-sm-none #{dateFormat(yesterday, 'm/d')}
+		li.nav-item
+			a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
+				span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
+				span.d-sm-none #{dateFormat(today, 'm/d')}
+		if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2018-09-30'
+			li.nav-item
+				a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
+					span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')}
+					span.d-sm-none #{dateFormat(tomorrow, 'm/d')}
