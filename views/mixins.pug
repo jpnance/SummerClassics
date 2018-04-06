@@ -158,51 +158,6 @@ mixin gameCard(game)
 							+teamButtons2(session, game, game.away.team)
 						div.team.btn-group(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
 							+teamButtons2(session, game, game.home.team)
-			else if game.away.picks.length > 0 || game.home.picks.length > 0
-				div.card-footer
-					div.picks.row.justify-content-center
-						div.col-2.col-sm-3.col-md-2.pr-0 #{game.away.team.abbreviation}
-						-
-							var picksClass = 'text-muted';
-
-							if (game.isFinal()) {
-								if (game.away.score > game.home.score) {
-									picksClass = 'text-success';
-								}
-								else if (game.home.score > game.away.score) {
-									picksClass = 'text-danger';
-								}
-							}
-
-						div.col-8.col-sm-9.col-md-10(class=picksClass)
-							if game.away.picks
-								span.align-text-bottom
-									each pick in game.away.picks
-										| #{pick.displayName}
-										if pick != game.away.picks[game.away.picks.length - 1]
-											| ,
-											|
-					div.picks.row.justify-content-center
-						div.col-2.col-sm-3.col-md-2.pr-0 #{game.home.team.abbreviation}
-						-
-							var picksClass = 'text-muted';
-
-							if (game.isFinal()) {
-								if (game.home.score > game.home.score) {
-									picksClass = 'text-success';
-								}
-								else if (game.home.score > game.home.score) {
-									picksClass = 'text-danger';
-								}
-							}
-
-						div.col-8.col-sm-9.col-md-10(class=picksClass)
-							if game.home.picks
-								each pick in game.home.picks
-									| #{pick.displayName}
-									if pick != game.home.picks[game.home.picks.length - 1]
-										| ,
-										|
 
 mixin teamRow(game, side, classes)
 	li.team-row.list-group-item.py-1(id='team-row-' + game[side].team._id class=classes.background)
