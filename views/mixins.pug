@@ -4,7 +4,7 @@ mixin title(title)
 	else
 		title Summer Classics &laquo; Coinflipper
 
-mixin teamButtons(session, game, team)
+mixin teamButtons2(session, game, team)
 	-
 		var buttons = [
 			{
@@ -160,9 +160,9 @@ mixin gameCard(game)
 				div.card-footer.text-center
 					div.btn-group
 						div.team.btn-group.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
-							+teamButtons(session, game, game.away.team)
+							+teamButtons2(session, game, game.away.team)
 						div.team.btn-group.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
-							+teamButtons(session, game, game.home.team)
+							+teamButtons2(session, game, game.home.team)
 			else if false && (game.away.picks.length > 0 || game.home.picks.length > 0)
 				div.card-footer
 					div.picks.row.justify-content-center
@@ -229,3 +229,33 @@ mixin teamRow(game, side, classes)
 						if pick != game[side].picks[game[side].picks.length - 1]
 							| ,
 							|
+
+mixin teamButtons(session, game, team, pitcher)
+	-
+		var buttons = [
+			{
+				actionLink: '/pick/' + team._id + '/' + game._id,
+				buttonClass: ['btn-outline-secondary', 'pick']
+			},
+			{
+				actionLink: '/unpick/' + team._id + '/' + game._id,
+				buttonClass: ['btn-primary', 'unpick']
+			}
+		];
+
+	each button in buttons
+		-
+			if (!team.classic || team.classic.isFinal() || game.hasStarted()) {
+				button.buttonClass.push('disabled');
+			}
+
+		a.team-button.text-left.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
+			| #{team.teamName}
+			if session
+				|
+				|
+				span.record
+					+record(team.classic)
+			br
+			span.pitcher
+				+pitcher(pitcher)

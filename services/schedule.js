@@ -127,7 +127,9 @@ module.exports.showAllForDate = function(request, response) {
 				tomorrow: tomorrow
 			};
 
-			response.render('index', responseData);
+			var template = request.cookies && request.cookies.preview ? 'preview' : 'index';
+
+			response.render(template, responseData);
 		});
 	});
 };

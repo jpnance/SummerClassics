@@ -7,6 +7,13 @@ var teams = require('./services/teams');
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
 
+	app.get('/preview', function(request, response) {
+		response.cookie('preview', 'yep').redirect('/');
+	});
+	app.get('/unpreview', function(request, response) {
+		response.clearCookie('preview').redirect('/');
+	});
+
 	app.get('/login', users.loginPrompt);
 	app.post('/login', sessions.logIn);
 	app.get('/logout', sessions.logOut);
