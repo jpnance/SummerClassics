@@ -12,7 +12,8 @@ mixin teamButton(session, game, side)
 			button.classes.push('disabled');
 			button.actionLink = '#';
 		}
-		else if (side.picked) {
+
+		if (side.picked) {
 			button.actionLink = '/unpick/' + side.team._id + '/' + game._id;
 			button.classes.push('btn-primary');
 		}
