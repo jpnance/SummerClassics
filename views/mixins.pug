@@ -137,7 +137,7 @@ mixin gameCard(game)
 			div.card-header.py-1(class=classes.header.background)
 				div.row.justify-content-center
 					div.col-10.col-sm-12.col-md-12.text-center
-						a(href='https://www.mlb.com/gameday/' + game._id class=classes.header.linkText)
+						a(href='https://www.mlb.com/gameday/' + game._id class=classes.header.linkText target='_blank')
 							if game.isDelayed()
 								| Delayed
 							else if !game.hasStarted()
