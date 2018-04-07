@@ -154,28 +154,36 @@ gameSchema.methods.syncWithApi = function() {
 };
 
 gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
-	if (a.isFinalAndCool() && !b.isFinalAndCool()) {
+	if (a.isFinal() && !b.isFinal()) {
 		return 1;
 	}
-	else if (!a.isFinalAndCool() && b.isFinalAndCool()) {
+	else if (!a.isFinal() && b.isFinal()) {
 		return -1;
 	}
 	else {
-		if (a.startTime < b.startTime) {
-			return -1;
-		}
-		else if (a.startTime > b.startTime) {
+		if (a.isOver() && !b.isOver()) {
 			return 1;
 		}
+		else if (!a.isOver() && b.isOver()) {
+			return -1;
+		}
 		else {
-			if (a.away.team.teamName < b.away.team.teamName) {
+			if (a.startTime < b.startTime) {
 				return -1;
 			}
-			else if (a.away.team.teamName > b.away.team.teamName) {
+			else if (a.startTime > b.startTime) {
 				return 1;
 			}
 			else {
-				return 0;
+				if (a.away.team.teamName < b.away.team.teamName) {
+					return -1;
+				}
+				else if (a.away.team.teamName > b.away.team.teamName) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
 			}
 		}
 	}
