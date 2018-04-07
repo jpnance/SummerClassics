@@ -161,29 +161,21 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 		return -1;
 	}
 	else {
-		if (a.isOver() && !b.isOver()) {
-			return 1;
-		}
-		else if (!a.isOver() && b.isOver()) {
+		if (a.startTime < b.startTime) {
 			return -1;
 		}
+		else if (a.startTime > b.startTime) {
+			return 1;
+		}
 		else {
-			if (a.startTime < b.startTime) {
+			if (a.away.team.teamName < b.away.team.teamName) {
 				return -1;
 			}
-			else if (a.startTime > b.startTime) {
+			else if (a.away.team.teamName > b.away.team.teamName) {
 				return 1;
 			}
 			else {
-				if (a.away.team.teamName < b.away.team.teamName) {
-					return -1;
-				}
-				else if (a.away.team.teamName > b.away.team.teamName) {
-					return 1;
-				}
-				else {
-					return 0;
-				}
+				return 0;
 			}
 		}
 	}
