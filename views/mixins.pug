@@ -15,7 +15,7 @@ mixin teamButton(session, game, side)
 
 		if (side.picked) {
 			button.actionLink = '/unpick/' + side.team._id + '/' + game._id;
-			button.classes.push('btn-primary');
+			button.classes.push('btn-secondary');
 		}
 		else {
 			button.actionLink = '/pick/' + side.team._id + '/' + game._id;

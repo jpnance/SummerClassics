@@ -39,11 +39,11 @@ $(document).ready(function() {
 				$('#game-' + data.gameId).find('a.team-button2').each(function(i, teamButton) {
 					var $this = $(teamButton);
 
-					$this.removeClass('btn-primary').addClass('btn-outline-secondary');
+					$this.removeClass('btn-secondary').addClass('btn-outline-secondary');
 					$this.attr('href', '/pick/' + $this.data('teamId') + '/' + data.gameId);
 
 					if ($this.data('teamId') == data.teamId) {
-						$this.removeClass('btn-outline-secondary').addClass('btn-primary');
+						$this.removeClass('btn-outline-secondary').addClass('btn-secondary');
 						$this.attr('href', '/unpick/' + $this.data('teamId') + '/' + data.gameId);
 					}
 
