@@ -142,11 +142,13 @@ mixin gameCard(game)
 								| Delayed
 							else if !game.hasStarted()
 								| #{dateFormat(game.startTime, 'h:MMtt')} ET
-							else if game.isOver()
+							else if game.isFinal()
 								| Final
 								if game.inning.number != 9
 									|
 									| (#{game.inning.number})
+							else if game.isOver()
+								| End of the #{game.inning.ordinal}
 							else if game.isActuallyHappening()
 								| #{game.inning.state} of the #{game.inning.ordinal}
 							else
