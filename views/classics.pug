@@ -30,20 +30,24 @@ block content
 								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd') + '#game-' + game._id)
 									if !game.isFinal()
 										| #{game.opponent.team.abbreviation}
+										if game.hasDefinitelyStarted()
+											span.result.text-nowrap
+												br
+												+scoreRelativeToTeam(game, team)
 									else
 										if !game.opponent.winner
 											strong.text-success #{game.opponent.team.abbreviation}
 											br
-											span.result.text-success
+											span.result.text-success.text-nowrap
 												| W
 												|
 												+scoreRelativeToTeam(game, team)
 										else
 											strike.text-danger #{game.opponent.team.abbreviation}
 											br
-											span.result.text-danger
+											span.result.text-danger.text-nowrap
 												| L
 												|
 												+scoreRelativeToTeam(game, team)
 							else if team.classic.isFinal()
-								| --
+								span.text-muted --
