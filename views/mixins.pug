@@ -171,7 +171,10 @@ mixin teamRow(game, side, classes)
 					h5.mb-0.text-nowrap
 						a.font-weight-bold(href='/schedule/' + game[side].team.abbreviation class=classes.linkText) #{game[side].team.teamName}
 					div.pitcher.mb-0.text-nowrap
-						a(href='http://m.mlb.com/player/' + game[side].probablePitcher._id class=classes.pitcherText target='_blank')
+						if game[side].probablePitcher
+							a(href='http://m.mlb.com/player/' + game[side].probablePitcher._id class=classes.pitcherText target='_blank')
+								+pitcher(game[side].probablePitcher)
+						else
 							+pitcher(game[side].probablePitcher)
 			h2.col-2.text-center.font-weight-normal.p-0.mb-0(class=classes.scoreText)
 				if game.isActuallyHappening()
