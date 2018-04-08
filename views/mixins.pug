@@ -41,7 +41,7 @@ mixin record(classic)
 	else
 		| (0-0)
 
-mixin gameCard(game)
+mixin gameCard(game, showDate)
 	-
 		var classes = {
 			card: { border: [] },
@@ -117,6 +117,8 @@ mixin gameCard(game)
 		}
 
 	div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
+		if showDate
+			h6.text-muted.text-center #{dateFormat(game.startTime, 'mmmm dS')}
 		div.card(class=classes.card.border)
 			div.card-header.py-1(class=classes.header.background)
 				div.row.justify-content-center
