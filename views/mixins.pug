@@ -8,7 +8,7 @@ mixin teamButton(session, game, side)
 	-
 		var button = { classes: [], actionLink: null };
 
-		if (!side.team.classic || side.team.classic.isFinal() || game.hasStarted()) {
+		if (!side.team.classic || side.team.classic.isFinal() || game.hasDefinitelyStarted()) {
 			button.classes.push('disabled');
 			button.actionLink = '#';
 		}
@@ -66,18 +66,7 @@ mixin gameCard(game, showDate)
 			classes.header.linkText.push('text-dark');
 		}
 
-		if (!game.isActuallyHappening()) {
-			if (game.classic) {
-				if (game.classic.team._id == game.away.team._id) {
-					classes.away.background.push('bg-light-gray');
-				}
-				else if (game.classic.team._id == game.home.team._id) {
-					classes.home.background.push('bg-light-gray');
-				}
-			}
-		}
-
-		if (game.isActuallyHappening() && !game.isFinal()) {
+		if (game.hasDefinitelyStarted() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
 			classes.away.picksText.push('text-dark');
@@ -126,7 +115,7 @@ mixin gameCard(game, showDate)
 						a(href='https://www.mlb.com/gameday/' + game._id class=classes.header.linkText target='_blank')
 							if game.isDelayed()
 								| Delayed
-							else if !game.hasStarted()
+							else if !game.hasPotentiallyStarted()
 								| #{dateFormat(game.startTime, 'h:MMtt')} ET
 							else if game.isFinal()
 								| Final
@@ -135,7 +124,7 @@ mixin gameCard(game, showDate)
 									| (#{game.inning.number})
 							else if game.isOver()
 								| End of the #{game.inning.ordinal}
-							else if game.isActuallyHappening()
+							else if game.hasDefinitelyStarted()
 								| #{game.inning.state} of the #{game.inning.ordinal}
 							else
 								| Live
@@ -144,7 +133,7 @@ mixin gameCard(game, showDate)
 				+teamRow(game, 'away', classes.away)
 				+teamRow(game, 'home', classes.home)
 
-			if session && !game.hasStarted()
+			if session && !game.hasDefinitelyStarted()
 				div.card-footer.text-center
 					div.btn-group
 						+teamButton(session, game, game.away)
@@ -163,10 +152,10 @@ mixin teamRow(game, side, classes)
 						else
 							+pitcher(game[side].probablePitcher)
 			h2.col-2.text-center.font-weight-normal.p-0.mb-0(class=classes.scoreText)
-				if game.isActuallyHappening()
+				if game.hasDefinitelyStarted()
 					| #{game[side].score}
 		div.row
-			if game.isActuallyHappening() && game[side].picks && game[side].picks.length > 0
+			if game.hasDefinitelyStarted() && game[side].picks && game[side].picks.length > 0
 				div.picks.col-6.offset-2.col-sm-8.offset-sm-1.p-0.mb-1.mt-2(class=classes.picksText)
 					each pick in game[side].picks
 						a(href='/picks/' + pick.user.username class=classes.picksText)
@@ -194,7 +183,7 @@ mixin teamButtons(session, game, team, pitcher)
 
 	each button in buttons
 		-
-			if (!team.classic || team.classic.isFinal() || game.hasStarted()) {
+			if (!team.classic || team.classic.isFinal() || game.hasDefinitelyStarted()) {
 				button.buttonClass.push('disabled');
 			}
 

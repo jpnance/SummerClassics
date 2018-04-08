@@ -28,22 +28,20 @@ var gameSchema = new Schema({
 	}
 });
 
-gameSchema.methods.hasStarted = function() {
-	var pastStartTime = false;
-
-	if (this.startTime && Date.now() >= this.startTime) {
-		pastStartTime = true;
-	}
-
-	return !this.isDelayed() && pastStartTime;
+gameSchema.methods.isPastStartTime = function() {
+	return this.startTime && Date.now() >= this.startTime;
 };
 
 gameSchema.methods.isDelayed = function() {
 	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS');
 };
 
-gameSchema.methods.isActuallyHappening = function() {
-	return this.hasStarted() && this.inning.number;
+gameSchema.methods.hasPotentiallyStarted = function() {
+	return this.isPastStartTime() && !this.isDelayed();
+};
+
+gameSchema.methods.hasDefinitelyStarted = function() {
+	return this.hasPotentiallyStarted() && this.inning.number;
 };
 
 gameSchema.methods.isCool = function(hours) {
@@ -74,6 +72,16 @@ gameSchema.methods.syncWithApi = function() {
 		var Status = require('../models/Status');
 
 		request.get('https://statsapi.mlb.com/api/v1.1/game/' + thisGame._id + '/feed/live', function(error, response) {
+			if (error) {
+				reject(error);
+				return;
+			}
+
+			if (!response || !response.text) {
+				reject('not really sure but bad');
+				return;
+			}
+
 			var playerPromises = [];
 
 			var data = JSON.parse(response.text);
@@ -144,7 +152,10 @@ gameSchema.methods.syncWithApi = function() {
 
 			Promise.all(playerPromises).then(function() {
 				thisGame.save(function(error) {
-					if (!error) {
+					if (error) {
+						reject(error);
+					}
+					else {
 						resolve(thisGame);
 					}
 				});

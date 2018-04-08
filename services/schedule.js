@@ -57,7 +57,7 @@ module.exports.showAllForTeam = function(request, response) {
 								}
 							}
 
-							if (game.hasStarted()) {
+							if (game.hasDefinitelyStarted()) {
 								if (classic.team._id == game.away.team._id) {
 									game.away.picks.push(classic);
 								}
@@ -151,7 +151,7 @@ module.exports.showAllForDate = function(request, response) {
 							}
 						}
 
-						if (game.hasStarted()) {
+						if (game.hasDefinitelyStarted()) {
 							if (classic.team._id == game.away.team._id) {
 								game.away.picks.push(classic);
 							}

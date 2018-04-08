@@ -58,7 +58,7 @@ module.exports.showAllForUser = function(request, response) {
 
 					if (!session || session.username != user.username) {
 						classic.picks = classic.picks.filter(function(game) {
-							return game.isActuallyHappening();
+							return game.hasDefinitelyStarted();
 						});
 					}
 
@@ -149,17 +149,8 @@ module.exports.pick = function(request, response) {
 
 			var verificationPromises = [];
 
-			if (game.isDelayed()) {
-				verificationPromises.push(new Promise(function(resolve, reject) {
-					game.syncWithApi().then(function(syncedGame) {
-						if (syncedGame.isDelayed()) {
-							resolve(syncedGame);
-						}
-						else {
-							reject('nope');
-						}
-					});
-				}));
+			if (game.hasPotentiallyStarted() && !game.hasDefinitelyStarted()) {
+				verificationPromises.push(game.syncWithApi());
 			}
 
 			Promise.all(verificationPromises).then(function(values) {
@@ -169,7 +160,7 @@ module.exports.pick = function(request, response) {
 
 				var classicPromises = [];
 
-				if (game.hasStarted()) {
+				if (game.hasDefinitelyStarted()) {
 					response.sendStatus(500);
 					return;
 				}
@@ -210,8 +201,8 @@ module.exports.pick = function(request, response) {
 						});
 					});
 				});
-			}).catch(function() {
-				response.sendStatus(500);
+			}).catch(function(error) {
+				response.send(error);
 				return;
 			});
 		});
@@ -231,17 +222,8 @@ module.exports.unpick = function(request, response) {
 
 			var verificationPromises = [];
 
-			if (game.isDelayed()) {
-				verificationPromises.push(new Promise(function(resolve, reject) {
-					game.syncWithApi().then(function(syncedGame) {
-						if (syncedGame.isDelayed()) {
-							resolve(syncedGame);
-						}
-						else {
-							reject('nope');
-						}
-					});
-				}));
+			if (game.hasPotentiallyStarted() && !game.hasDefinitelyStarted()) {
+				verificationPromises.push(game.syncWithApi());
 			}
 
 			Promise.all(verificationPromises).then(function(values) {
@@ -251,7 +233,7 @@ module.exports.unpick = function(request, response) {
 
 				var classicPromises = [];
 
-				if (game.hasStarted()) {
+				if (game.hasDefinitelyStarted()) {
 					response.sendStatus(500);
 					return;
 				}
@@ -279,8 +261,8 @@ module.exports.unpick = function(request, response) {
 						gameId: game._id
 					});
 				});
-			}).catch(function() {
-				response.sendStatus(500);
+			}).catch(function(error) {
+				response.send(error);
 				return;
 			});
 		});

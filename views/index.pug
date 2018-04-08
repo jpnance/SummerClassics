@@ -14,19 +14,19 @@ block content
 					a(href='https://www.mlb.com/gameday/' + game._id)
 						if game.isDelayed()
 							| Delayed
-						else if !game.hasStarted()
+						else if !game.hasDefinitelyStarted()
 							| #{dateFormat(game.startTime, 'h:MMtt')} ET
 						else if game.isOver()
 							| Final
 							if game.inning.number != 9
 								|
 								| (#{game.inning.number})
-						else if game.isActuallyHappening()
+						else if game.hasDefinitelyStarted()
 							| #{game.inning.state} of the #{game.inning.ordinal}
 						else
 							| Live
 
-				if game.hasStarted()
+				if game.hasDefinitelyStarted()
 					div.live-game
 						-
 							var picksClass = 'text-muted';
@@ -76,7 +76,7 @@ block content
 											| ,
 											|
 
-				else if !game.hasStarted()
+				else if !game.hasDefinitelyStarted()
 					div.team.pb-2(id='team-' + game.away.team._id class=game.away.picked ? 'picked': 'unpicked')
 						+teamButtons(session, game, game.away.team, game.away.probablePitcher)
 					div.team.pb-2(id='team-' + game.home.team._id class=game.home.picked ? 'picked': 'unpicked')
