@@ -69,8 +69,8 @@ module.exports.showAllForTeam = function(request, response) {
 						}
 					});
 
-				game.away.picks.sort(Classic.populatedUserDisplayNameSort);
-				game.home.picks.sort(Classic.populatedUserDisplayNameSort);
+					game.away.picks.sort(Classic.populatedUserDisplayNameSort);
+					game.home.picks.sort(Classic.populatedUserDisplayNameSort);
 				});
 
 				var responseData = {
