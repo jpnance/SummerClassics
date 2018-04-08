@@ -41,30 +41,55 @@ classicSchema.methods.pick = function(gameId) {
 };
 
 classicSchema.methods.unpick = function(gameId) {
-	if (this.picks.indexOf(gameId) == -1) {
-		return;
+	if (this.populated('picks')) {
+		this.picks = this.picks.filter(function(game) {
+			return game._id != gameId;
+		});
 	}
+	else {
+		if (this.picks.indexOf(gameId) == -1) {
+			return;
+		}
 
-	this.picks.splice(this.picks.indexOf(gameId), 1);
+		this.picks.splice(this.picks.indexOf(gameId), 1);
+	}
 };
 
-classicSchema.methods.tally = function() {
+classicSchema.methods.scoreAndResolve = function() {
 	var classic = this;
 
 	classic.record = { wins: 0, losses: 0 };
+	classic.score = {
+		potential: { best: 16, worst: -8 },
+		final: 0
+	};
 
-	classic.picks.forEach(function(pick) {
+	var unnecessaryPicks = [];
+
+	classic.picks.forEach(function(game) {
 		if (!classic.isFinal()) {
-			if (pick.isFinal()) {
-				if ((pick.away.team == classic.team && pick.away.winner) || (pick.home.team == classic.team && pick.home.winner)) {
+			if (game.isFinal()) {
+				if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
 					classic.record.wins++;
 				}
-				else if ((pick.away.team == classic.team && !pick.away.winner) || (pick.home.team == classic.team && !pick.home.winner)) {
+				else if ((game.away.team == classic.team && !game.away.winner) || (game.home.team == classic.team && !game.home.winner)) {
 					classic.record.losses++;
 				}
 			}
 		}
 	});
+
+	if (classic.isFinal()) {
+		classic.picks.forEach(function(game) {
+			if (!game.isFinal()) {
+				unnecessaryPicks.push(game._id);
+			}
+		});
+
+		unnecessaryPicks.forEach(function(gameId) {
+			classic.unpick(gameId);
+		});
+	}
 
 	if (classic.record.wins == 4 || classic.record.losses == 4) {
 		switch (classic.record.wins - classic.record.losses) {

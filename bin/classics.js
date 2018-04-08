@@ -9,7 +9,7 @@ Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(err
 
 	classics.forEach(function(classic) {
 		classicPromises.push(new Promise(function(resolve, reject) {
-			classic.tally();
+			classic.scoreAndResolve();
 
 			classic.save(function(error) {
 				if (!error) {

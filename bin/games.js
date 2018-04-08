@@ -23,7 +23,7 @@ Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: 
 
 			classics.forEach(function(classic) {
 				classicPromises.push(new Promise(function(resolve, reject) {
-					classic.tally();
+					classic.scoreAndResolve();
 
 					classic.save(function(error) {
 						if (!error) {
