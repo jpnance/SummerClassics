@@ -44,9 +44,21 @@ mixin record(classic)
 mixin gameCard(game)
 	-
 		var classes = {
+			card: { border: [] },
 			header: { background: [], linkText: [] },
 			away: { background: [], linkText: [], pitcherText: ['text-muted'], scoreText: [], picksText: [] },
 			home: { background: [], linkText: [], pitcherText: ['text-muted'], scoreText: [], picksText: [] }
+		}
+
+		if (game.classic) {
+			classes.card.border.push('border-secondary');
+
+			if (game.classic.team._id == game.away.team._id) {
+				classes.away.background.push('bg-light-gray');
+			}
+			else if (game.classic.team._id == game.home.team._id) {
+				classes.home.background.push('bg-light-gray');
+			}
 		}
 
 		if (game.isDelayed()) {
@@ -70,70 +82,42 @@ mixin gameCard(game)
 			classes.header.linkText.push('text-white');
 			classes.away.picksText.push('text-dark');
 			classes.home.picksText.push('text-dark');
-
-			if (game.classic) {
-				if (game.classic.team._id == game.away.team._id) {
-					classes.away.background.push('bg-light-gray');
-				}
-				else if (game.classic.team._id == game.home.team._id) {
-					classes.home.background.push('bg-light-gray');
-				}
-			}
 		}
 
 		if (game.isFinal()) {
 			if (game.classic) {
-				if (game.classic.team._id == game.away.team._id) {
-					classes.away.linkText.push('text-white');
-					classes.away.pitcherText = ['text-light'];
-					classes.away.scoreText.push('text-white');
-					classes.away.picksText.push('text-white');
+				classes.header.linkText.push('text-white');
 
+				if (game.classic.team._id == game.away.team._id) {
 					if (game.away.winner) {
-						classes.home.picksText.push('text-danger');
-						classes.away.background.push('bg-success');
+						classes.header.background.push('bg-success');
 					}
 					else if (game.home.winner) {
-						classes.home.picksText.push('text-success');
-						classes.away.background.push('bg-danger');
-					}
-					else {
-						classes.away.background.push('bg-light-gray');
+						classes.header.background.push('bg-danger');
 					}
 				}
 				else if (game.classic.team._id == game.home.team._id) {
-					classes.home.linkText.push('text-white');
-					classes.home.pitcherText = ['text-light'];
-					classes.home.scoreText.push('text-white');
-					classes.home.picksText.push('text-white');
-
 					if (game.home.winner) {
-						classes.away.picksText.push('text-danger');
-						classes.home.background.push('bg-success');
+						classes.header.background.push('bg-success');
 					}
-					else if (game.away.winner) {
-						classes.away.picksText.push('text-success');
-						classes.home.background.push('bg-danger');
-					}
-					else {
-						classes.home.background.push('bg-light-gray');
+					if (game.away.winner) {
+						classes.header.background.push('bg-danger');
 					}
 				}
 			}
-			else {
-				if (game.away.winner) {
-					classes.away.picksText.push('text-success');
-					classes.home.picksText.push('text-danger');
-				}
-				else if (game.home.winner) {
-					classes.home.picksText.push('text-success');
-					classes.away.picksText.push('text-danger');
-				}
+
+			if (game.away.winner) {
+				classes.away.picksText.push('text-success');
+				classes.home.picksText.push('text-danger');
+			}
+			else if (game.home.winner) {
+				classes.home.picksText.push('text-success');
+				classes.away.picksText.push('text-danger');
 			}
 		}
 
 	div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
-		div.card
+		div.card(class=classes.card.border)
 			div.card-header.py-1(class=classes.header.background)
 				div.row.justify-content-center
 					div.col-10.col-sm-12.col-md-12.text-center

@@ -36,7 +36,15 @@ $(document).ready(function() {
 
 		$.get(actionLink, function(data) {
 			if (data.success) {
-				$('#game-' + data.gameId).find('a.team-button2').each(function(i, teamButton) {
+				var $game = $('#game-' + data.gameId);
+
+				$game.find('div.card').removeClass('border-secondary');
+
+				if (data.teamId) {
+					$game.find('div.card').addClass('border-secondary');
+				}
+
+				$game.find('a.team-button2').each(function(i, teamButton) {
 					var $this = $(teamButton);
 
 					$this.removeClass('btn-secondary').addClass('btn-outline-secondary');
