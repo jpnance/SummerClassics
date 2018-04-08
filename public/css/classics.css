@@ -1,5 +1,5 @@
 a.team-button, a.team-button2, button.btn {
-	line-height: 0.9;
+	line-height: 0.9rem;
 }
 
 .game-status {
@@ -24,7 +24,7 @@ a.team-button, a.team-button2, button.btn {
 }
 
 th.team, td.classic-game {
-	line-height: 1.0rem;
+	line-height: 0.9rem;
 }
 
 th.team span.record {
