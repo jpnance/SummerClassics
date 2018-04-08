@@ -24,13 +24,26 @@ block content
 
 				if team.classic
 					each i in [0, 1, 2, 3, 4, 5, 6]
-						td.text-center.align-middle
+						td.classic-game.text-center.align-middle
 							if team.classic.picks[i]
 								- var game = team.classic.picks[i];
 								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd'))
 									if !game.isFinal()
 										| #{game.opponent.team.abbreviation}
-									else if !game.opponent.winner
-										strong.text-success #{game.opponent.team.abbreviation}
 									else
-										strike.text-danger #{game.opponent.team.abbreviation}
+										if !game.opponent.winner
+											strong.text-success #{game.opponent.team.abbreviation}
+											br
+											span.result.text-success
+												| W
+												|
+												+scoreRelativeToTeam(game, team)
+										else
+											strike.text-danger #{game.opponent.team.abbreviation}
+											br
+											span.result.text-danger
+												| L
+												|
+												+scoreRelativeToTeam(game, team)
+							else if team.classic.isFinal()
+								| --

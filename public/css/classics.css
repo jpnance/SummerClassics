@@ -23,12 +23,16 @@ a.team-button, a.team-button2, button.btn {
 	line-height: 1.1;
 }
 
-th.team {
+th.team, td.classic-game {
 	line-height: 1.0rem;
 }
 
 th.team span.record {
 	font-weight: normal;
+}
+
+td.classic-game span.result {
+	font-size: 80%;
 }
 
 div.team.picked a.team-button.pick,
