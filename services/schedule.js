@@ -177,9 +177,7 @@ module.exports.showAllForDate = function(request, response) {
 				tomorrow: tomorrow
 			};
 
-			var template = request.cookies && request.cookies.preview ? 'schedule/all' : 'index';
-
-			response.render(template, responseData);
+			response.render('schedule/all', responseData);
 		});
 	});
 };
