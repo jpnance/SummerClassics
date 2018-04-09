@@ -127,14 +127,14 @@ module.exports.showStandings = function(request, response) {
 					standingsMap[classic.user.username].score.final += classic.score.final;
 
 					if (classic.record.wins == 4) {
-						standingsMap[classic.user.username].progress.wins += (1 / 30) * 100;
+						standingsMap[classic.user.username].progress.wins += (4 / 120) * 100;
 					}
 					else if (classic.record.losses == 4) {
-						standingsMap[classic.user.username].progress.losses += (1 / 30) * 100;
+						standingsMap[classic.user.username].progress.losses += (4 / 120) * 100;
 					}
 				}
 				else {
-					standingsMap[classic.user.username].progress.open += ((Math.max(classic.record.wins, classic.record.losses) / 4) / 30) * 100;
+					standingsMap[classic.user.username].progress.open += (Math.max(classic.record.wins, classic.record.losses) / 120) * 100;
 				}
 			});
 
