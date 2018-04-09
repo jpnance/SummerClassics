@@ -75,7 +75,8 @@ module.exports.showAllForTeam = function(request, response) {
 
 				var responseData = {
 					session: session,
-					games: games
+					games: games,
+					team: team
 				};
 
 				response.render('schedule/team', responseData);
