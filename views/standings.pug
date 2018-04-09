@@ -21,10 +21,10 @@ block content
 				tr
 					td.text-right
 						a(href='/picks/' + standing.user.username) #{standing.user.displayName}
-							div.progress(style={ height: '5px' })
-								div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
-					td.text-center #{standing.record.wins}-#{standing.record.losses}
-					td.text-center #{standing.score.potential.maximum}
-					td.text-center #{standing.score.potential.minimum}
-					td.text-center.table-active
+						div.progress.mb-1(style={ height: '5px' })
+							div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
+					td.text-center.align-middle #{standing.record.wins}-#{standing.record.losses}
+					td.text-center.align-middle #{standing.score.potential.maximum}
+					td.text-center.align-middle #{standing.score.potential.minimum}
+					td.text-center.table-active.align-middle
 						| #{standing.score.final}
