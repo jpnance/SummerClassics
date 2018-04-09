@@ -132,6 +132,8 @@ mixin gameCard(game, showDate)
 								| End of the #{game.inning.ordinal}
 							else if game.hasDefinitelyStarted()
 								| #{game.inning.state} of the #{game.inning.ordinal}
+							else if game.isWarmingUp()
+								| Warmup
 							else
 								| Live
 
