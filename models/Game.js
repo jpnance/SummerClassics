@@ -33,7 +33,7 @@ gameSchema.methods.isPastStartTime = function() {
 };
 
 gameSchema.methods.isDelayed = function() {
-	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS');
+	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS' || this.status == 'PY');
 };
 
 gameSchema.methods.hasPotentiallyStarted = function() {
