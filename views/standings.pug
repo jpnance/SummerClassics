@@ -22,7 +22,9 @@ block content
 					td.text-right
 						a(href='/picks/' + standing.user.username) #{standing.user.displayName}
 						div.progress.mb-1(style={ height: '5px' })
-							div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
+							div.progress-bar.bg-success(role='progressbar' style={ width: standing.progress.wins + '%' })
+							div.progress-bar.bg-danger(role='progressbar' style={ width: standing.progress.losses + '%' })
+							div.progress-bar(role='progressbar' style={ width: standing.progress.open + '%' })
 					td.text-center.align-middle #{standing.record.wins}-#{standing.record.losses}
 					td.text-center.align-middle #{standing.score.potential.maximum}
 					td.text-center.align-middle #{standing.score.potential.minimum}

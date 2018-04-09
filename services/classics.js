@@ -101,7 +101,11 @@ module.exports.showStandings = function(request, response) {
 								minimum: 0
 							}
 						},
-						progress: 0
+						progress: {
+							wins: 0,
+							losses: 0,
+							open: 0
+						}
 					};
 				}
 
@@ -121,9 +125,17 @@ module.exports.showStandings = function(request, response) {
 					standingsMap[classic.user.username].score.potential.maximum += classic.score.final;
 					standingsMap[classic.user.username].score.potential.minimum += classic.score.final;
 					standingsMap[classic.user.username].score.final += classic.score.final;
-				}
 
-				standingsMap[classic.user.username].progress += Math.max(classic.record.wins, classic.record.losses) / 4;
+					if (classic.record.wins == 4) {
+						standingsMap[classic.user.username].progress.wins += (1 / 30) * 100;
+					}
+					else if (classic.record.losses == 4) {
+						standingsMap[classic.user.username].progress.losses += (1 / 30) * 100;
+					}
+				}
+				else {
+					standingsMap[classic.user.username].progress.open += ((Math.max(classic.record.wins, classic.record.losses) / 4) / 30) * 100;
+				}
 			});
 
 			Object.keys(standingsMap).forEach(function(key) {
