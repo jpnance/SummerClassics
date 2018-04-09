@@ -19,6 +19,8 @@ block content
 			tr
 				td.text-right
 					a(href='/picks/' + standing.user.username) #{standing.user.displayName}
+					div.progress(style={ height: '3px' })
+						div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
 				td.text-center.text-muted #{standing.record.wins}-#{standing.record.losses}
 				td.text-center.text-muted #{standing.score.potential.maximum}
 				td.text-center.text-muted #{standing.score.potential.minimum}

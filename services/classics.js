@@ -100,7 +100,8 @@ module.exports.showStandings = function(request, response) {
 								maximum: 0,
 								minimum: 0
 							}
-						}
+						},
+						progress: 0
 					};
 				}
 
@@ -121,6 +122,8 @@ module.exports.showStandings = function(request, response) {
 					standingsMap[classic.user.username].score.potential.minimum += classic.score.final;
 					standingsMap[classic.user.username].score.final += classic.score.final;
 				}
+
+				standingsMap[classic.user.username].progress += Math.max(classic.record.wins, classic.record.losses) / 4;
 			});
 
 			Object.keys(standingsMap).forEach(function(key) {
