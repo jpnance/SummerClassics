@@ -8,21 +8,23 @@ block content
 		table.table.table-sm
 			tr
 				th
-				th.text-center.text-muted Record
-				th.text-center.text-muted
+				th.text-center Record
+				th.text-center
 					span.d-none.d-sm-inline Maximum
 					span.d-sm-none Max
-				th.text-center.text-muted
+				th.text-center
 					span.d-none.d-sm-inline Minimum
 					span.d-sm-none Min
-				th.text-center Points
+				th.text-center.table-active Points
+
 			each standing in standings
 				tr
 					td.text-right
 						a(href='/picks/' + standing.user.username) #{standing.user.displayName}
-						div.progress(style={ height: '3px' })
-							div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
-					td.text-center.text-muted #{standing.record.wins}-#{standing.record.losses}
-					td.text-center.text-muted #{standing.score.potential.maximum}
-					td.text-center.text-muted #{standing.score.potential.minimum}
-					td.text-center #{standing.score.final}
+							div.progress(style={ height: '5px' })
+								div.progress-bar(role='progressbar' style={ width: standing.progress + '%' })
+					td.text-center #{standing.record.wins}-#{standing.record.losses}
+					td.text-center #{standing.score.potential.maximum}
+					td.text-center #{standing.score.potential.minimum}
+					td.text-center.table-active
+						| #{standing.score.final}
