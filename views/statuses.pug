@@ -1,0 +1,8 @@
+extends layout.pug
+
+block title
+	+title('Statuses')
+
+block content
+	each status in statuses
+		pre #{status}

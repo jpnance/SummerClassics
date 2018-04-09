@@ -3,6 +3,7 @@ var sessions = require('./services/sessions');
 var schedule = require('./services/schedule');
 var classics = require('./services/classics');
 var teams = require('./services/teams');
+var statuses = require('./services/statuses');
 
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
@@ -35,4 +36,6 @@ module.exports = function(app) {
 	app.get('/standings', classics.showStandings);
 
 	app.get('/teams', teams.showAll);
+
+	app.get('/statuses', statuses.showAll);
 };
