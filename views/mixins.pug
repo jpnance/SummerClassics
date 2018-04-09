@@ -115,6 +115,8 @@ mixin gameCard(game, showDate)
 						a(href='https://www.mlb.com/gameday/' + game._id class=classes.header.linkText target='_blank')
 							if game.isDelayed()
 								| Delayed
+							else if game.hasBeenPostponed()
+								| Postponed
 							else if !game.hasPotentiallyStarted()
 								| #{dateFormat(game.startTime, 'h:MMtt')} ET
 							else if game.isFinal()
@@ -133,7 +135,7 @@ mixin gameCard(game, showDate)
 				+teamRow(game, 'away', classes.away)
 				+teamRow(game, 'home', classes.home)
 
-			if session && !game.hasDefinitelyStarted()
+			if session && !game.hasDefinitelyStarted() && !game.hasBeenPostponed()
 				div.card-footer.text-center
 					div.btn-group
 						+teamButton(session, game, game.away)

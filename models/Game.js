@@ -36,6 +36,10 @@ gameSchema.methods.isDelayed = function() {
 	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS' || this.status == 'PY');
 };
 
+gameSchema.methods.hasBeenPostponed = function() {
+	return this.status && (this.status == 'DI' || this.status == 'DR');
+};
+
 gameSchema.methods.hasPotentiallyStarted = function() {
 	return this.isPastStartTime() && !this.isDelayed();
 };

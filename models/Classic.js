@@ -64,10 +64,14 @@ classicSchema.methods.scoreAndResolve = function() {
 		final: 0
 	};
 
+	var postponedPicks = [];
 	var unnecessaryPicks = [];
 
 	classic.picks.forEach(function(game) {
-		if (!classic.isFinal()) {
+		if (game.hasBeenPostponed()) {
+			postponedPicks.push(game._id);
+		}
+		else if (!classic.isFinal()) {
 			if (game.isFinal()) {
 				if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
 					classic.record.wins++;
@@ -77,6 +81,11 @@ classicSchema.methods.scoreAndResolve = function() {
 				}
 			}
 		}
+	});
+
+	postponedPicks.forEach(function(gameId) {
+		console.log('unpicking ' + gameId + ' cuz it was postponed');
+		classic.unpick(gameId);
 	});
 
 	if (classic.isFinal()) {
