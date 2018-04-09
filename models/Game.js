@@ -32,6 +32,10 @@ gameSchema.methods.isPastStartTime = function() {
 	return this.startTime && Date.now() >= this.startTime;
 };
 
+gameSchema.methods.isWarmingUp = function() {
+	return this.status && this.status == 'PW';
+};
+
 gameSchema.methods.isDelayed = function() {
 	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS' || this.status == 'PY');
 };
