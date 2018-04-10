@@ -21,6 +21,16 @@ module.exports.showAll = function(request, response) {
 module.exports.showAllForTeam = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		Team.findOne({ abbreviation: request.params.teamAbbreviation }, function(error, team) {
+			if (error) {
+				response.sendStatus(500);
+				return;
+			}
+
+			if (!team) {
+				response.sendStatus(404);
+				return;
+			}
+
 			var dataPromises = [
 				Game.find({ '$or': [ { 'home.team': team._id }, { 'away.team': team._id } ]}).sort('startTime').populate('away.team away.probablePitcher home.team home.probablePitcher'),
 				Classic.find({ season: process.env.SEASON }).populate('user team')
