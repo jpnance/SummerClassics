@@ -20,31 +20,33 @@ html
 		link(href='/images/favicon.ico' rel='icon')
 
 	body
-		div.container.pb-3
-			div.col-xs-12
-				h2.mt-2.mb-0
-					strong
-						a.text-dark(href='/') Summer Classics
+		-
+			var navItems = [];
 
-				-
-					var navItems = [];
+			navItems.push({ name: 'Schedule', href: '/schedule' });
+			navItems.push({ name: 'Standings', href: '/standings', });
 
-					navItems.push({ name: 'Schedule', href: '/schedule' });
-					navItems.push({ name: 'Standings', href: '/standings', });
+			if (session) {
+				navItems.push({ name: 'Picks', href: '/picks' });
+				navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
+				navItems.push({ name: 'Log Out', href: '/logout' });
+			}
+			else {
+				navItems.push({ name: 'Log In', href: '/login' });
+			}
 
-					if (session) {
-						navItems.push({ name: 'Picks', href: '/picks' });
-						navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
-						navItems.push({ name: 'Log Out', href: '/logout' });
-					}
-					else {
-						navItems.push({ name: 'Log In', href: '/login' });
-					}
-
-				ul.nav.nav-pills
+		nav.navbar.navbar-expand-md.navbar-light.bg-light
+			a.navbar-brand(href='/')
+				img.d-inline-block.align-top(src='http://coinflipper.org/logo.png' height='30')
+				|
+				| Summer Classics
+			button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav')
+				span.navbar-toggler-icon
+			div.collapse.navbar-collapse#navbarNav
+				ul.navbar-nav
 					each navItem in navItems
 						li.nav-item
-							a.nav-link.p-0.mr-2(href=navItem.href) #{navItem.name}
+							a.nav-link(href=navItem.href) #{navItem.name}
 
 		//-
 			if session && session.user.admin
