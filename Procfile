@@ -4,3 +4,4 @@ schedule: node bin/schedule.js
 spring: node bin/spring.js
 classics: node bin/classics.js
 games: node bin/games.js
+notification: node bin/notification.js
