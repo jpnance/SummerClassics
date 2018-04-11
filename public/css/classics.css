@@ -43,3 +43,30 @@ div.team.unpicked a.team-button.unpick {
 .bg-light-gray {
 	background-color: #e6e6e6 !important;
 }
+
+li.notification {
+	font-size: 80%;
+}
+
+@media (min-width: 0px) {
+	/* xs */
+}
+
+@media (min-width: 576px) {
+	/* sm */
+}
+
+@media (min-width: 768px) {
+	/* md */
+	div.notifications.dropdown-menu {
+		width: 300px;
+	}
+}
+
+@media (min-width: 992px) {
+	/* lg */
+}
+
+@media (min-width: 1200px) {
+	/* xl */
+}

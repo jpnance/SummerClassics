@@ -233,3 +233,88 @@ mixin scoreRelativeToTeam(game, team)
 		| #{game.away.score}-#{game.home.score}
 	else if game.home.team._id == team._id
 		| #{game.home.score}-#{game.away.score}
+
+mixin notificationListGroupItem(notification)
+	-
+		var listGroupItemClass = '';
+
+		switch(notification.type) {
+			case 'classic-win': listGroupItemClass = 'list-group-item-success'; break;
+			case 'classic-loss': listGroupItemClass = 'list-group-item-danger'; break;
+			case 'postponed': listGroupItemClass = 'list-group-item-info'; break;
+			case 'unnecessary': listGroupItemClass = 'list-group-item-info'; break;
+		}
+
+	li.notification.list-group-item(class=listGroupItemClass)
+		div.row
+			div.col-11
+				if notification.type == 'classic-win'
+					strong Congratulations!
+					|
+					|
+					span
+						| You won your
+						|
+						strong #{notification.classic.team.teamName}
+						|
+						| series in
+						|
+						+numberToWord(notification.classic.record.wins + notification.classic.record.losses)
+						|
+						| games, earning you
+						|
+						strong #{notification.classic.score.final} points
+						| !
+				else if notification.type == 'classic-loss'
+					span
+						| You lost your
+						|
+						strong #{notification.classic.team.teamName}
+						|
+						| series in
+						|
+						+numberToWord(notification.classic.record.wins + notification.classic.record.losses)
+						|
+						| games, costing you
+						|
+						strong #{Math.abs(notification.classic.score.final)}
+							|
+							|
+							if notification.classic.score.final == -1
+								| point
+							else
+								| points
+						| .
+				else if notification.type == 'postponed'
+					strong Heads up!
+					|
+					|
+					span
+						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm dS', true)} has been postponed so your
+						|
+						strong #{notification.classic.team.teamName}
+						|
+						| selection has been automatically unpicked for you.
+				else if notification.type == 'unnecessary'
+					strong Heads up!
+					|
+					|
+					span
+						| Your
+						|
+						strong #{notification.classic.team.teamName}
+						|
+						| selection in the #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game on #{dateFormat(notification.game.startTime, 'mmmm dS')} is no longer necessary so it's been automatically unpicked for you.
+			div.col-1.pl-0
+				a.close(href='/notifications/dismiss/' + notification._id)
+					span &times;
+
+mixin numberToWord(number)
+	if number == 4
+		| four
+	else if number == 5
+		| five
+	else if number == 6
+		| six
+	else if number == 7
+		| seven

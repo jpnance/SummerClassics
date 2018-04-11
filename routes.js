@@ -41,4 +41,5 @@ module.exports = function(app) {
 	app.get('/statuses', statuses.showAll);
 
 	app.get('/notifications', notifications.showAll);
+	app.get('/notifications/dismiss/:notificationId', notifications.dismiss);
 };

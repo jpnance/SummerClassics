@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var Team = require('../models/Team');
 var Game = require('../models/Game');
+var Notification = require('../models/Notification');
 
 var classicSchema = new Schema({
 	season: { type: Number, required: true, default: (new Date()).getFullYear() },
@@ -57,89 +58,129 @@ classicSchema.methods.unpick = function(gameId) {
 
 classicSchema.methods.scoreAndResolve = function() {
 	var classic = this;
+	var wasAlreadyFinal = classic.isFinal();
 
-	classic.record = { wins: 0, losses: 0 };
-	classic.score = {
-		potential: { best: 16, worst: -8 },
-		final: 0
-	};
+	return new Promise(function(resolve, reject) {
+		classic.record = { wins: 0, losses: 0 };
+		classic.score = {
+			potential: { best: 16, worst: -8 },
+			final: 0
+		};
 
-	var postponedPicks = [];
-	var unnecessaryPicks = [];
+		var postponedGames = [];
+		var unnecessaryGames = [];
+		var notificationPromises = [];
 
-	classic.picks.forEach(function(game) {
-		if (game.hasBeenPostponed()) {
-			postponedPicks.push(game._id);
-		}
-		else if (!classic.isFinal()) {
-			if (game.isFinal()) {
-				if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
-					classic.record.wins++;
-				}
-				else if ((game.away.team == classic.team && !game.away.winner) || (game.home.team == classic.team && !game.home.winner)) {
-					classic.record.losses++;
-				}
-			}
-		}
-	});
-
-	postponedPicks.forEach(function(gameId) {
-		console.log('unpicking ' + gameId + ' cuz it was postponed');
-		classic.unpick(gameId);
-	});
-
-	if (classic.isFinal()) {
 		classic.picks.forEach(function(game) {
-			if (!game.isFinal()) {
-				unnecessaryPicks.push(game._id);
+			if (game.hasBeenPostponed()) {
+				postponedGames.push(game);
+			}
+			else if (!classic.isFinal()) {
+				if (game.isFinal()) {
+					if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
+						classic.record.wins++;
+					}
+					else if ((game.away.team == classic.team && !game.away.winner) || (game.home.team == classic.team && !game.home.winner)) {
+						classic.record.losses++;
+					}
+				}
 			}
 		});
 
-		unnecessaryPicks.forEach(function(gameId) {
-			classic.unpick(gameId);
+		postponedGames.forEach(function(game) {
+			notificationPromises.push(Notification.create({
+				user: classic.user,
+				type: 'postponement',
+				game: game._id,
+				originalStartTime: game.startTime,
+				classic: classic._id
+			}));
+
+			classic.unpick(game._id);
 		});
-	}
 
-	if (classic.record.wins == 4 || classic.record.losses == 4) {
-		switch (classic.record.wins - classic.record.losses) {
-			case 4:
-				classic.score.final = 16;
-				break;
-
-			case 3:
-				classic.score.final = 8;
-				break;
-
-			case 2:
-				classic.score.final = 4;
-				break;
-
-			case 1:
-				classic.score.final = 2;
-				break;
-
-			case -1:
-				classic.score.final = -1;
-				break;
-
-			case -2:
-				classic.score.final = -2;
-				break;
-
-			case -3:
-				classic.score.final = -4;
-				break;
-
-			case -4:
-				classic.score.final = -8;
-				break;
+		if (classic.isFinal() && !wasAlreadyFinal) {
+			if (classic.record.wins == 4) {
+				notificationPromises.push(Notification.create({
+					user: classic.user,
+					type: 'classic-win',
+					classic: classic._id
+				}));
+			}
+			else if (classic.record.losses == 4) {
+				notificationPromises.push(Notification.create({
+					user: classic.user,
+					type: 'classic-loss',
+					classic: classic._id
+				}));
+			}
 		}
-	}
-	else {
-		classic.score.potential = { best: 0, worst: 0 };
-		classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
-		classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
-	}
+
+		if (classic.isFinal()) {
+			classic.picks.forEach(function(game) {
+				if (!game.isFinal()) {
+					notificationPromises.push(Notification.create({
+						user: classic.user,
+						type: 'unnecessary',
+						game: game._id,
+						originalStartTime: game.startTime,
+						classic: classic._id
+					}));
+
+					unnecessaryGames.push(game);
+				}
+			});
+
+			unnecessaryGames.forEach(function(game) {
+				classic.unpick(game._id);
+			});
+		}
+
+		if (classic.record.wins == 4 || classic.record.losses == 4) {
+			switch (classic.record.wins - classic.record.losses) {
+				case 4:
+					classic.score.final = 16;
+					break;
+
+				case 3:
+					classic.score.final = 8;
+					break;
+
+				case 2:
+					classic.score.final = 4;
+					break;
+
+				case 1:
+					classic.score.final = 2;
+					break;
+
+				case -1:
+					classic.score.final = -1;
+					break;
+
+				case -2:
+					classic.score.final = -2;
+					break;
+
+				case -3:
+					classic.score.final = -4;
+					break;
+
+				case -4:
+					classic.score.final = -8;
+					break;
+			}
+		}
+		else {
+			classic.score.potential = { best: 0, worst: 0 };
+			classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
+			classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
+		}
+
+		Promise.all(notificationPromises).then(function() {
+			resolve('notified');
+		});
+	});
 };
 
 classicSchema.statics.initialize = function(user, season) {

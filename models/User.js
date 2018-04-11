@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var Notification = require('../models/Notification');
+
 var userSchema = new Schema({
 	username: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
@@ -9,6 +11,12 @@ var userSchema = new Schema({
 	displayName: { type: String, required: true },
 	seasons: { type: [Number] },
 	admin: { type: Boolean, default: false }
+});
+
+userSchema.virtual('notifications', {
+	ref: 'Notification',
+	localField: '_id',
+	foreignField: 'user'
 });
 
 userSchema.methods.isEligibleFor = function(season) {
