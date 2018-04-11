@@ -241,7 +241,7 @@ mixin notificationListGroupItem(notification)
 		switch(notification.type) {
 			case 'classic-win': listGroupItemClass = 'list-group-item-success'; break;
 			case 'classic-loss': listGroupItemClass = 'list-group-item-danger'; break;
-			case 'postponed': listGroupItemClass = 'list-group-item-info'; break;
+			case 'postponement': listGroupItemClass = 'list-group-item-info'; break;
 			case 'unnecessary': listGroupItemClass = 'list-group-item-info'; break;
 		}
 
@@ -285,7 +285,7 @@ mixin notificationListGroupItem(notification)
 							else
 								| points
 						| .
-				else if notification.type == 'postponed'
+				else if notification.type == 'postponement'
 					strong Heads up!
 					|
 					|
