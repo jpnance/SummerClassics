@@ -52,7 +52,7 @@ html
 								a.nav-link(href=navItem.href) #{navItem.name}
 						else
 							li.nav-item.dropdown.py-1
-								a.nav-link.dropdown-toggle(href='#' data-toggle='dropdown')
+								a.nav-link.dropdown-toggle(href='#' class=(session.user.notifications.length == 0 ? 'disabled' : '') data-toggle='dropdown')
 									| Notifications
 									if session.user.notifications.length > 0
 										span.badge.badge-pill.badge-primary.align-middle.ml-1(style={ 'font-size': '60%' }) #{session.user.notifications.length}
