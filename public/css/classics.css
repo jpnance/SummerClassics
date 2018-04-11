@@ -50,6 +50,10 @@ li.notification {
 
 @media (min-width: 0px) {
 	/* xs */
+	td.classic-game {
+		font-size: 80%;
+		line-height: 0.8rem;
+	}
 }
 
 @media (min-width: 576px) {
@@ -60,6 +64,11 @@ li.notification {
 	/* md */
 	div.notifications.dropdown-menu {
 		width: 300px;
+	}
+
+	td.classic-game {
+		font-size: 100%;
+		line-height: 0.8rem;
 	}
 }
 
