@@ -1,0 +1,8 @@
+extends layout.pug
+
+block title
+	+title('Notifications')
+
+block content
+	each notification in notifications
+		div.alert.alert-info #{notification.message}

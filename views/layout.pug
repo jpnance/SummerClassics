@@ -20,31 +20,46 @@ html
 		link(href='/images/favicon.ico' rel='icon')
 
 	body
-		div.container.pb-3
-			div.col-xs-12
-				h2.mt-2.mb-0
-					strong
-						a.text-dark(href='/') Summer Classics
+		-
+			var navItems = [];
 
-				-
-					var navItems = [];
+			navItems.push({ name: 'Schedule', href: '/schedule' });
+			navItems.push({ name: 'Standings', href: '/standings', });
 
-					navItems.push({ name: 'Schedule', href: '/schedule' });
-					navItems.push({ name: 'Standings', href: '/standings', });
+			if (session) {
+				navItems.push({ name: 'Picks', href: '/picks' });
+				navItems.push({ name: 'Notifications', href: '#' });
+				navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
+				navItems.push({ name: 'Log Out', href: '/logout' });
+			}
+			else {
+				navItems.push({ name: 'Log In', href: '/login' });
+			}
 
-					if (session) {
-						navItems.push({ name: 'Picks', href: '/picks' });
-						navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
-						navItems.push({ name: 'Log Out', href: '/logout' });
-					}
-					else {
-						navItems.push({ name: 'Log In', href: '/login' });
-					}
-
-				ul.nav.nav-pills
+		nav.navbar.navbar-expand-md.navbar-light.bg-light
+			a.navbar-brand(href='/')
+				img.mr-2(src='http://coinflipper.org/logo.png' height='30')
+				| Summer Classics
+			button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav')
+				if session && session.user.notifications.length > 0
+					span.badge.badge-pill.badge-primary.align-middle.mr-2(style={ 'font-size': '50%' }) #{session.user.notifications.length}
+				span.navbar-toggler-icon
+			div.collapse.navbar-collapse#navbarNav
+				ul.navbar-nav
 					each navItem in navItems
-						li.nav-item
-							a.nav-link.p-0.mr-2(href=navItem.href) #{navItem.name}
+						if navItem.name != 'Notifications'
+							li.nav-item.py-1
+								a.nav-link(href=navItem.href) #{navItem.name}
+						else
+							li.nav-item.dropdown.py-1
+								a.nav-link.dropdown-toggle(href='#' data-toggle='dropdown')
+									| Notifications
+									if session.user.notifications.length > 0
+										span.badge.badge-pill.badge-primary.align-middle.ml-1(style={ 'font-size': '60%' }) #{session.user.notifications.length}
+								div.notifications.dropdown-menu.py-0
+									ul.list-group.list-group-flush
+										each notification in session.user.notifications
+											+notificationListGroupItem(notification)
 
 		//-
 			if session && session.user.admin

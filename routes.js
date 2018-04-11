@@ -4,6 +4,7 @@ var schedule = require('./services/schedule');
 var classics = require('./services/classics');
 var teams = require('./services/teams');
 var statuses = require('./services/statuses');
+var notifications = require('./services/notifications');
 
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
@@ -38,4 +39,7 @@ module.exports = function(app) {
 	app.get('/teams', teams.showAll);
 
 	app.get('/statuses', statuses.showAll);
+
+	app.get('/notifications', notifications.showAll);
+	app.get('/notifications/dismiss/:notificationId', notifications.dismiss);
 };

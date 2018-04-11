@@ -22,7 +22,7 @@ module.exports.add = function(request, response) {
 module.exports.edit = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		if (session && (request.params.username == session.user.username || session.user.admin)) {
-			User.findOne({ username: request.params.username }).exec(function(error, user) {
+			User.findOne({ username: request.params.username }).populate('notifications').exec(function(error, user) {
 				var responseData = {
 					user: user,
 					session: session

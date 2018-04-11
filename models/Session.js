@@ -37,7 +37,23 @@ sessionSchema.statics.closeActiveSession = function(request, callback) {
 
 sessionSchema.statics.withActiveSession = function(request, callback) {
 	if (request.cookies.sessionId) {
-		this.findByIdAndUpdate(request.cookies.sessionId, { userAgent: request.headers['user-agent'], ipAddress: request.connection.remoteAddress, lastActivity: Date.now() }).populate('user').exec(function(error, session) {
+		this.findByIdAndUpdate(request.cookies.sessionId, {
+			userAgent: request.headers['user-agent'],
+			ipAddress: request.connection.remoteAddress,
+			lastActivity: Date.now()
+		}).populate({
+			path: 'user',
+			populate: {
+				path: 'notifications',
+				match: { read: false },
+				populate: {
+					path: 'game classic',
+					populate: {
+						path: 'team home.team away.team'
+					}
+				}
+			}
+		}).exec(function(error, session) {
 			if (error) {
 				callback(error, null);
 			}
