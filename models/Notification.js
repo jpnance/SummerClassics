@@ -15,7 +15,7 @@ var notificationSchema = new Schema({
 	originalStartTime: {
 		type: Date,
 		required: function() {
-			return ['postponement', 'unnecessary'].includes(this.type);
+			return ['postponement'].includes(this.type);
 		}
 	},
 	classic: {

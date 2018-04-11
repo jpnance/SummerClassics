@@ -123,7 +123,6 @@ classicSchema.methods.scoreAndResolve = function() {
 						user: classic.user,
 						type: 'unnecessary',
 						game: game._id,
-						originalStartTime: game.startTime,
 						classic: classic._id
 					}));
 
