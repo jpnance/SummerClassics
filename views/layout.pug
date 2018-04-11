@@ -39,7 +39,7 @@ html
 		nav.navbar.navbar-expand-md.navbar-light.bg-light.mb-3
 			a.navbar-brand(href='/')
 				img.mr-2(src='http://coinflipper.org/logo.png' height='30')
-				strong Summer Classics
+				strong.align-middle Summer Classics
 			button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav')
 				if session && session.user.notifications.length > 0
 					span.badge.badge-pill.badge-primary.align-middle.mr-2(style={ 'font-size': '50%' }) #{session.user.notifications.length}
