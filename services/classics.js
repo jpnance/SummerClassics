@@ -175,7 +175,7 @@ module.exports.pick = function(request, response) {
 
 				var classicPromises = [];
 
-				if (game.hasDefinitelyStarted()) {
+				if (game.hasDefinitelyStarted() || game.hasBeenPostponed()) {
 					response.sendStatus(500);
 					return;
 				}
