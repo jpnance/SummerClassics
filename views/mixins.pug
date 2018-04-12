@@ -28,7 +28,7 @@ mixin teamButton(session, game, side)
 			button.classes.push('btn-outline-secondary');
 		}
 
-	a.team-button2.text-center.btn(href=button.actionLink class=button.classes data-team-id=side.team._id)
+	a.team-button.text-center.btn(href=button.actionLink class=button.classes data-team-id=side.team._id)
 		| #{side.team.abbreviation}
 		if session
 			br
@@ -180,36 +180,6 @@ mixin teamRow(game, side, classes)
 								| ,
 						|
 						|
-
-mixin teamButtons(session, game, team, pitcher)
-	-
-		var buttons = [
-			{
-				actionLink: '/pick/' + team._id + '/' + game._id,
-				buttonClass: ['btn-outline-secondary', 'pick']
-			},
-			{
-				actionLink: '/unpick/' + team._id + '/' + game._id,
-				buttonClass: ['btn-primary', 'unpick']
-			}
-		];
-
-	each button in buttons
-		-
-			if (!team.classic || team.classic.isFinal() || game.hasDefinitelyStarted()) {
-				button.buttonClass.push('disabled');
-			}
-
-		a.team-button.text-left.btn.btn-block.col-xs-12.m-0(href=button.actionLink class=button.buttonClass)
-			| #{team.teamName}
-			if session
-				|
-				|
-				span.record
-					+record(team.classic)
-			br
-			span.pitcher
-				+pitcher(pitcher)
 
 mixin scheduleNav(yesterday, today, tomorrow)
 	ul.nav.justify-content-center

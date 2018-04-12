@@ -5,37 +5,6 @@ $(document).ready(function() {
 
 		$.get(actionLink, function(data) {
 			if (data.success) {
-				$('#game-' + data.gameId).find('div.team').each(function(i, team) {
-					var $this = $(team);
-
-					$this.removeClass('picked').addClass('unpicked');
-
-					if ($this.attr('id') == 'team-' + data.teamId) {
-						$this.removeClass('unpicked').addClass('picked');
-					}
-				});
-
-				$('#game-' + data.gameId).find('li.team-row').each(function(i, teamRow) {
-					var $this = $(teamRow);
-
-					$this.removeClass('bg-light-gray');
-
-					if ($this.attr('id') == 'team-row-' + data.teamId) {
-						$this.addClass('bg-light-gray');
-					}
-				});
-			}
-		});
-
-		e.preventDefault();
-	});
-
-	$('body').on('click', 'a.team-button2', function(e) {
-		var $this = $(e.currentTarget);
-		var actionLink = $this.attr('href');
-
-		$.get(actionLink, function(data) {
-			if (data.success) {
 				var $game = $('#game-' + data.gameId);
 
 				$game.find('div.card').removeClass('border-secondary');
@@ -44,7 +13,7 @@ $(document).ready(function() {
 					$game.find('div.card').addClass('border-secondary');
 				}
 
-				$game.find('a.team-button2').each(function(i, teamButton) {
+				$game.find('a.team-button').each(function(i, teamButton) {
 					var $this = $(teamButton);
 
 					$this.removeClass('btn-secondary').addClass('btn-outline-secondary');
