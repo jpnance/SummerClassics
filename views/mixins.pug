@@ -1,13 +1,8 @@
-mixin title(breadcrumbs)
+mixin title(...breadcrumbs)
 	title
-		if Array.isArray(breadcrumbs)
-			each breadcrumb in breadcrumbs
-				| #{breadcrumb} &laquo;
-				|
-		else
-			| #{breadcrumbs} &laquo;
+		each breadcrumb in breadcrumbs
+			| #{breadcrumb} &laquo;
 			|
-
 		| Summer Classics &laquo; Coinflipper
 
 mixin teamButton(session, game, side)
