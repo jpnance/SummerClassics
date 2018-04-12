@@ -1,0 +1,56 @@
+extends ../layout.pug
+
+block title
+	+title('Picks')
+
+block content
+	h4.text-center #{user.firstName} #{user.lastName}
+
+	table.table.table-sm
+		tr
+			th
+
+			each i in [1, 2, 3, 4, 5, 6, 7]
+				th.text-nowrap.text-center
+					span.d-none.d-md-inline Game #{i}
+					span.d-md-none G#{i}
+
+		each team in teams
+			tr
+				th.team.text-nowrap.text-right.py-2
+					a(href='/picks/' + team.abbreviation)
+						span.team-name.d-none.d-sm-inline #{team.teamName}
+						span.team-name.d-sm-none #{team.abbreviation}
+					br
+					span.record
+						+record(team.classic)
+
+				if team.classic
+					each i in [0, 1, 2, 3, 4, 5, 6]
+						td.classic-game.text-center.align-middle
+							if team.classic.picks[i]
+								- var game = team.classic.picks[i];
+								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd') + '#game-' + game._id)
+									if !game.isFinal()
+										| #{game.opponent.team.abbreviation}
+										if game.hasDefinitelyStarted()
+											span.result.text-nowrap
+												br
+												+scoreRelativeToTeam(game, team)
+									else
+										if !game.opponent.winner
+											strong.text-success #{game.opponent.team.abbreviation}
+											br
+											span.result.text-success.text-nowrap
+												| W
+												|
+												+scoreRelativeToTeam(game, team)
+										else
+											strike.text-danger #{game.opponent.team.abbreviation}
+											br
+											span.result.text-danger.text-nowrap
+												| L
+												|
+												+scoreRelativeToTeam(game, team)
+							else if team.classic.isFinal()
+								span.text-muted --

@@ -1,9 +1,11 @@
-extends layout.pug
+extends ../layout.pug
 
 block title
 	+title('Picks')
 
 block content
+	h4.text-center #{team.name}
+
 	table.table.table-sm
 		tr
 			th
@@ -13,21 +15,20 @@ block content
 					span.d-none.d-md-inline Game #{i}
 					span.d-md-none G#{i}
 
-		each team in teams
+		each user in users
 			tr
 				th.team.text-nowrap.text-right.py-2
-					a(href='/schedule/' + team.abbreviation)
-						span.team-name.d-none.d-sm-inline #{team.teamName}
-						span.team-name.d-sm-none #{team.abbreviation}
+					a(href='/picks/' + user.username)
+						span.team-name #{user.displayName}
 					br
 					span.record
-						+record(team.classic)
+						+record(user.classic)
 
-				if team.classic
+				if user.classic
 					each i in [0, 1, 2, 3, 4, 5, 6]
 						td.classic-game.text-center.align-middle
-							if team.classic.picks[i]
-								- var game = team.classic.picks[i];
+							if user.classic.picks[i]
+								- var game = user.classic.picks[i];
 								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd') + '#game-' + game._id)
 									if !game.isFinal()
 										| #{game.opponent.team.abbreviation}
@@ -50,5 +51,5 @@ block content
 												| L
 												|
 												+scoreRelativeToTeam(game, team)
-							else if team.classic.isFinal()
+							else if user.classic.isFinal()
 								span.text-muted --

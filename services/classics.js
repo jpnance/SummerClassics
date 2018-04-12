@@ -16,7 +16,7 @@ module.exports.showAllForUser = function(request, response) {
 				}
 			}
 			else {
-				User.findOne({ username: request.params.username }).exec(function(error, user) {
+				User.findOne({ username: request.params.username }).select('username firstName lastName').exec(function(error, user) {
 					if (user) {
 						resolve(user);
 					}
@@ -65,10 +65,69 @@ module.exports.showAllForUser = function(request, response) {
 					classic.picks.sort(Classic.populatedPicksStartTimeSort);
 				});
 
-				response.render('classics', { session: session, teams: teams });
+				response.render('classics/user', { session: session, teams: teams, user: user });
 			});
 		}).catch(function(error) {
 			response.send(error);
+		});
+	});
+};
+
+module.exports.showAllForTeam = function(request, response) {
+	Session.withActiveSession(request, function(error, session) {
+		Team.findOne({ abbreviation: request.params.teamAbbreviation }, function(error, team) {
+			if (error) {
+				response.sendStatus(500);
+				return;
+			}
+
+			if (!team) {
+				response.sendStatus(404);
+				return;
+			}
+
+			var dataPromises = [
+				Classic.find({ season: process.env.SEASON, team: team._id }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } }),
+				User.find({ seasons: process.env.SEASON }).select('displayName username').sort('displayName')
+			];
+
+			Promise.all(dataPromises).then(function(values) {
+				var classics = values[0];
+				var users = values[1];
+
+				var processedUsers = [];
+
+				users.forEach(function(user) {
+					var processedUser = { displayName: user.displayName, username: user.username };
+
+					classics.forEach(function(classic) {
+						if (classic.user.toString() == user._id.toString()) {
+							processedUser.classic = classic;
+
+							classic.picks.forEach(function(pick) {
+								if (pick.away.team._id == classic.team._id) {
+									pick.opponent = pick.home;
+								}
+								else if (pick.home.team._id == classic.team._id) {
+									pick.opponent = pick.away;
+								}
+							});
+
+							if (!session || session.user._id.toString() != user._id.toString()) {
+								classic.picks = classic.picks.filter(function(game) {
+									return game.hasDefinitelyStarted();
+								});
+							}
+
+							classic.picks.sort(Classic.populatedPicksStartTimeSort);
+						}
+					});
+
+					processedUsers.push(processedUser);
+				});
+
+				response.render('classics/team', { session: session, users: processedUsers, team: team });
+			});
 		});
 	});
 };
