@@ -181,8 +181,8 @@ mixin scheduleNav(yesterday, today, tomorrow)
 		if dateFormat(yesterday, 'yyyy-mm-dd') >= '2018-03-29'
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
-					span.d-none.d-sm-inline #{dateFormat(yesterday, 'mmmm dS')}
-					span.d-sm-none #{dateFormat(yesterday, 'mmm. d')}
+					span.d-none.d-sm-inline &laquo; #{dateFormat(yesterday, 'mmmm dS')}
+					span.d-sm-none &laquo; #{dateFormat(yesterday, 'mmm. d')}
 		li.nav-item
 			a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
 				span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
@@ -190,8 +190,8 @@ mixin scheduleNav(yesterday, today, tomorrow)
 		if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2018-09-30'
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
-					span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')}
-					span.d-sm-none #{dateFormat(tomorrow, 'mmm. d')}
+					span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')} &raquo;
+					span.d-sm-none #{dateFormat(tomorrow, 'mmm. d')} &raquo;
 
 mixin scoreRelativeToTeam(game, team)
 	if game.away.team._id == team._id
