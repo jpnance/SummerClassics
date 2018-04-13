@@ -67,6 +67,11 @@ mixin gameCard(game, showDate)
 			classes.header.linkText.push('text-dark');
 		}
 
+		if (game.hasBeenPostponed()) {
+			classes.header.background.push('bg-secondary');
+			classes.header.linkText.push('text-white');
+		}
+
 		if (game.hasDefinitelyStarted() && !game.isFinal()) {
 			classes.header.background.push('bg-primary');
 			classes.header.linkText.push('text-white');
