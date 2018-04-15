@@ -41,7 +41,7 @@ gameSchema.methods.isDelayed = function() {
 };
 
 gameSchema.methods.hasBeenPostponed = function() {
-	return this.status && (this.status == 'DI' || this.status == 'DR');
+	return this.status && (this.status == 'DI' || this.status == 'DR' || this.status == 'DS');
 };
 
 gameSchema.methods.hasPotentiallyStarted = function() {
