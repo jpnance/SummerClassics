@@ -7,6 +7,7 @@ var statusSchema = new Schema({
 	codedGameState: { type: String, required: true },
 	detailedState: { type: String, required: true },
 	statusCode: { type: String, required: true },
+	startTimeTBD: { type: Boolean },
 	abstractGameCode: { type: String, required: true },
 	reason: { type: String },
 	example: { type: Number, ref: 'Game', required: true }
