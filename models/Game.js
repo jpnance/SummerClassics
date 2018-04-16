@@ -19,7 +19,15 @@ var gameSchema = new Schema({
 		score: { type: Number, default: 0 },
 		winner: { type: Boolean }
 	},
-	status: { type: String, required: true },
+	status: {
+		abstractGameState: { type: String, required: true },
+		codedGameState: { type: String, required: true },
+		detailedState: { type: String, required: true },
+		statusCode: { type: String, required: true },
+		startTimeTBD: { type: Boolean },
+		abstractGameCode: { type: String, required: true },
+		reason: { type: String },
+	},
 	inning: {
 		number: { type: Number },
 		ordinal: { type: String },
@@ -33,15 +41,15 @@ gameSchema.methods.isPastStartTime = function() {
 };
 
 gameSchema.methods.isWarmingUp = function() {
-	return this.status && this.status == 'PW';
+	return this.status && this.status.statusCode == 'PW';
 };
 
 gameSchema.methods.isDelayed = function() {
-	return this.status && (this.status == 'PI' || this.status == 'PR' || this.status == 'PS' || this.status == 'PY');
+	return this.status && (this.status.statusCode == 'PI' || this.status.statusCode == 'PR' || this.status.statusCode == 'PS' || this.status.statusCode == 'PY');
 };
 
 gameSchema.methods.hasBeenPostponed = function() {
-	return this.status && (this.status == 'DI' || this.status == 'DR' || this.status == 'DS');
+	return this.status && (this.status.statusCode == 'DI' || this.status.statusCode == 'DR' || this.status.statusCode == 'DS' || this.status.startTimeTBD);
 };
 
 gameSchema.methods.hasPotentiallyStarted = function() {
@@ -60,7 +68,7 @@ gameSchema.methods.isCool = function(hours) {
 };
 
 gameSchema.methods.isFinal = function() {
-	return this.status == 'F';
+	return this.status.statusCode == 'F';
 };
 
 gameSchema.methods.isFinalAndCool = function() {
@@ -68,7 +76,7 @@ gameSchema.methods.isFinalAndCool = function() {
 };
 
 gameSchema.methods.isOver = function() {
-	return this.status == 'O' || this.status == 'F';
+	return this.status.statusCode == 'O' || this.status.statusCode == 'F';
 };
 
 gameSchema.methods.syncWithApi = function() {
@@ -133,11 +141,11 @@ gameSchema.methods.syncWithApi = function() {
 				});
 			}
 
-			thisGame.status = data.gameData.status.statusCode;
+			thisGame.status = data.gameData.status;
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status == 'I' || thisGame.status == 'MA' || thisGame.status == 'MF' || thisGame.status == 'MI' || thisGame.status == 'O' || thisGame.status == 'F') {
+			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'F') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 
@@ -147,7 +155,7 @@ gameSchema.methods.syncWithApi = function() {
 				thisGame.inning.half = data.liveData.linescore.inningHalf;
 			}
 
-			if (thisGame.status == 'F') {
+			if (thisGame.status.statusCode == 'F') {
 				if (thisGame.away.score > thisGame.home.score) {
 					thisGame.away.winner = true;
 					thisGame.home.winner = false;
