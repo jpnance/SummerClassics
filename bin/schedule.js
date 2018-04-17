@@ -43,7 +43,7 @@ for (var i = 0; i <= days; i++) {
 						startTime: game.gameDate,
 						'away.team': awayTeam.id,
 						'home.team': homeTeam.id,
-						status: game.status.statusCode
+						status: game.status
 					};
 
 					gamePromises.push(Game.findByIdAndUpdate(game.gamePk, newGame, { upsert: true }));
