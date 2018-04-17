@@ -7,6 +7,7 @@ var Player = require('../models/Player');
 var gameSchema = new Schema({
 	_id: { type: Number },
 	startTime: { type: Date },
+	date: { type: String, required: true },
 	away: {
 		team: { type: Number, ref: 'Team', required: true },
 		probablePitcher: { type: Number, ref: 'Player' },
@@ -36,6 +37,10 @@ var gameSchema = new Schema({
 	}
 });
 
+gameSchema.methods.hasStartTime = function() {
+	return this.startTime && this.status && !this.status.startTimeTBD;
+};
+
 gameSchema.methods.isPastStartTime = function() {
 	return this.startTime && Date.now() >= this.startTime;
 };
@@ -49,7 +54,7 @@ gameSchema.methods.isDelayed = function() {
 };
 
 gameSchema.methods.hasBeenPostponed = function() {
-	return this.status && (this.status.statusCode == 'DI' || this.status.statusCode == 'DR' || this.status.statusCode == 'DS' || this.status.startTimeTBD);
+	return this.status && (this.status.statusCode == 'DI' || this.status.statusCode == 'DR' || this.status.statusCode == 'DS' || this.status.statusCode == 'DV');
 };
 
 gameSchema.methods.hasPotentiallyStarted = function() {

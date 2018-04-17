@@ -10,7 +10,18 @@ mongoose.connect(process.env.MONGODB_URI);
 var dateCushion = new Date();
 dateCushion.setDate(dateCushion.getDate() + 7);
 
-Game.find({ status: { '$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG'] }, startTime: { '$lt': dateCushion } }).sort('startTime').exec(function(error, games) {
+var conditions = {
+	status: {
+		'$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG']
+	},
+	startTime: { '$lt': dateCushion }
+};
+
+if (!process.env.OVERRIDE_UPDATE_ALL) {
+	delete conditions.status;
+}
+
+Game.find(conditions).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
 	games.forEach(function(game) {

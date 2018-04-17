@@ -124,7 +124,10 @@ mixin gameCard(game, showDate)
 							else if game.hasBeenPostponed()
 								| Postponed
 							else if !game.hasPotentiallyStarted()
-								| #{dateFormat(game.startTime, 'h:MMtt')} ET
+								if game.hasStartTime()
+									| #{dateFormat(game.startTime, 'h:MMtt')} ET
+								else
+									| TBD
 							else if game.isFinal()
 								| Final
 								if game.inning.number != 9
