@@ -122,19 +122,35 @@ gameSchema.methods.syncWithApi = function() {
 				pitcherIds.forEach(function(pitcherId) {
 					playerPromises.push(new Promise(function(resolve2, reject2) {
 						request.get('https://statsapi.mlb.com/api/v1/people/' + pitcherId, function(error, response) {
+							if (error) {
+								reject(error);
+								return;
+							}
+
+							if (!response || !response.text) {
+								reject('not really sure but bad');
+								return;
+							}
+
 							var playerData = JSON.parse(response.text);
 							var player = playerData.people[0];
 
 							var newPlayer = {
 								number: player.primaryNumber,
-								name: player.fullName,
+								name: player.firstLastName,
 								position: player.primaryPosition.abbreviation,
 								bats: player.batSide.code,
 								throws: player.pitchHand.code
 							};
 
+							if (player.nickName) {
+								newPlayer.nickname = player.nickName;
+							}
+
 							Player.findByIdAndUpdate(player.id, newPlayer, { upsert: true }).then(function() {
 								resolve2('good');
+							}).catch(function() {
+								reject('dunno sorry');
 							});
 						});
 					}));
