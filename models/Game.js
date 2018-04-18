@@ -7,7 +7,7 @@ var Player = require('../models/Player');
 var gameSchema = new Schema({
 	_id: { type: Number },
 	startTime: { type: Date },
-	date: { type: String, required: true },
+	date: { type: String },
 	away: {
 		team: { type: Number, ref: 'Team', required: true },
 		probablePitcher: { type: Number, ref: 'Player' },
@@ -162,6 +162,8 @@ gameSchema.methods.syncWithApi = function() {
 				});
 			}
 
+			thisGame.startTime = data.gameData.datetime.dateTime;
+			thisGame.date = data.gameData.datetime.originalDate;
 			thisGame.status = data.gameData.status;
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));

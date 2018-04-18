@@ -41,10 +41,8 @@ for (var i = 0; i <= days; i++) {
 
 					var newGame = {
 						startTime: game.gameDate,
-						date: date.date,
 						'away.team': awayTeam.id,
-						'home.team': homeTeam.id,
-						status: game.status
+						'home.team': homeTeam.id
 					};
 
 					gamePromises.push(Game.findByIdAndUpdate(game.gamePk, newGame, { upsert: true }));

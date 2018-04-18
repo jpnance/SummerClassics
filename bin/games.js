@@ -17,8 +17,8 @@ var conditions = {
 	startTime: { '$lt': dateCushion }
 };
 
-if (!process.env.OVERRIDE_UPDATE_ALL) {
-	delete conditions.status;
+if (process.env.OVERRIDE_UPDATE_ALL) {
+	conditions = {};
 }
 
 Game.find(conditions).sort('startTime').exec(function(error, games) {
