@@ -5,6 +5,9 @@ block title
 
 block content
 	form.col-12.col-md-8.col-lg-6.col-xl-4(action='/login' method='POST')
+		if error
+			div.alert.alert-danger(role='alert') #{error.message}
+
 		div.form-group
 			label(for='username') Username
 			input.form-control(type='text' id='username' name='username')
