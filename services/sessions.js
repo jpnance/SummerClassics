@@ -56,12 +56,12 @@ module.exports.logIn = function(request, response) {
 				});
 			}
 			else {
-				response.redirect('/?error=login');
+				response.redirect('/login?error=login');
 			}
 		});
 	}
 	else {
-		response.redirect('/?error=login');
+		response.redirect('/login?error=login');
 	}
 };
 

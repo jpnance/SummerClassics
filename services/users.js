@@ -5,7 +5,13 @@ var User = require('../models/User');
 var Classic = require('../models/Classic');
 
 module.exports.loginPrompt = function(request, response) {
-	response.render('users/login');
+	var responseData = {};
+
+	if (request.query.error == 'login') {
+		responseData.error = { message: 'Invalid username/password combination.' };
+	}
+
+	response.render('users/login', responseData);
 };
 
 module.exports.add = function(request, response) {
