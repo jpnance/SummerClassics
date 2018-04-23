@@ -181,8 +181,6 @@ module.exports.showStandings = function(request, response) {
 				}
 
 				if (classic.score.final) {
-					standingsMap[classic.user.username].score.potential.maximum += classic.score.final;
-					standingsMap[classic.user.username].score.potential.minimum += classic.score.final;
 					standingsMap[classic.user.username].score.final += classic.score.final;
 
 					if (classic.record.wins == 4) {
