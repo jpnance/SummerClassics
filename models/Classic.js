@@ -169,6 +169,8 @@ classicSchema.methods.scoreAndResolve = function() {
 					classic.score.final = -8;
 					break;
 			}
+
+			classic.score.potential = { best: classic.score.final, worst: classic.score.final };
 		}
 		else {
 			classic.score.potential = { best: 0, worst: 0 };
