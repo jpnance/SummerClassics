@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
 var dateCushion = new Date();
-dateCushion.setDate(dateCushion.getDate() + 7);
+dateCushion.setDate(dateCushion.getDate() + 3);
 
 var conditions = {
 	status: {
