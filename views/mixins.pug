@@ -139,6 +139,8 @@ mixin gameCard(game, showDate)
 								| #{game.inning.state} of the #{game.inning.ordinal}
 							else if game.isWarmingUp()
 								| Warmup
+							else if !game.hasStartTime()
+								| TBD
 							else
 								| Starting Soon
 
