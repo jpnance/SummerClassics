@@ -228,10 +228,10 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 			return -1;
 		}
 		else {
-			if (a.startTime < b.startTime) {
+			if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime < b.startTime) {
 				return -1;
 			}
-			else if (a.startTime > b.startTime) {
+			else if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime > b.startTime) {
 				return 1;
 			}
 			else {
@@ -242,7 +242,15 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 					return 1;
 				}
 				else {
-					return 0;
+					if (a.gameNumber < b.gameNumber) {
+						return -1;
+					}
+					else if (a.gameNumber > b.gameNumber) {
+						return 1;
+					}
+					else {
+						return 0;
+					}
 				}
 			}
 		}
