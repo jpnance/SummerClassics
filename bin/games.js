@@ -51,5 +51,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 				mongoose.disconnect();
 			});
 		});
+	}).catch(function(error) {
+		console.log(error);
 	});
 });

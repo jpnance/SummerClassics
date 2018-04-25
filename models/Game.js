@@ -7,6 +7,7 @@ var Player = require('../models/Player');
 var gameSchema = new Schema({
 	_id: { type: Number },
 	startTime: { type: Date },
+	gameNumber: { type: Number },
 	date: { type: String },
 	away: {
 		team: { type: Number, ref: 'Team', required: true },
@@ -128,12 +129,12 @@ gameSchema.methods.syncWithApi = function() {
 					playerPromises.push(new Promise(function(resolve2, reject2) {
 						request.get('https://statsapi.mlb.com/api/v1/people/' + pitcherId, function(error, response) {
 							if (error) {
-								reject(error);
+								reject2(error);
 								return;
 							}
 
 							if (!response || !response.text) {
-								reject('not really sure but bad');
+								reject2('not really sure but bad');
 								return;
 							}
 
@@ -155,7 +156,7 @@ gameSchema.methods.syncWithApi = function() {
 							Player.findByIdAndUpdate(player.id, newPlayer, { upsert: true }).then(function() {
 								resolve2('good');
 							}).catch(function() {
-								reject('dunno sorry');
+								reject2('dunno sorry');
 							});
 						});
 					}));
@@ -165,6 +166,13 @@ gameSchema.methods.syncWithApi = function() {
 			thisGame.startTime = data.gameData.datetime.dateTime;
 			thisGame.date = data.gameData.datetime.originalDate;
 			thisGame.status = data.gameData.status;
+
+			if (data.gameData.game.doubleHeader == 'Y') {
+				thisGame.gameNumber = data.gameData.game.gameNumber;
+			}
+			else {
+				thisGame.gameNumber = undefined;
+			}
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
@@ -198,8 +206,10 @@ gameSchema.methods.syncWithApi = function() {
 						resolve(thisGame);
 					}
 				});
+			}).catch(function(error) {
+				console.log(error);
 			});
-		});
+		}).retry(3);
 	});
 };
 
