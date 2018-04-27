@@ -340,3 +340,26 @@ module.exports.unpick = function(request, response) {
 		});
 	});
 };
+
+module.exports.all = function(request, response) {
+	if (!request.query || !request.query.apiKey || request.query.apiKey != process.env.API_KEY) {
+		response.sendStatus(401);
+		return;
+	}
+
+	var dataPromises = [
+		Classic.find({ season: process.env.SEASON }).populate({ path: 'user', select: '-password -admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+	];
+
+	Promise.all(dataPromises).then(function(values) {
+		var classics = values[0];
+
+		classics.forEach(function(classic) {
+			classic.picks = classic.picks.filter(function(game) {
+				return game.hasDefinitelyStarted();
+			});
+		});
+
+		response.json(classics);
+	});
+};

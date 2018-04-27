@@ -148,3 +148,20 @@ module.exports.update = function(request, response) {
 		});
 	});
 };
+
+module.exports.all = function(request, response) {
+	if (!request.query || !request.query.apiKey || request.query.apiKey != process.env.API_KEY) {
+		response.sendStatus(401);
+		return;
+	}
+
+	var dataPromises = [
+		User.find({ seasons: process.env.SEASON }).select('-password -admin')
+	];
+
+	Promise.all(dataPromises).then(function(values) {
+		var users = values[0];
+
+		response.json(users);
+	});
+};
