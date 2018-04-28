@@ -363,3 +363,46 @@ module.exports.all = function(request, response) {
 		response.json(classics);
 	});
 };
+
+module.exports.allForUser = function(request, response) {
+	if (!request.query || !request.query.apiKey || request.query.apiKey != process.env.API_KEY) {
+		response.sendStatus(401);
+		return;
+	}
+
+	var verifyUser = new Promise(function(resolve, reject) {
+		if (!request.params.username) {
+			reject({ error: 'not querying for anything' });
+		}
+		else {
+			User.findOne({ username: request.params.username }).select('username firstName lastName').exec(function(error, user) {
+				if (user) {
+					resolve(user);
+				}
+				else {
+					reject({ error: 'who' });
+				}
+			});
+		}
+	});
+
+	verifyUser.then(function(user) {
+		var dataPromises = [
+			Classic.find({ season: process.env.SEASON, user: user._id }).populate({ path: 'user', select: '-password -admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+		];
+
+		Promise.all(dataPromises).then(function(values) {
+			var classics = values[0];
+
+			classics.forEach(function(classic) {
+				classic.picks = classic.picks.filter(function(game) {
+					return game.hasDefinitelyStarted();
+				});
+			});
+
+			response.json(classics);
+		});
+	}).catch(function(error) {
+		response.send(error);
+	});
+};
