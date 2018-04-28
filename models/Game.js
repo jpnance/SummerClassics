@@ -167,7 +167,7 @@ gameSchema.methods.syncWithApi = function() {
 			thisGame.date = data.gameData.datetime.originalDate;
 			thisGame.status = data.gameData.status;
 
-			if (data.gameData.game.doubleHeader == 'Y') {
+			if (data.gameData.game.doubleHeader == 'Y' || data.gameData.game.doubleHeader == 'S') {
 				thisGame.gameNumber = data.gameData.game.gameNumber;
 			}
 			else {
