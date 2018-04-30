@@ -13,7 +13,14 @@ app.use(cookieParser());
 
 app.set('view engine', 'pug');
 
-app.locals.dateFormat = require('dateformat');
+var dateFormat = require('dateformat');
+
+dateFormat.i18n.monthNames = [
+	'Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.',
+	'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+app.locals.dateFormat = dateFormat;
 
 require('./routes')(app);
 
