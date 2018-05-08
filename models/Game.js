@@ -116,11 +116,18 @@ gameSchema.methods.syncWithApi = function() {
 			if (data.gameData.probablePitchers) {
 				var pitcherIds = [];
 
-				if (data.gameData.probablePitchers.away && thisGame.away.probablePitcher != data.gameData.probablePitchers.away.id) {
+				if (!data.gameData.probablePitchers.away) {
+					thisGame.away.probablePitcher = undefined;
+				}
+				else if (thisGame.away.probablePitcher != data.gameData.probablePitchers.away.id) {
 					thisGame.away.probablePitcher = data.gameData.probablePitchers.away.id;
 					pitcherIds.push(data.gameData.probablePitchers.away.id);
 				}
-				if (data.gameData.probablePitchers.home && thisGame.home.probablePitcher != data.gameData.probablePitchers.home.id) {
+
+				if (!data.gameData.probablePitchers.home) {
+					thisGame.home.probablePitcher = undefined;
+				}
+				else if (thisGame.home.probablePitcher != data.gameData.probablePitchers.home.id) {
 					thisGame.home.probablePitcher = data.gameData.probablePitchers.home.id;
 					pitcherIds.push(data.gameData.probablePitchers.home.id);
 				}
