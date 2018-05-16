@@ -66,6 +66,10 @@ gameSchema.methods.hasDefinitelyStarted = function() {
 	return this.hasPotentiallyStarted() && this.inning.number;
 };
 
+gameSchema.methods.hasBeenSuspended = function() {
+	return this.status && this.status.statusCode == 'UR';
+};
+
 gameSchema.methods.isCool = function(hours) {
 	var later = new Date(this.startTime);
 	later.setMinutes(later.getMinutes() + 210);
@@ -183,7 +187,7 @@ gameSchema.methods.syncWithApi = function() {
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'F') {
+			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 

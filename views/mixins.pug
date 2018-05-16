@@ -62,7 +62,7 @@ mixin gameCard(game, showDate)
 			}
 		}
 
-		if (game.isDelayed()) {
+		if (game.isDelayed() || game.hasBeenSuspended()) {
 			classes.header.background.push('bg-warning');
 			classes.header.linkText.push('text-dark');
 		}
@@ -140,6 +140,8 @@ mixin gameCard(game, showDate)
 									| (#{game.inning.number})
 							else if game.isOver()
 								| End of the #{game.inning.ordinal}
+							else if game.hasBeenSuspended()
+								| Suspended
 							else if game.hasDefinitelyStarted()
 								| #{game.inning.state} of the #{game.inning.ordinal}
 							else if game.isWarmingUp()
