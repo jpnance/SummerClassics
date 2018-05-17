@@ -30,7 +30,7 @@ block content
 						td.classic-game.text-center.align-middle
 							if team.classic.picks[i]
 								- var game = team.classic.picks[i];
-								a(href='/schedule/' + dateFormat(game.startTime, 'yyyy-mm-dd') + '#game-' + game._id)
+								a(href='/schedule/' + dateFormat(game.date, 'yyyy-mm-dd', true) + '#game-' + game._id)
 									if !game.isFinal()
 										| #{game.opponent.team.abbreviation}
 										if game.hasDefinitelyStarted()
