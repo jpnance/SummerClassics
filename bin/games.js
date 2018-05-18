@@ -11,7 +11,7 @@ var dateCushion = new Date();
 dateCushion.setDate(dateCushion.getDate() + 3);
 
 var conditions = {
-	status: {
+	'status.statusCode': {
 		'$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG']
 	},
 	startTime: { '$lt': dateCushion }
