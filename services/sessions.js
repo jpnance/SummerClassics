@@ -51,7 +51,7 @@ module.exports.logIn = function(request, response) {
 						response.send(error);
 					}
 					else {
-						response.cookie('sessionId', sessionId).redirect('/');
+						response.cookie('sessionId', sessionId, { expires: new Date(process.env.SEASON + '-12-31') }).redirect('/');
 					}
 				});
 			}
