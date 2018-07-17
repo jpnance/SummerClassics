@@ -127,7 +127,7 @@ module.exports.showAllForDate = function(request, response) {
 		yesterday.setHours(today.getHours() - 18);
 
 		var data = [
-			Game.find({ date: dateString }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher'),
+			Game.find({ date: dateString, 'away.team': { '$nin': [159, 160] }, 'home.team': { '$nin': [159, 160] } }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher'),
 			Classic.find({ season: process.env.SEASON }).populate('user team')
 		];
 

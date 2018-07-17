@@ -8,5 +8,8 @@ block content
 		div.col-12.pb-3
 			+scheduleNav(yesterday, today, tomorrow)
 
-		each game in games
-			+gameCard(game)
+		if games.length == 0
+			h4.col-12.text-center No games scheduled for #{dateFormat(today, 'mmmm dS')}.
+		else
+			each game in games
+				+gameCard(game)
