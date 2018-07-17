@@ -9,7 +9,7 @@ block content
 			+scheduleNav(yesterday, today, tomorrow)
 
 		if games.length == 0
-			h4.col-12.text-center No games scheduled for #{dateFormat(today, 'mmmm dS')}.
+			h5.col-8.offset-2.text-center There are no games scheduled for #{dateFormat(today, 'mmmm dS')}.
 		else
 			each game in games
 				+gameCard(game)
