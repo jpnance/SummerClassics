@@ -197,7 +197,7 @@ gameSchema.methods.syncWithApi = function() {
 				thisGame.inning.half = data.liveData.linescore.inningHalf;
 			}
 
-			if (thisGame.status.statusCode == 'F') {
+			if (thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR') {
 				if (thisGame.away.score > thisGame.home.score) {
 					thisGame.away.winner = true;
 					thisGame.home.winner = false;
