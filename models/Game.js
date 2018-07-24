@@ -78,7 +78,7 @@ gameSchema.methods.isCool = function(hours) {
 };
 
 gameSchema.methods.isFinal = function() {
-	return this.status.statusCode == 'F';
+	return this.status && (this.status.statusCode == 'F' || this.status.statusCode == 'FR');
 };
 
 gameSchema.methods.isFinalAndCool = function() {
@@ -86,7 +86,7 @@ gameSchema.methods.isFinalAndCool = function() {
 };
 
 gameSchema.methods.isOver = function() {
-	return this.status.statusCode == 'O' || this.status.statusCode == 'F';
+	return this.status.statusCode == 'O' || this.status.statusCode == 'F' || this.status.statusCode == 'FR';
 };
 
 gameSchema.methods.syncWithApi = function() {
@@ -187,7 +187,7 @@ gameSchema.methods.syncWithApi = function() {
 
 			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F') {
+			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 
