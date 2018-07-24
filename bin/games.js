@@ -21,6 +21,10 @@ if (process.env.OVERRIDE_UPDATE_ALL) {
 	conditions = {};
 }
 
+if (process.env.FORCE_UPDATE_FOR_GAME_ID) {
+	conditions = { '_id': process.env.FORCE_UPDATE_FOR_GAME_ID };
+}
+
 Game.find(conditions).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
