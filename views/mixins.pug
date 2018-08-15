@@ -30,9 +30,12 @@ mixin teamButton(session, game, side)
 			span.record
 				+record(side.team.classic)
 
-mixin pitcher(pitcher)
+mixin pitcher(pitcher, gameDate)
 	if pitcher
-		| #{pitcher.name}
+		if gameDate && ['2018-08-24', '2018-08-25', '2018-08-26'].includes(gameDate)
+			| #{pitcher.nickname}
+		else
+			| #{pitcher.name}
 	else
 		| TBD
 
@@ -170,7 +173,7 @@ mixin teamRow(game, side, classes)
 					div.pitcher.mb-0.text-nowrap
 						if game[side].probablePitcher
 							a(href='http://m.mlb.com/player/' + game[side].probablePitcher._id class=classes.pitcherText target='_blank')
-								+pitcher(game[side].probablePitcher)
+								+pitcher(game[side].probablePitcher, game.date)
 						else
 							span(class=classes.pitcherText)
 								+pitcher(game[side].probablePitcher)
