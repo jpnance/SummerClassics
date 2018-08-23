@@ -32,7 +32,7 @@ mixin teamButton(session, game, side)
 
 mixin pitcher(pitcher, gameDate)
 	if pitcher
-		if gameDate && ['2018-08-24', '2018-08-25', '2018-08-26'].includes(gameDate)
+		if gameDate && ['2018-08-24', '2018-08-25', '2018-08-26'].includes(gameDate) && pitcher.nickname
 			| #{pitcher.nickname}
 		else
 			| #{pitcher.name}
