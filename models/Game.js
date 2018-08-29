@@ -63,7 +63,7 @@ gameSchema.methods.hasPotentiallyStarted = function() {
 };
 
 gameSchema.methods.hasDefinitelyStarted = function() {
-	return this.hasPotentiallyStarted() && this.inning.number;
+	return (this.hasPotentiallyStarted() || this.hasBeenSuspended()) && this.inning.number;
 };
 
 gameSchema.methods.hasBeenSuspended = function() {
