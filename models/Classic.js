@@ -56,7 +56,7 @@ classicSchema.methods.unpick = function(gameId) {
 	}
 };
 
-classicSchema.methods.scoreAndResolve = function() {
+classicSchema.methods.scoreAndResolve = function(finalize) {
 	var classic = this;
 	var wasAlreadyFinal = classic.isFinal();
 
@@ -173,9 +173,15 @@ classicSchema.methods.scoreAndResolve = function() {
 			classic.score.potential = { best: classic.score.final, worst: classic.score.final };
 		}
 		else {
-			classic.score.potential = { best: 0, worst: 0 };
-			classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
-			classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
+			if (finalize) {
+				classic.score.final = -1000;
+				classic.score.potential = { best: -1000, worst: -1000 };
+			}
+			else {
+				classic.score.potential = { best: 0, worst: 0 };
+				classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
+				classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
+			}
 		}
 
 		Promise.all(notificationPromises).then(function() {
