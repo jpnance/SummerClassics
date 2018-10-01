@@ -38,7 +38,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 
 			classics.forEach(function(classic) {
 				classicPromises.push(new Promise(function(resolve, reject) {
-					classic.scoreAndResolve().then(function() {
+					classic.scoreAndResolve(process.env.FINALIZE).then(function() {
 						classic.save(function(error) {
 							if (!error) {
 								resolve('good');
