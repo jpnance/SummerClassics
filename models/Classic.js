@@ -237,14 +237,22 @@ classicSchema.statics.standingsSort = function(a, b) {
 				return 1;
 			}
 			else {
-				if (a.user.displayName < b.user.displayName) {
+				if (a.record.winningPercentage > b.record.winningPercentage) {
 					return -1;
 				}
-				else if (b.user.displayName < a.user.displayName) {
+				else if (b.record.winningPercentage > a.record.winningPercentage) {
 					return 1;
 				}
 				else {
-					return 0;
+					if (a.user.displayName < b.user.displayName) {
+						return -1;
+					}
+					else if (b.user.displayName < a.user.displayName) {
+						return 1;
+					}
+					else {
+						return 0;
+					}
 				}
 			}
 		}
