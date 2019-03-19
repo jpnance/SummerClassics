@@ -109,12 +109,12 @@ module.exports.showAllForDate = function(request, response) {
 			dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
 		}
 
-		if (dateString < '2018-03-29') {
-			dateString = '2018-03-29';
+		if (dateString < '2019-03-20') {
+			dateString = '2019-03-20';
 		}
 
-		if (dateString > '2018-09-30') {
-			dateString = '2018-09-30';
+		if (dateString > '2019-09-29') {
+			dateString = '2019-09-29';
 		}
 
 		var today = new Date(dateString);
@@ -127,7 +127,7 @@ module.exports.showAllForDate = function(request, response) {
 		yesterday.setHours(today.getHours() - 18);
 
 		var data = [
-			Game.find({ date: dateString, 'away.team': { '$nin': [159, 160] }, 'home.team': { '$nin': [159, 160] } }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher'),
+			Game.find({ season: process.env.SEASON, date: dateString, 'away.team': { '$nin': [159, 160] }, 'home.team': { '$nin': [159, 160] } }).sort('startTime away.team.teamName').populate('away.team away.probablePitcher home.team home.probablePitcher'),
 			Classic.find({ season: process.env.SEASON }).populate('user team')
 		];
 

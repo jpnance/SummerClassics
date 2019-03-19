@@ -6,7 +6,7 @@ var Game = require('../models/Game');
 var Notification = require('../models/Notification');
 
 var classicSchema = new Schema({
-	season: { type: Number, required: true, default: (new Date()).getFullYear() },
+	season: { type: Number, required: true, default: process.env.SEASON },
 	user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 	team: { type: Number, ref: 'Team', required: true },
 	picks: [{ type: Number, ref: 'Game', default: [] }],

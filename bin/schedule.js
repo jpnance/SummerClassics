@@ -1,3 +1,5 @@
+var dotenv = require('dotenv').config({ path: '../.env' });
+
 var request = require('superagent');
 
 var Game = require('../models/Game');
@@ -8,8 +10,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
 var dateRange = {
-	start: new Date('2018-03-29 00:00:00'),
-	end: new Date('2018-10-01 00:00:00')
+	start: new Date('2019-03-20 00:00:00'),
+	end: new Date('2019-09-30 00:00:00')
 };
 
 var days = (dateRange.end - dateRange.start) / 86400000;
@@ -40,6 +42,7 @@ for (var i = 0; i <= days; i++) {
 					var homeTeam = game.teams.home.team;
 
 					var newGame = {
+						season: process.env.SEASON,
 						startTime: game.gameDate,
 						'away.team': awayTeam.id,
 						'home.team': homeTeam.id

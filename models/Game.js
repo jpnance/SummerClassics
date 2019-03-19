@@ -6,6 +6,7 @@ var Player = require('../models/Player');
 
 var gameSchema = new Schema({
 	_id: { type: Number },
+	season: { type: Number, required: true, default: process.env.SEASON },
 	startTime: { type: Date },
 	gameNumber: { type: Number },
 	date: { type: String },

@@ -34,6 +34,8 @@ mixin pitcher(pitcher, gameDate)
 	if pitcher
 		if gameDate && ['2018-08-24', '2018-08-25', '2018-08-26'].includes(gameDate) && pitcher.nickname
 			| #{pitcher.nickname}
+		else if gameDate && gameDate == '2019-04-15'
+			| Jackie Robinson
 		else
 			| #{pitcher.name}
 	else
@@ -198,7 +200,7 @@ mixin teamRow(game, side, classes)
 
 mixin scheduleNav(yesterday, today, tomorrow)
 	ul.nav.justify-content-center
-		if dateFormat(yesterday, 'yyyy-mm-dd') >= '2018-03-29'
+		if dateFormat(yesterday, 'yyyy-mm-dd') >= '2019-03-20'
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
 					span.d-none.d-sm-inline &laquo; #{dateFormat(yesterday, 'mmmm dS')}
@@ -207,7 +209,7 @@ mixin scheduleNav(yesterday, today, tomorrow)
 			a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
 				span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
 				span.d-sm-none #{dateFormat(today, 'mmm d')}
-		if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2018-09-30'
+		if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2019-09-29'
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
 					span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')} &raquo;

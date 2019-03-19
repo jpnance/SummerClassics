@@ -1,3 +1,5 @@
+var dotenv = require('dotenv').config({ path: '../.env' });
+
 var Classic = require('../models/Classic');
 
 var mongoose = require('mongoose');
