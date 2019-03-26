@@ -7,7 +7,8 @@ module.exports.logIn = function(request, response) {
 	if (request.body.username && request.body.password) {
 		User.find({
 			username: request.body.username,
-			password: crypto.createHash('sha256').update(request.body.password).digest('hex')
+			password: crypto.createHash('sha256').update(request.body.password).digest('hex'),
+			seasons: process.env.SEASON
 		}, function(error, documents) {
 			if (request.body.justVerify) {
 				if (error) {
