@@ -20,7 +20,7 @@ var conditions = {
 };
 
 if (process.env.OVERRIDE_UPDATE_ALL) {
-	conditions = {};
+	conditions = { season: process.env.SEASON };
 }
 
 if (process.env.FORCE_UPDATE_FOR_GAME_ID) {
