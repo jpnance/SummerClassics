@@ -17,7 +17,7 @@ var classicSchema = new Schema({
 			}, default: 16 },
 			worst: { type: Number, required: function() {
 				return this.record.wins < 4 && this.record.losses < 4;
-			}, default: -8 },
+			}, default: -16 },
 		},
 		final: { type: Number, required: function() {
 			return this.record.wins == 4 || this.record.losses == 4;
@@ -63,7 +63,7 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 	return new Promise(function(resolve, reject) {
 		classic.record = { wins: 0, losses: 0 };
 		classic.score = {
-			potential: { best: 16, worst: -8 },
+			potential: { best: 16, worst: -16 },
 			final: 0
 		};
 
@@ -142,31 +142,31 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 					break;
 
 				case 3:
-					classic.score.final = 8;
+					classic.score.final = 10;
 					break;
 
 				case 2:
-					classic.score.final = 4;
+					classic.score.final = 7;
 					break;
 
 				case 1:
-					classic.score.final = 2;
+					classic.score.final = 4;
 					break;
 
 				case -1:
-					classic.score.final = -1;
-					break;
-
-				case -2:
-					classic.score.final = -2;
-					break;
-
-				case -3:
 					classic.score.final = -4;
 					break;
 
+				case -2:
+					classic.score.final = -7;
+					break;
+
+				case -3:
+					classic.score.final = -10;
+					break;
+
 				case -4:
-					classic.score.final = -8;
+					classic.score.final = -16;
 					break;
 			}
 
@@ -179,8 +179,42 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 			}
 			else {
 				classic.score.potential = { best: 0, worst: 0 };
-				classic.score.potential.best = Math.pow(2, 4 - classic.record.losses);
-				classic.score.potential.worst = -1 * Math.pow(2, 3 - classic.record.wins);
+
+				switch (classic.records.wins) {
+					case 0:
+						classic.score.potential.worst = -16;
+						break;
+
+					case 1:
+						classic.score.potential.worst = -10;
+						break;
+
+					case 2:
+						classic.score.potential.worst = -7;
+						break;
+
+					case 3:
+						classic.score.potential.worst = -4;
+						break;
+				}
+
+				switch (classic.records.losses) {
+					case 0:
+						classic.score.potential.best = 16;
+						break;
+
+					case 1:
+						classic.score.potential.best = 10;
+						break;
+
+					case 2:
+						classic.score.potential.best = 7;
+						break;
+
+					case 3:
+						classic.score.potential.best = 4;
+						break;
+				}
 			}
 		}
 
