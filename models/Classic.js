@@ -180,7 +180,7 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 			else {
 				classic.score.potential = { best: 0, worst: 0 };
 
-				switch (classic.records.wins) {
+				switch (classic.record.wins) {
 					case 0:
 						classic.score.potential.worst = -16;
 						break;
@@ -198,7 +198,7 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 						break;
 				}
 
-				switch (classic.records.losses) {
+				switch (classic.record.losses) {
 					case 0:
 						classic.score.potential.best = 16;
 						break;
