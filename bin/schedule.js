@@ -34,7 +34,7 @@ for (var i = 0; i <= days; i++) {
 
 			data.dates.forEach(function(date) {
 				date.games.forEach(function(game) {
-					if (!process.env.OVERRIDE_UPDATE_ALL && (/*game.status.abstractGameCode == 'F' ||*/ game.seriesDescription != 'Regular Season')) {
+					if (!process.env.OVERRIDE_UPDATE_ALL && (game.status.abstractGameCode == 'F' || game.seriesDescription != 'Regular Season')) {
 						return;
 					}
 
