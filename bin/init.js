@@ -1,3 +1,5 @@
+var dotenv = require('dotenv').config({ path: '../.env' });
+
 var crypto = require('crypto');
 
 var User = require('../models/User');
