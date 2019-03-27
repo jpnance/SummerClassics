@@ -25,7 +25,7 @@ for (var i = 0; i <= days; i++) {
 	var month = date.getMonth();
 	var date = date.getDate();
 
-	var dateString = year + '-' + (month + 1) + '-' + (date < 10 ? '0' : '') + date;
+	var dateString = year + '-' + (month + 1 < 10 ? '0' : '') + (month + 1) + '-' + (date < 10 ? '0' : '') + date;
 
 	schedulePromises.push(new Promise(function(resolve, reject) {
 		request.get('https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=' + dateString + '&hydrate=team', function(error, response) {
@@ -34,16 +34,25 @@ for (var i = 0; i <= days; i++) {
 
 			data.dates.forEach(function(date) {
 				date.games.forEach(function(game) {
-					if (!process.env.OVERRIDE_UPDATE_ALL && (game.status.abstractGameCode == 'F' || game.seriesDescription != 'Regular Season')) {
+					if (!process.env.OVERRIDE_UPDATE_ALL && (/*game.status.abstractGameCode == 'F' ||*/ game.seriesDescription != 'Regular Season')) {
 						return;
 					}
 
 					var awayTeam = game.teams.away.team;
 					var homeTeam = game.teams.home.team;
 
+					var gameStartDate = new Date(game.gameDate);
+
+					var gameYear = gameStartDate.getFullYear();
+					var gameMonth = gameStartDate.getMonth();
+					var gameDate = gameStartDate.getDate();
+
+					var gameDateString = gameYear + '-' + (gameMonth + 1 < 10 ? '0' : '') + (gameMonth + 1) + '-' + (gameDate < 10 ? '0' : '') + gameDate;
+
 					var newGame = {
 						season: process.env.SEASON,
 						startTime: game.gameDate,
+						date: gameDateString,
 						'away.team': awayTeam.id,
 						'home.team': homeTeam.id
 					};
