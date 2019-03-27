@@ -203,9 +203,7 @@ classicSchema.statics.initialize = function(user, season) {
 			var classicPromises = [];
 
 			teams.forEach(function(team) {
-				var classic = new Classic({ season: process.env.SEASON, user: user._id, team: team._id });
-
-				classicPromises.push(classic.save());
+				classicPromises.push(Classic.updateOne({ season: process.env.SEASON, user: user._id, team: team._id }, {}, { upsert: true }));
 			});
 
 			Promise.all(classicPromises).then(function() {

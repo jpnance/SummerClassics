@@ -142,7 +142,14 @@ module.exports.update = function(request, response) {
 					response.send(error);
 				}
 				else {
-					response.redirect('/');
+					if (user.seasons.includes(parseInt(process.env.SEASON))) {
+						Classic.initialize(user, process.env.SEASON).then(function() {
+							response.redirect('/');
+						});
+					}
+					else {
+						response.redirect('/');
+					}
 				}
 			});
 		});
