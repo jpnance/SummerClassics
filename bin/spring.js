@@ -1,3 +1,5 @@
+var dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
+
 var request = require('superagent');
 
 var Game = require('../models/Game');
