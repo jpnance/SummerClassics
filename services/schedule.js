@@ -32,7 +32,7 @@ module.exports.showAllForTeam = function(request, response) {
 			}
 
 			var dataPromises = [
-				Game.find({ '$or': [ { 'home.team': team._id }, { 'away.team': team._id } ]}).sort('startTime').populate('away.team away.probablePitcher home.team home.probablePitcher'),
+				Game.find({ season: process.env.SEASON, '$or': [ { 'home.team': team._id }, { 'away.team': team._id } ]}).sort('startTime').populate('away.team away.probablePitcher home.team home.probablePitcher'),
 				Classic.find({ season: process.env.SEASON }).populate('user team')
 			];
 
