@@ -162,8 +162,10 @@ module.exports.all = function(request, response) {
 		return;
 	}
 
+	var season = parseInt(request.query.season) || process.env.SEASON;
+
 	var dataPromises = [
-		User.find({ seasons: process.env.SEASON }).select('-password -admin')
+		User.find({ seasons: season }).select('-password -admin')
 	];
 
 	Promise.all(dataPromises).then(function(values) {
