@@ -221,7 +221,7 @@ gameSchema.methods.syncWithApi = function() {
 			}).catch(function(error) {
 				console.log(error);
 			});
-		}).retry(3);
+		}).timeout({ response: 5000, deadline: 60000 }).retry(3);
 	});
 };
 
