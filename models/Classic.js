@@ -75,14 +75,12 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 			if (game.hasBeenPostponed()) {
 				postponedGames.push(game);
 			}
-			else if (!classic.isFinal()) {
-				if (game.isFinal()) {
-					if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
-						classic.record.wins++;
-					}
-					else if ((game.away.team == classic.team && !game.away.winner) || (game.home.team == classic.team && !game.home.winner)) {
-						classic.record.losses++;
-					}
+			if (game.isFinal()) {
+				if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
+					classic.record.wins++;
+				}
+				else if ((game.away.team == classic.team && !game.away.winner) || (game.home.team == classic.team && !game.home.winner)) {
+					classic.record.losses++;
 				}
 			}
 		});
