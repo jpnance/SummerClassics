@@ -28,6 +28,7 @@ module.exports = function(app) {
 	app.post('/users/edit/:username', users.update);
 
 	app.get('/schedule/?', schedule.showAllForDate);
+	app.get('/schedule.json', schedule.allForDate);
 	app.get('/schedule/:date(\\d\\d\\d\\d-\\d\\d-\\d\\d)', schedule.showAllForDate);
 	app.get('/schedule/:teamAbbreviation(\\w+)', schedule.showAllForTeam);
 

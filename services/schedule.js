@@ -192,3 +192,20 @@ module.exports.showAllForDate = function(request, response) {
 		});
 	});
 };
+
+module.exports.allForDate = function(request, response) {
+	if (!request.query || !request.query.apiKey || request.query.apiKey != process.env.API_KEY) {
+		response.sendStatus(401);
+		return;
+	}
+
+	var dataPromises = [
+		Game.find({ date: request.query.date }).populate('away.team home.team')
+	];
+
+	Promise.all(dataPromises).then(function(values) {
+		var games = values[0];
+
+		response.json(games);
+	});
+};
