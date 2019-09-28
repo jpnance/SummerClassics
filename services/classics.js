@@ -232,7 +232,7 @@ module.exports.pick = function(request, response) {
 
 				var classicPromises = [];
 
-				if (game.hasDefinitelyStarted() || game.hasBeenPostponed()) {
+				if (game.hasDefinitelyStarted() || game.hasBeenPostponed() || game.hasBeenCanceled()) {
 					response.sendStatus(500);
 					return;
 				}

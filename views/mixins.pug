@@ -67,7 +67,7 @@ mixin gameCard(game, showDate)
 			}
 		}
 
-		if (game.isDelayed() || game.hasBeenSuspended()) {
+		if (game.isDelayed() || game.hasBeenSuspended() || game.hasBeenCanceled()) {
 			classes.header.background.push('bg-warning');
 			classes.header.linkText.push('text-dark');
 		}
@@ -133,6 +133,8 @@ mixin gameCard(game, showDate)
 								| Delayed
 							else if game.hasBeenPostponed()
 								| Postponed
+							else if game.hasBeenCanceled()
+								| Canceled
 							else if !game.hasPotentiallyStarted()
 								if game.hasStartTime()
 									| #{dateFormat(game.startTime, 'h:MMtt')} ET
@@ -160,7 +162,7 @@ mixin gameCard(game, showDate)
 				+teamRow(game, 'away', classes.away)
 				+teamRow(game, 'home', classes.home)
 
-			if session && !game.hasDefinitelyStarted() && !game.hasBeenPostponed()
+			if session && !game.hasDefinitelyStarted() && !game.hasBeenPostponed() && !game.hasBeenCanceled()
 				div.card-footer.text-center
 					div.btn-group
 						+teamButton(session, game, game.away)

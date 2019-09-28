@@ -59,6 +59,10 @@ gameSchema.methods.hasBeenPostponed = function() {
 	return this.status && (this.status.statusCode == 'DI' || this.status.statusCode == 'DR' || this.status.statusCode == 'DS' || this.status.statusCode == 'DV');
 };
 
+gameSchema.methods.hasBeenCanceled = function() {
+	return this.status && this.status.statusCode == 'CO';
+};
+
 gameSchema.methods.hasPotentiallyStarted = function() {
 	return this.isPastStartTime() && !this.isDelayed();
 };
