@@ -4,16 +4,15 @@ block title
 	+title('Log In')
 
 block content
-	form.col-12.col-md-8.col-lg-6.col-xl-4(action='/login' method='POST')
+	form.col-12.col-md-8.col-lg-6.col-xl-4(action=process.env.LOGIN_SERVICE + '/links/create' method='POST')
 		if error
 			div.alert.alert-danger(role='alert') #{error.message}
 
 		div.form-group
-			label(for='username') Username
-			input.form-control(type='text' id='username' name='username')
+			label(for='email') Email Address
+			input.form-control(type='text' id='email' name='email')
 
-		div.form-group
-			label(for='password') Password
-			input.form-control(type='password' id='password' name='password')
+		input(type='hidden' name='sendLoginLink' value='true')
+		input(type='hidden' name='redirectTo' value=process.env.CLASSIX_SERVICE)
 
-		button.btn.btn-primary(type='submit') Log In
+		button.btn.btn-primary(type='submit') Send Me a Login Link
