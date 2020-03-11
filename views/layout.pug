@@ -55,10 +55,7 @@ html(lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml')
 			div.collapse.navbar-collapse#navbarNav
 				ul.navbar-nav
 					each navItem in navItems
-						if navItem.name != 'Notifications'
-							li.nav-item.py-1
-								a.nav-link(href=navItem.href) #{navItem.name}
-						else
+						if navItem.name == 'Notifications'
 							li.nav-item.dropdown.py-1
 								a.nav-link.dropdown-toggle(href='#' class=(session.user.notifications.length == 0 ? 'disabled' : '') data-toggle='dropdown')
 									| Notifications
@@ -68,6 +65,17 @@ html(lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml')
 									ul.list-group.list-group-flush
 										each notification in session.user.notifications
 											+notificationListGroupItem(notification)
+						else if navItem.name == 'Log Out'
+							li.nav-item.dropdown.py-1
+								a.nav-link.dropdown-toggle(href='#' data-toggle='dropdown')
+									| Log Out
+
+								div.log-out.dropdown-menu.py-0
+									a.this-device.dropdown-item(href=process.env.LOGIN_SERVICE + '/sessions/delete') This Device
+									a.all-devices.dropdown-item(href=process.env.LOGIN_SERVICE + '/sessions/deleteAll') All Devices
+						else
+							li.nav-item.py-1
+								a.nav-link(href=navItem.href) #{navItem.name}
 
 		//-
 			if session && session.user.admin
