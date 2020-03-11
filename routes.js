@@ -10,10 +10,10 @@ module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
 
 	app.get('/preview', function(request, response) {
-		response.cookie('preview', 'yep').redirect('/');
+		response.cookie('gateKey', process.env.GATE_KEY).redirect('/');
 	});
 	app.get('/unpreview', function(request, response) {
-		response.clearCookie('preview').redirect('/');
+		response.clearCookie('gateKey').redirect('/');
 	});
 
 	app.get('/login', users.loginPrompt);
