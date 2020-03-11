@@ -78,8 +78,6 @@ $(document).ready(function() {
 		$this.attr('disabled', true);
 		e.preventDefault();
 
-		console.log($form.serializeArray());
-
 		$.post($form.attr('action'), $form.serializeArray(), function() {
 			window.location = '/login?success=email-sent';
 		}).fail(function(response) {
