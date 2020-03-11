@@ -17,7 +17,6 @@ module.exports = function(app) {
 	});
 
 	app.get('/login', users.loginPrompt);
-	app.post('/login', sessions.logIn);
 	app.get('/logout', sessions.logOut);
 
 	app.get('/users', users.showAll);
