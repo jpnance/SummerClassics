@@ -40,7 +40,8 @@ sessionSchema.statics.closeActiveSession = function(request, callback) {
 sessionSchema.statics.withActiveSession = function(request, callback) {
 	if (request.cookies.sessionKey) {
 		apiRequest
-			.get(process.env.LOGIN_SERVICE + '/sessions/retrieve/' + request.cookies.sessionKey)
+			.post(process.env.LOGIN_SERVICE + '/sessions/retrieve')
+			.send({ key: request.cookies.sessionKey })
 			.then(response => {
 				User.findOne({
 					username: response.body.user.username
