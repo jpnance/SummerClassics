@@ -109,12 +109,12 @@ module.exports.showAllForDate = function(request, response) {
 			dateString = dateFormat(request.params.date, 'yyyy-mm-dd', true);
 		}
 
-		if (dateString < '2019-03-20') {
-			dateString = '2019-03-20';
+		if (dateString < process.env.OPENING_DAY) {
+			dateString = process.env.OPENING_DAY;
 		}
 
-		if (dateString > '2019-09-29') {
-			dateString = '2019-09-29';
+		if (dateString > process.env.FINAL_DAY) {
+			dateString = process.env.FINAL_DAY;
 		}
 
 		var today = new Date(dateString);

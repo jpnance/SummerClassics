@@ -32,9 +32,9 @@ mixin teamButton(session, game, side)
 
 mixin pitcher(pitcher, gameDate)
 	if pitcher
-		if gameDate && ['2019-08-23', '2019-08-24', '2019-08-25'].includes(gameDate) && pitcher.nickname
+		if gameDate && process.env.PLAYERS_WEEKEND.includes(gameDate) && pitcher.nickname
 			| #{pitcher.nickname}
-		else if gameDate && gameDate == '2019-04-15'
+		else if gameDate && gameDate == process.env.JACKIE_ROBINSON_DAY
 			| Jackie Robinson
 		else
 			| #{pitcher.name}
@@ -202,7 +202,7 @@ mixin teamRow(game, side, classes)
 
 mixin scheduleNav(yesterday, today, tomorrow)
 	ul.nav.justify-content-center
-		if dateFormat(yesterday, 'yyyy-mm-dd') >= '2019-03-20'
+		if dateFormat(yesterday, 'yyyy-mm-dd') >= process.env.OPENING_DAY
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(yesterday, 'yyyy-mm-dd'))
 					span.d-none.d-sm-inline &laquo; #{dateFormat(yesterday, 'mmmm dS')}
@@ -211,7 +211,7 @@ mixin scheduleNav(yesterday, today, tomorrow)
 			a.nav-link.disabled(href='/schedule/' + dateFormat(today, 'yyyy-mm-dd'))
 				span.d-none.d-sm-inline #{dateFormat(today, 'mmmm dS')}
 				span.d-sm-none #{dateFormat(today, 'mmm d')}
-		if dateFormat(tomorrow, 'yyyy-mm-dd') <= '2019-09-29'
+		if dateFormat(tomorrow, 'yyyy-mm-dd') <= process.env.FINAL_DAY
 			li.nav-item
 				a.nav-link(href='/schedule/' + dateFormat(tomorrow, 'yyyy-mm-dd'))
 					span.d-none.d-sm-inline #{dateFormat(tomorrow, 'mmmm dS')} &raquo;

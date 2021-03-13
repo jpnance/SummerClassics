@@ -10,8 +10,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
 var dateRange = {
-	start: new Date('2019-03-20 00:00:00'),
-	end: new Date('2019-09-30 00:00:00')
+	start: new Date(process.env.SEASON + '-03-20 00:00:00'),
+	end: new Date(process.env.SEASON + '-10-10 00:00:00')
 };
 
 var days = (dateRange.end - dateRange.start) / 86400000;
