@@ -7,7 +7,7 @@ var Classic = require('../models/Classic');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 var dateCushion = new Date();
 dateCushion.setDate(dateCushion.getDate() + 3);
@@ -16,11 +16,12 @@ var conditions = {
 	'status.statusCode': {
 		'$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG']
 	},
+	season: parseInt(process.env.SEASON),
 	startTime: { '$lt': dateCushion }
 };
 
 if (process.env.OVERRIDE_UPDATE_ALL) {
-	conditions = { season: process.env.SEASON };
+	conditions = { season: parseInt(process.env.SEASON) };
 }
 
 if (process.env.FORCE_UPDATE_FOR_GAME_ID) {

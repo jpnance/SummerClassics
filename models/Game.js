@@ -190,7 +190,7 @@ gameSchema.methods.syncWithApi = function() {
 				thisGame.gameNumber = undefined;
 			}
 
-			playerPromises.push(Status.update(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
+			playerPromises.push(Status.updateOne(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
 			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
