@@ -6,6 +6,8 @@ var teams = require('./services/teams');
 var statuses = require('./services/statuses');
 var notifications = require('./services/notifications');
 
+var Session = require('./models/Session');
+
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
 
@@ -46,4 +48,10 @@ module.exports = function(app) {
 
 	app.get('/notifications', notifications.showAll);
 	app.get('/notifications/dismiss/:notificationId', notifications.dismiss);
+
+	app.get('/rules', function(request, response) {
+		Session.withActiveSession(request, function(error, session) {
+			response.render('rules', { session: session });
+		});
+	});
 };

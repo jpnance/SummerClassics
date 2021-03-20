@@ -38,9 +38,11 @@ html(lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml')
 				navItems.push({ name: 'Picks', href: '/picks' });
 				navItems.push({ name: 'Notifications', href: '#' });
 				navItems.push({ name: 'Settings', href: '/users/edit/' + session.username });
+				navItems.push({ name: 'Rules', href: '/rules' });
 				navItems.push({ name: 'Log Out', href: process.env.LOGIN_SERVICE + '/sessions/delete' });
 			}
 			else {
+				navItems.push({ name: 'Rules', href: '/rules' });
 				navItems.push({ name: 'Log In', href: '/login' });
 			}
 

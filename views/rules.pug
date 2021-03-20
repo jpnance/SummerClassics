@@ -1,0 +1,56 @@
+extends layout.pug
+
+block title
+	+title('Rules')
+
+block content
+	h1 Summer Classics Rules for 2021
+	p The Summer Classics is a regular season baseball picks pool for any number of entrants. It's designed such that it can be completed on many different schedules: whether picking one game a day for the whole season or picking as many games as possible in the last six weeks, both strategies can result in a complete and legal entry.
+	ol
+		li Plain English
+			ol(type='a')
+				li The entry fee is $50.
+				li You must pick every MLB team to win a game at least four times (120 picks minimum) and maybe as many as seven times (210 picks maximum).
+				li The faster you get to four correct picks for a team, the more points you score; the faster you get to four incorrect picks for a team, the more points you lose. (Think of it as a best-of-seven series.)
+				li You can pick any games you want in any order you want (they don't have to be part of a continuous block) but you can't pick both sides of the same game.
+				li Once you get to either four correct picks or four incorrect picks for a team, you can't pick that team again for the rest of the season.
+				li If you want to try and make all your picks within the month of April, that's totally fine; if you want to wait until August to make your first pick, that's cool, too.
+		li Overview
+			ol(type='a')
+				li The entry fee for every entrant is $50. It must be paid before an entrant will be allowed to begin making picks.
+				li There will be one guaranteed pay-out spot for first place and one additional pay-out spot for every five entrants.
+					ol(type='i')
+						li The lowest additional pay-out spot will pay $50.
+						li The rest of the pay-out values will be announced no later than May 1st of the current season (and will be placed on this page).
+						li First place will be worth at least twice as much money as second place.
+				li Pay-out spots will be allocated based on points (in according with the scoring rules, defined later) at the conclusion of the MLB regular season.
+		li Format
+			ol(type='a')
+				li Each entrant will compete in one best-of-seven series for each of the thirty MLB teams.
+				li In each team's series, the entrant will attempt to correctly pick that team to win in four regular season MLB games.
+				li If the entrant makes four correct picks in a series within seven attempts (i.e. the entrant accrues four wins before four losses for a given MLB team), the entrant will score positive points for that team's series; otherwise, they will score negative points (scoring rules defined later).
+				li Once an entrant scores any points for a team's series, they may no longer pick that team in any games (i.e. each entrant only has one opportunity per MLB team to score points).
+		li Picks
+			ol(type='a')
+				li An entrant may pick any combination of regular season MLB games for a given team (i.e. they do not need to be consecutive).
+				li An entrant may only pick one side of any given game (i.e. you cannot pick both teams in an effort to guarantee a win and a loss).
+				li Neither side of a game may be picked after that game has had its first pitch thrown.
+		li Scoring
+			ol(type='a')
+				li A series won in four games will be worth 16 points to the entrant.
+				li A series won in five games will be worth 10 points to the entrant.
+				li A series won in six games will be worth 7 points to the entrant.
+				li A series won in seven games will be worth 4 points to the entrant.
+				li A series lost in seven games will be worth -4 points to the entrant.
+				li A series lost in six games will be worth -7 points to the entrant.
+				li A series lost in five games will be worth -10 points to the entrant.
+				li A series lost in four games will be worth -16 points to the entrant.
+				li An incomplete series at the conclusion of the MLB regular season will be worth -1,000 points to the entrant.
+				li The final standings will be based on most points scored.
+				li In the event that two or more entrants are tied on points scored, the tie will be broken by each entrant's winning percentage (i.e. correct picks divided by picks made).
+				li In the event that two or more entrants are tied on both points scored and winning percentage, any money owed for the relevant pay-out spots will be split equally amongst the entrants (e.g. if there are five pay-out spots and there is a three-way tie for third place, the sum of money allotted for third, fourth, and fifth place will be split equally among all three entrants).
+		li Miscellany
+			ol(type='a')
+				li Any pick for an MLB game that gets postponed or suspended will automatically be vacated and count as neither a win nor a loss (i.e. as if the pick had never been made).
+				li All picks must be made by the entrant on the website with potential exceptions only made in the event of website downtime.
+				li In the event that these rules underspecify a situation that must be ruled on, the pool administrator will retain the authority to make the ruling.
