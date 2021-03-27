@@ -15,6 +15,7 @@ app.use(cookieParser());
 
 var router = express.Router();
 
+/*
 router.use(function(request, response, next) {
 	if (request.path != '/preview' && (!request.cookies.gateKey || request.cookies.gateKey != process.env.GATE_KEY)) {
 		response.render('gate');
@@ -23,6 +24,7 @@ router.use(function(request, response, next) {
 		next();
 	}
 });
+*/
 
 app.use(router);
 
