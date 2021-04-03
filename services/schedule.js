@@ -132,10 +132,15 @@ module.exports.showAllForDate = function(request, response) {
 		];
 
 		Promise.all(data).then(function(values) {
-			var games = values[0];
+			var games = {
+				all: values[0],
+				interesting: [],
+				other: []
+			};
+
 			var classics = values[1];
 
-			games.forEach(function(game) {
+			games.all.forEach(function(game) {
 				game.away.picks = [];
 				game.home.picks = [];
 
@@ -178,7 +183,17 @@ module.exports.showAllForDate = function(request, response) {
 				game.home.picks.sort(Classic.populatedUserDisplayNameSort);
 			});
 
-			games.sort(Game.progressSortWithPopulatedTeams);
+			games.all.sort(Game.progressSortWithPopulatedTeams);
+
+			games.interesting = games.all.filter(function(game) {
+				return game.hasDefinitelyStarted() && (game.away.picks.length || game.home.picks.length);
+			});
+
+			games.interesting.sort(Game.interestingnessSortWithPopulatedPicks);
+
+			games.other = games.all.filter(function(game) {
+				return !games.interesting.includes(game);
+			});
 
 			var responseData = {
 				session: session,
