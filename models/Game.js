@@ -254,41 +254,36 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 	else if (!a.isFinal() && b.isFinal()) {
 		return -1;
 	}
-	else {
-		if (a.hasBeenPostponed() && !b.hasBeenPostponed()) {
-			return 1;
-		}
-		else if (!a.hasBeenPostponed() && b.hasBeenPostponed()) {
-			return -1;
-		}
-		else {
-			if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime < b.startTime) {
-				return -1;
-			}
-			else if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime > b.startTime) {
-				return 1;
-			}
-			else {
-				if (a.away.team.teamName < b.away.team.teamName) {
-					return -1;
-				}
-				else if (a.away.team.teamName > b.away.team.teamName) {
-					return 1;
-				}
-				else {
-					if (a.gameNumber < b.gameNumber) {
-						return -1;
-					}
-					else if (a.gameNumber > b.gameNumber) {
-						return 1;
-					}
-					else {
-						return 0;
-					}
-				}
-			}
-		}
+
+	if (a.hasBeenPostponed() && !b.hasBeenPostponed()) {
+		return 1;
 	}
+	else if (!a.hasBeenPostponed() && b.hasBeenPostponed()) {
+		return -1;
+	}
+
+	if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime < b.startTime) {
+		return -1;
+	}
+	else if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime > b.startTime) {
+		return 1;
+	}
+
+	if (a.away.team.teamName < b.away.team.teamName) {
+		return -1;
+	}
+	else if (a.away.team.teamName > b.away.team.teamName) {
+		return 1;
+	}
+
+	if (a.gameNumber < b.gameNumber) {
+		return -1;
+	}
+	else if (a.gameNumber > b.gameNumber) {
+		return 1;
+	}
+
+	return 0;
 };
 
 module.exports = mongoose.model('Game', gameSchema);
