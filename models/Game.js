@@ -269,6 +269,13 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 		return 1;
 	}
 
+	if (a.status.startTimeTBD && !b.status.startTimeTBD) {
+		return 1;
+	}
+	else if (!a.status.startTimeTBD && b.status.startTimeTBD) {
+		return -1;
+	}
+
 	if (a.away.team.teamName < b.away.team.teamName) {
 		return -1;
 	}
