@@ -48,6 +48,10 @@ li.notification {
 	font-size: 80%;
 }
 
+hr.divider {
+	flex: auto;
+}
+
 @media (min-width: 0px) {
 	/* xs */
 	td.classic-game {
