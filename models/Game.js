@@ -262,6 +262,13 @@ gameSchema.statics.progressSortWithPopulatedTeams = function(a, b) {
 		return -1;
 	}
 
+	if (a.hasDefinitelyStarted() && !a.isFinal() && !b.hasDefinitelyStarted()) {
+		return -1;
+	}
+	else if (!a.hasDefinitelyStarted() && b.hasDefinitelyStarted() && !b.isFinal()) {
+		return 1;
+	}
+
 	if (!a.status.startTimeTBD && !b.status.startTimeTBD && a.startTime < b.startTime) {
 		return -1;
 	}

@@ -1,3 +1,9 @@
+img.logo {
+	border-radius: 4px;
+	height: 30px;
+	width: 26px;
+}
+
 a.team-button, button.btn {
 	line-height: 0.9rem;
 }
