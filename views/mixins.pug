@@ -133,6 +133,8 @@ mixin gameCard(game, showDate)
 								| Delayed
 							else if game.hasBeenPostponed()
 								| Postponed
+							else if game.hasBeenSuspended()
+								| Suspended
 							else if game.hasBeenCanceled()
 								| Canceled
 							else if !game.hasPotentiallyStarted()
@@ -147,8 +149,6 @@ mixin gameCard(game, showDate)
 									| (#{game.inning.number})
 							else if game.isOver()
 								| End of the #{game.inning.ordinal}
-							else if game.hasBeenSuspended()
-								| Suspended
 							else if game.hasDefinitelyStarted()
 								| #{game.inning.state} of the #{game.inning.ordinal}
 							else if game.isWarmingUp()
