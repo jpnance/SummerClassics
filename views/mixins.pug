@@ -231,6 +231,7 @@ mixin notificationListGroupItem(notification)
 			case 'classic-win': listGroupItemClass = 'list-group-item-success'; break;
 			case 'classic-loss': listGroupItemClass = 'list-group-item-danger'; break;
 			case 'postponement': listGroupItemClass = 'list-group-item-info'; break;
+			case 'suspension': listGroupItemClass = 'list-group-item-info'; break;
 			case 'unnecessary': listGroupItemClass = 'list-group-item-info'; break;
 		}
 
@@ -280,6 +281,16 @@ mixin notificationListGroupItem(notification)
 					|
 					span
 						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm dS')} has been postponed so your
+						|
+						strong #{notification.classic.team.teamName}
+						|
+						| selection has been automatically unpicked for you.
+				else if notification.type == 'suspension'
+					strong Heads up!
+					|
+					|
+					span
+						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm dS')} has been suspended so your
 						|
 						strong #{notification.classic.team.teamName}
 						|

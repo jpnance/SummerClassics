@@ -72,7 +72,7 @@ gameSchema.methods.hasDefinitelyStarted = function() {
 };
 
 gameSchema.methods.hasBeenSuspended = function() {
-	return this.status && this.status.statusCode == 'UR';
+	return this.status && ['TI', 'TR', 'UI', 'UR'].includes(this.status.statusCode);
 };
 
 gameSchema.methods.isCool = function(hours) {

@@ -9,20 +9,20 @@ var notificationSchema = new Schema({
 		type: Number,
 		ref: 'Game',
 		required: function() {
-			return ['postponement', 'unnecessary'].includes(this.type);
+			return ['postponement', 'suspension', 'unnecessary'].includes(this.type);
 		}
 	},
 	originalStartTime: {
 		type: Date,
 		required: function() {
-			return ['postponement'].includes(this.type);
+			return ['postponement', 'suspension'].includes(this.type);
 		}
 	},
 	classic: {
 		type: Schema.Types.ObjectId,
 		ref: 'Classic',
 		required: function() {
-			return ['classic-win', 'classic-loss', 'postponement', 'unnecessary'].includes(this.type);
+			return ['classic-win', 'classic-loss', 'postponement', 'suspension', 'unnecessary'].includes(this.type);
 		}
 	},
 	read: { type: Boolean, default: false }

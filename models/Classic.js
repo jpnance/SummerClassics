@@ -68,6 +68,7 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 		};
 
 		var postponedGames = [];
+		var suspendedGames = [];
 		var unnecessaryGames = [];
 		var notificationPromises = [];
 
@@ -75,6 +76,10 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 			if (game.hasBeenPostponed()) {
 				postponedGames.push(game);
 			}
+			else if (game.hasBeenSuspended()) {
+				suspendedGames.push(game);
+			}
+
 			if (game.isFinal()) {
 				if ((game.away.team == classic.team && game.away.winner) || (game.home.team == classic.team && game.home.winner)) {
 					classic.record.wins++;
@@ -89,6 +94,18 @@ classicSchema.methods.scoreAndResolve = function(finalize) {
 			notificationPromises.push(Notification.create({
 				user: classic.user,
 				type: 'postponement',
+				game: game._id,
+				originalStartTime: game.startTime,
+				classic: classic._id
+			}));
+
+			classic.unpick(game._id);
+		});
+
+		suspendedGames.forEach(function(game) {
+			notificationPromises.push(Notification.create({
+				user: classic.user,
+				type: 'suspension',
 				game: game._id,
 				originalStartTime: game.startTime,
 				classic: classic._id
