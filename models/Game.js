@@ -230,6 +230,13 @@ gameSchema.methods.syncWithApi = function() {
 };
 
 gameSchema.statics.interestingnessSortWithPopulatedPicks = function(a, b) {
+	if (a.isFinal() && !b.isFinal()) {
+		return 1;
+	}
+	else if (!a.isFinal() && b.isFinal()) {
+		return -1;
+	}
+
 	if (a.away.picks.length && a.home.picks.length && (!b.away.picks.length || !b.home.picks.length)) {
 		return -1;
 	}
