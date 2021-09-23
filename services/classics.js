@@ -350,7 +350,7 @@ module.exports.all = function(request, response) {
 	var season = parseInt(request.query.season) || process.env.SEASON;
 
 	var dataPromises = [
-		Classic.find({ season: season }).populate({ path: 'user', select: '-password -admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+		Classic.find({ season: season }).populate({ path: 'user', select: '-admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
 	];
 
 	Promise.all(dataPromises).then(function(values) {
@@ -390,7 +390,7 @@ module.exports.allForUser = function(request, response) {
 
 	verifyUser.then(function(user) {
 		var dataPromises = [
-			Classic.find({ season: process.env.SEASON, user: user._id }).populate({ path: 'user', select: '-password -admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
+			Classic.find({ season: process.env.SEASON, user: user._id }).populate({ path: 'user', select: '-admin' }).populate('team').populate({ path: 'picks', populate: { path: 'away.team home.team' } })
 		];
 
 		Promise.all(dataPromises).then(function(values) {

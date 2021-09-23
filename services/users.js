@@ -7,10 +7,7 @@ var Classic = require('../models/Classic');
 module.exports.loginPrompt = function(request, response) {
 	var responseData = {};
 
-	if (request.query.error == 'login') {
-		responseData.error = { message: 'Invalid username/password combination.' };
-	}
-	else if (request.query.error == 'invalid-email') {
+	if (request.query.error == 'invalid-email') {
 		responseData.error = { message: 'Invalid email address.' };
 	}
 	else if (request.query.error == 'not-found') {
@@ -75,22 +72,15 @@ module.exports.showAll = function(request, response) {
 module.exports.signUp = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		if (session && session.user.admin) {
-			if (!request.body.username && !request.body.password) {
-				response.status(400).send('No data supplied');
-			}
-			else if (!request.body.username) {
+			if (!request.body.username) {
 				response.status(400).send('No username supplied');
-			}
-			else if (!request.body.password) {
-				response.status(400).send('No password supplied');
 			}
 			else {
 				var user = new User({
 					username: request.body.username,
 					firstName: request.body.firstName,
 					lastName: request.body.lastName,
-					displayName: request.body.displayName ? request.body.displayName : request.body.firstName,
-					password: crypto.createHash('sha256').update(request.body.password).digest('hex')
+					displayName: request.body.displayName ? request.body.displayName : request.body.firstName
 				});
 
 				if (request.body.eligible == 'on') {
@@ -145,10 +135,6 @@ module.exports.update = function(request, response) {
 				}
 			}
 
-			if (request.body.password1 && request.body.password2 && request.body.password1 == request.body.password2) {
-				user.password = crypto.createHash('sha256').update(request.body.password1).digest('hex');
-			}
-
 			user.save(function(error) {
 				if (error) {
 					response.send(error);
@@ -177,7 +163,7 @@ module.exports.all = function(request, response) {
 	var season = parseInt(request.query.season) || process.env.SEASON;
 
 	var dataPromises = [
-		User.find({ seasons: season }).select('-password -admin')
+		User.find({ seasons: season }).select('-admin')
 	];
 
 	Promise.all(dataPromises).then(function(values) {

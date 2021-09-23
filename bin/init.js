@@ -15,7 +15,6 @@ User.findOne({ username: process.env.ADMIN_USERNAME }).then(function(user) {
 	if (!user) {
 		user = new User({
 			username: process.env.ADMIN_USERNAME,
-			password: crypto.createHash('sha256').update(process.env.ADMIN_PASSWORD).digest('hex'),
 			firstName: process.env.ADMIN_FIRST_NAME,
 			lastName: process.env.ADMIN_LAST_NAME,
 			displayName: process.env.ADMIN_DISPLAY_NAME,
