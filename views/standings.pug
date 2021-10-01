@@ -26,7 +26,11 @@ block content
 							div.progress-bar.bg-danger(role='progressbar' style={ width: standing.progress.losses + '%' })
 							div.progress-bar(role='progressbar' style={ width: standing.progress.open + '%' })
 					td.text-center.align-middle #{standing.record.wins}-#{standing.record.losses}
-					td.text-center.align-middle #{standing.score.potential.maximum}
-					td.text-center.align-middle #{standing.score.potential.minimum}
+					td.text-center.align-middle
+						if standing.score.potential.maximum != standing.score.potential.minimum
+							| #{standing.score.potential.maximum}
+					td.text-center.align-middle
+						if standing.score.potential.minimum != standing.score.potential.maximum
+							| #{standing.score.potential.minimum}
 					td.text-center.table-active.align-middle
 						| #{standing.score.final}
