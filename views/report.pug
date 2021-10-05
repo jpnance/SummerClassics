@@ -4,10 +4,10 @@ block title
 	+title('Postseason Report')
 
 block content
-	table.table.table-sm.table-responsive.table-striped
+	table.table.table-sm.table-responsive#report
 		thead
-			tr
-				th
+			tr.sticky-top
+				th.sticky-left: br
 				th.text-right Overall
 				th.text-right 1-Run
 				each team in reportData.teams
@@ -16,15 +16,15 @@ block content
 		tbody
 			each user in reportData.users
 				tr
-					th.text-right #{user.displayName}
+					th.text-right.sticky-left #{user.displayName}
 					td.text-right #{reportData[user.username].overall.wins}-#{reportData[user.username].overall.losses}
 					td.text-right #{reportData[user.username].oneRun.wins}-#{reportData[user.username].oneRun.losses}
 					each team in reportData.teams
 						td.text-right #{reportData[user.username].pickedAgainst[team.abbreviation].wins}-#{reportData[user.username].pickedAgainst[team.abbreviation].losses}
 
 		tfoot
-			tr
-				th.text-right Total
+			tr.sticky-bottom
+				th.text-right.sticky-left Total
 				td.text-right #{reportData.total.overall.wins}-#{reportData.total.overall.losses}
 				td.text-right #{reportData.total.oneRun.wins}-#{reportData.total.oneRun.losses}
 				each team in reportData.teams

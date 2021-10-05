@@ -58,6 +58,30 @@ hr.divider {
 	flex: auto;
 }
 
+.sticky-bottom {
+	bottom: 0;
+	position: sticky;
+}
+
+.sticky-left {
+	left: 0;
+	position: sticky;
+}
+
+table#report {
+	height: 80vh;
+}
+
+table#report thead th,
+table#report tfoot th,
+table#report tfoot td {
+	background-color: white;
+}
+
+table#report tbody th {
+	background-color: white;
+}
+
 @media (min-width: 0px) {
 	/* xs */
 	td.classic-game {
