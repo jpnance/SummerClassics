@@ -1,0 +1,31 @@
+extends layout.pug
+
+block title
+	+title('Rules')
+
+block content
+	table.table.table-sm.table-responsive
+		thead
+			tr
+				th
+				th.text-right Overall
+				th.text-right 1-Run
+				each team in reportData.teams
+					th.text-nowrap.text-right vs. #{team.abbreviation}
+
+		tbody
+			each user in reportData.users
+				tr
+					th.text-right #{user.displayName}
+					td.text-right #{reportData[user.username].overall.wins}-#{reportData[user.username].overall.losses}
+					td.text-right #{reportData[user.username].oneRun.wins}-#{reportData[user.username].oneRun.losses}
+					each team in reportData.teams
+						td.text-right #{reportData[user.username].pickedAgainst[team.abbreviation].wins}-#{reportData[user.username].pickedAgainst[team.abbreviation].losses}
+
+		tfoot
+			tr
+				th.text-right Total
+				td.text-right #{reportData.total.overall.wins}-#{reportData.total.overall.losses}
+				td.text-right #{reportData.total.oneRun.wins}-#{reportData.total.oneRun.losses}
+				each team in reportData.teams
+					td.text-right #{reportData.total.pickedAgainst[team.abbreviation].wins}-#{reportData.total.pickedAgainst[team.abbreviation].losses}

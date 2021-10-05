@@ -11,9 +11,10 @@ var User = require('../models/User');
 var Game = require('../models/Game');
 var Classic = require('../models/Classic');
 
-var teamMap = {};
-
-var summary = {
+var report = {
+	users: [],
+	teams: [],
+	teamMap: {},
 	total: {
 		overall: { wins: 0, losses: 0 },
 		oneRun: { wins: 0, losses: 0 },
@@ -23,7 +24,9 @@ var summary = {
 
 User.find({ "seasons": process.env.SEASON }).then((users) => {
 	users.forEach((user) => {
-		summary[user.username] = {
+		report.users.push({ username: user.username, displayName: user.displayName });
+
+		report[user.username] = {
 			overall: { wins: 0, losses: 0 },
 			oneRun: { wins: 0, losses: 0 },
 			pickedAgainst: {}
@@ -32,12 +35,14 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 
 	Team.find({}).then((teams) => {
 		teams.forEach((team) => {
-			teamMap[team._id] = team.abbreviation;
+			report.teams.push({ _id: team._id, abbreviation: team.abbreviation, teamName: team.teamName });
 
-			summary.total.pickedAgainst[team.abbreviation] = { wins: 0, losses: 0 };
+			report.teamMap[team._id] = team.abbreviation;
+
+			report.total.pickedAgainst[team.abbreviation] = { wins: 0, losses: 0 };
 
 			users.forEach((user) => {
-				summary[user.username].pickedAgainst[team.abbreviation] = { wins: 0, losses: 0 };
+				report[user.username].pickedAgainst[team.abbreviation] = { wins: 0, losses: 0 };
 			});
 		});
 	});
@@ -46,10 +51,10 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 		classics.forEach((classic) => {
 			//console.log(JSON.stringify(classic, null, '  ')); process.exit();
 			var username = classic.user.username;
-			var totalOverallSummary = summary.total.overall;
-			var userOverallSummary = summary[username].overall;
-			var totalOneRunSummary = summary.total.oneRun;
-			var userOneRunSummary = summary[username].oneRun;
+			var totalOverallSummary = report.total.overall;
+			var userOverallSummary = report[username].overall;
+			var totalOneRunSummary = report.total.oneRun;
+			var userOneRunSummary = report[username].oneRun;
 
 			classic.picks.forEach((pick) => {
 				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
@@ -79,24 +84,24 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 				var pickedAgainstTeam;
 
 				if (pick.away.team == classic.team) {
-					pickedAgainstTeam = teamMap[pick.home.team];
+					pickedAgainstTeam = report.teamMap[pick.home.team];
 				}
 				else if (pick.home.team == classic.team) {
-					pickedAgainstTeam = teamMap[pick.away.team];
+					pickedAgainstTeam = report.teamMap[pick.away.team];
 				}
 
 				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
-					summary.total.pickedAgainst[pickedAgainstTeam].wins++;
-					summary[username].pickedAgainst[pickedAgainstTeam].wins++;
+					report.total.pickedAgainst[pickedAgainstTeam].wins++;
+					report[username].pickedAgainst[pickedAgainstTeam].wins++;
 				}
 				else {
-					summary.total.pickedAgainst[pickedAgainstTeam].losses++;
-					summary[username].pickedAgainst[pickedAgainstTeam].losses++;
+					report.total.pickedAgainst[pickedAgainstTeam].losses++;
+					report[username].pickedAgainst[pickedAgainstTeam].losses++;
 				}
 			});
 		});
 
-		console.log(JSON.stringify(summary, null, '  '));
+		console.log(JSON.stringify(report, null, '  '));
 		process.exit();
 	});
 });

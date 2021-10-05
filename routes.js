@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var users = require('./services/users');
 var schedule = require('./services/schedule');
 var classics = require('./services/classics');
@@ -6,6 +8,18 @@ var statuses = require('./services/statuses');
 var notifications = require('./services/notifications');
 
 var Session = require('./models/Session');
+
+var stringCompare = function(a, b) {
+	if (a < b) {
+		return -1;
+	}
+	else if (a > b) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+};
 
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
@@ -46,6 +60,19 @@ module.exports = function(app) {
 
 	app.get('/notifications', notifications.showAll);
 	app.get('/notifications/dismiss/:notificationId', notifications.dismiss);
+
+	app.get('/report', function(request, response) {
+		fs.readFile('./data/report.json', 'utf8', (error, data) => {
+			var reportData = JSON.parse(data);
+
+			reportData.users.sort((a, b) => stringCompare(a.displayName, b.displayName));
+			reportData.teams.sort((a, b) => stringCompare(a.abbreviation, b.abbreviation));
+
+			Session.withActiveSession(request, function(error, session) {
+				response.render('report', { session: session, reportData: reportData });
+			});
+		});
+	});
 
 	app.get('/rules', function(request, response) {
 		Session.withActiveSession(request, function(error, session) {
