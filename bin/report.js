@@ -131,7 +131,7 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 
 				/* ---- */
 
-				var monthIndex = (new Date(pick.date)).getMonth() + 1;
+				var monthIndex = (new Date(pick.date + 'T12:00:00-07:00')).getMonth() + 1;
 
 				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
 					report.total.months[monthIndex].wins++;
