@@ -39,6 +39,7 @@ var report = {
 			9: { wins: 0, losses: 0 },
 			10: { wins: 0, losses: 0 }
 		},
+		pickDates: []
 	}
 };
 
@@ -60,6 +61,7 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 				9: { wins: 0, losses: 0 },
 				10: { wins: 0, losses: 0 }
 			},
+			pickDates: []
 		};
 	});
 
@@ -141,10 +143,20 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 					report.total.months[monthIndex].losses++;
 					report[username].months[monthIndex].losses++;
 				}
+
+				/* ---- */
+
+				if (!report.total.pickDates.includes(pick.date)) {
+					report.total.pickDates.push(pick.date);
+				}
+
+				if (!report[username].pickDates.includes(pick.date)) {
+					report[username].pickDates.push(pick.date);
+				}
 			});
 		});
 
-		console.log(JSON.stringify(report, null, '  '));
+		console.log(JSON.stringify(report));
 		process.exit();
 	});
 });
