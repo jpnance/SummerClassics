@@ -10,6 +10,8 @@ block content
 				th.sticky-left: br
 				th.text-right Overall
 				th.text-right 1-Run
+				each monthId in Object.keys(reportData.monthMap)
+					th.text-right #{reportData.monthMap[monthId]}
 				each team in reportData.teams
 					th.text-nowrap.text-right vs. #{team.abbreviation}
 
@@ -19,6 +21,8 @@ block content
 					th.text-right.sticky-left #{user.displayName}
 					td.text-right #{reportData[user.username].overall.wins}-#{reportData[user.username].overall.losses}
 					td.text-right #{reportData[user.username].oneRun.wins}-#{reportData[user.username].oneRun.losses}
+					each monthId in Object.keys(reportData.monthMap)
+						td.text-right #{reportData[user.username].months[monthId].wins}-#{reportData[user.username].months[monthId].losses}
 					each team in reportData.teams
 						td.text-right #{reportData[user.username].pickedAgainst[team.abbreviation].wins}-#{reportData[user.username].pickedAgainst[team.abbreviation].losses}
 
@@ -27,5 +31,7 @@ block content
 				th.text-right.sticky-left Total
 				td.text-right #{reportData.total.overall.wins}-#{reportData.total.overall.losses}
 				td.text-right #{reportData.total.oneRun.wins}-#{reportData.total.oneRun.losses}
+				each monthId in Object.keys(reportData.monthMap)
+					td.text-right #{reportData.total.months[monthId].wins}-#{reportData.total.months[monthId].losses}
 				each team in reportData.teams
 					td.text-right #{reportData.total.pickedAgainst[team.abbreviation].wins}-#{reportData.total.pickedAgainst[team.abbreviation].losses}

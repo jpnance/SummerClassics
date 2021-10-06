@@ -14,11 +14,31 @@ var Classic = require('../models/Classic');
 var report = {
 	users: [],
 	teams: [],
+	monthMap: {
+		3: 'March',
+		4: 'April',
+		5: 'May',
+		6: 'June',
+		7: 'July',
+		8: 'August',
+		9: 'September',
+		10: 'October'
+	},
 	teamMap: {},
 	total: {
 		overall: { wins: 0, losses: 0 },
 		oneRun: { wins: 0, losses: 0 },
 		pickedAgainst: {},
+		months: {
+			3: { wins: 0, losses: 0 },
+			4: { wins: 0, losses: 0 },
+			5: { wins: 0, losses: 0 },
+			6: { wins: 0, losses: 0 },
+			7: { wins: 0, losses: 0 },
+			8: { wins: 0, losses: 0 },
+			9: { wins: 0, losses: 0 },
+			10: { wins: 0, losses: 0 }
+		},
 	}
 };
 
@@ -29,7 +49,17 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 		report[user.username] = {
 			overall: { wins: 0, losses: 0 },
 			oneRun: { wins: 0, losses: 0 },
-			pickedAgainst: {}
+			pickedAgainst: {},
+			months: {
+				3: { wins: 0, losses: 0 },
+				4: { wins: 0, losses: 0 },
+				5: { wins: 0, losses: 0 },
+				6: { wins: 0, losses: 0 },
+				7: { wins: 0, losses: 0 },
+				8: { wins: 0, losses: 0 },
+				9: { wins: 0, losses: 0 },
+				10: { wins: 0, losses: 0 }
+			},
 		};
 	});
 
@@ -97,6 +127,19 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 				else {
 					report.total.pickedAgainst[pickedAgainstTeam].losses++;
 					report[username].pickedAgainst[pickedAgainstTeam].losses++;
+				}
+
+				/* ---- */
+
+				var monthIndex = (new Date(pick.date)).getMonth() + 1;
+
+				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
+					report.total.months[monthIndex].wins++;
+					report[username].months[monthIndex].wins++;
+				}
+				else {
+					report.total.months[monthIndex].losses++;
+					report[username].months[monthIndex].losses++;
 				}
 			});
 		});
