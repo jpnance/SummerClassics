@@ -173,7 +173,7 @@ mixin teamRow(game, side, classes)
 		div.row
 			div.col-10.offset-1.p-0
 				div.d-flex
-					img.mr-2(src='/images/' + game[side].team.abbreviation.toLowerCase() + '.png')
+					img.p-1.mr-1(src='/images/' + game[side].team.abbreviation.toLowerCase() + '.png')
 					div.d-flex.flex-column.flex-grow-1
 						h5.mb-0.text-nowrap
 							a.font-weight-bold(href='/schedule/' + game[side].team.abbreviation + '#game-' + game._id class=classes.linkText)
