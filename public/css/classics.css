@@ -4,6 +4,11 @@ img.logo {
 	width: 26px;
 }
 
+li.team-row img {
+	height: 40px;
+	width: 40px;
+}
+
 a.team-button, button.btn {
 	line-height: 0.9rem;
 }
