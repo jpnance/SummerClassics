@@ -195,11 +195,12 @@ mixin teamRow(game, side, classes)
 											| #{pick.user.displayName}
 										|
 										|
-										span.record (#{Math.floor(Math.random() * 3)}-#{Math.floor(Math.random() * 3)})
+										span.record
+											+record(pick)
 										| ,
 									|
 									|
-					h2.col-2.text-center.text-nowrap.font-weight-normal.p-0.mb-0(class=classes.scoreText) #{Math.floor(Math.random() * 15)}
+					h2.col-2.text-center.text-nowrap.font-weight-normal.p-0.mb-0(class=classes.scoreText)
 						if game.hasDefinitelyStarted()
 							| #{game[side].score}
 
