@@ -214,8 +214,16 @@ module.exports.allForDate = function(request, response) {
 		return;
 	}
 
+	var options = {
+		season: process.env.SEASON
+	};
+
+	if (request.query.date) {
+		options.date = request.query.date;
+	}
+
 	var dataPromises = [
-		Game.find({ date: request.query.date }).populate('away.team home.team')
+		Game.find(options).populate('away.team home.team')
 	];
 
 	Promise.all(dataPromises).then(function(values) {
