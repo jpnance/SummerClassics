@@ -87,6 +87,24 @@ table#report tbody th {
 	background-color: white;
 }
 
+.name-and-bars {
+	display: grid;
+}
+
+.name {
+	grid-column-start: 1;
+	grid-row-start: 1;
+	padding: 0 4px;
+}
+
+.bars {
+	gap: 1px;
+	grid-column-start: 1;
+	grid-row-start: 1;
+	opacity: 0.2;
+	height: 30px;
+}
+
 @media (min-width: 0px) {
 	/* xs */
 	td.classic-game {

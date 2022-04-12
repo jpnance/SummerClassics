@@ -3,6 +3,7 @@ var User = require('../models/User');
 var Game = require('../models/Game');
 var Team = require('../models/Team');
 var Classic = require('../models/Classic');
+var Projection = require('../models/Projection');
 
 module.exports.showAllForUser = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
@@ -135,14 +136,19 @@ module.exports.showAllForTeam = function(request, response) {
 module.exports.showStandings = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		var dataPromises = [
-			Classic.find({ season: process.env.SEASON }).populate('user')
+			Classic.find({ season: process.env.SEASON }).populate('user'),
+			User.find({ seasons: process.env.SEASON }).select('displayName username').sort('displayName'),
+			Projection.findById(process.env.SEASON)
 		];
 
 		Promise.all(dataPromises).then(function(values) {
 			var classics = values[0];
+			var users = values[1];
+			var projection = values[2];
 
 			var standingsMap = {};
 			var standings = [];
+			var projections = {};
 
 			classics.forEach(function(classic) {
 				if (!standingsMap[classic.user.username]) {
@@ -195,13 +201,29 @@ module.exports.showStandings = function(request, response) {
 				}
 			});
 
+			users.forEach(function(user) {
+				var projectionsUserIndex = projection.data[0].indexOf(user.displayName);
+
+				projection.data.forEach(function(projection, i) {
+					if (i == 0 || i > 5) {
+						return;
+					}
+
+					if (!standingsMap[user.username].projections) {
+						standingsMap[user.username].projections = [];
+					}
+
+					standingsMap[user.username].projections.push(projection[projectionsUserIndex]);
+				});
+			});
+
 			Object.keys(standingsMap).forEach(function(key) {
 				standings.push(standingsMap[key]);
 			});
 
 			standings = standings.sort(Classic.standingsSort);
 
-			response.render('standings', { session: session, standings: standings });
+			response.render('standings', { session: session, standings: standings, projections: projections });
 		});
 	});
 };
