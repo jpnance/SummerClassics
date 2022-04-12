@@ -1,0 +1,10 @@
+1. change dates in .env
+	- SEASON
+	- OPENING_DAY
+	- JACKIE_ROBINSON_DAY (probably just April 15th)
+	- PLAYERS_WEEKEND (probably won't know this at the beginning of the year)
+	- FINAL_DAY
+
+2. node bin/schedule.js
+	- this will populate the schedule for the season
+	- this relies on SEASON, OPENING_DAY, and FINAL_DAY being correct
