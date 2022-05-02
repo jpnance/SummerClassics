@@ -215,7 +215,7 @@ module.exports.allForDate = function(request, response) {
 	}
 
 	var options = {
-		season: process.env.SEASON
+		season: request.query.season || process.env.SEASON
 	};
 
 	if (request.query.date) {
