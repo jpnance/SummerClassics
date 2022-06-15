@@ -15,7 +15,6 @@ var report = {
 	users: [],
 	teams: [],
 	monthMap: {
-		3: 'March',
 		4: 'April',
 		5: 'May',
 		6: 'June',
@@ -89,6 +88,10 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 			var userOneRunSummary = report[username].oneRun;
 
 			classic.picks.forEach((pick) => {
+				if (pick.status.abstractGameCode != 'F') {
+					return;
+				}
+
 				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
 					totalOverallSummary.wins++;
 					userOverallSummary.wins++;
