@@ -205,7 +205,7 @@ module.exports.showStandings = function(request, response) {
 				var projectionsUserIndex = projection.data[0].indexOf(user.displayName);
 
 				projection.data.forEach(function(projection, i) {
-					if (i == 0 || i > 5) {
+					if (i == 0) {
 						return;
 					}
 
