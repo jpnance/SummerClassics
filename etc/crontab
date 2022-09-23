@@ -1,0 +1,3 @@
+0 3 * * *	/usr/local/bin/node /app/bin/schedule.js
+*/5 * * * *	/usr/local/bin/node /app/bin/games.js
+*/30 * * * *	/usr/local/bin/node /app/bin/projections.js
