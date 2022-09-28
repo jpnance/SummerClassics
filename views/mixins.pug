@@ -118,7 +118,7 @@ mixin gameCard(game, showDate)
 
 	div.col-xs-12.col-sm-6.col-md-6.col-lg-4.mb-4(id='game-' + game._id)
 		if showDate
-			h6.text-muted.text-center #{dateFormat(game.startTime, 'mmmm dS')}
+			h6.text-muted.text-center #{dateFormat(game.startTime, 'mmmm d')}
 		div.card(class=classes.card.border)
 			div.card-header.py-1(class=classes.header.background)
 				div.row.justify-content-center
@@ -285,7 +285,7 @@ mixin notificationListGroupItem(notification)
 					|
 					|
 					span
-						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm dS')} has been postponed so your
+						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm d')} has been postponed so your
 						|
 						strong #{notification.classic.team.teamName}
 						|
@@ -295,7 +295,7 @@ mixin notificationListGroupItem(notification)
 					|
 					|
 					span
-						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm dS')} has been suspended so your
+						| The #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game originally scheduled for #{dateFormat(notification.originalStartTime, 'mmmm d')} has been suspended so your
 						|
 						strong #{notification.classic.team.teamName}
 						|
@@ -309,7 +309,7 @@ mixin notificationListGroupItem(notification)
 						|
 						strong #{notification.classic.team.teamName}
 						|
-						| selection in the #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game on #{dateFormat(notification.game.startTime, 'mmmm dS')} is no longer necessary so it's been automatically unpicked for you.
+						| selection in the #{notification.game.away.team.teamName}/#{notification.game.home.team.teamName} game on #{dateFormat(notification.game.startTime, 'mmmm d')} is no longer necessary so it's been automatically unpicked for you.
 			div.col-1.pl-0
 				a.close(href='/notifications/dismiss/' + notification._id)
 					span &times;

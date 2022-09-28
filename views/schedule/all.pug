@@ -1,7 +1,7 @@
 extends ../layout.pug
 
 block title
-	+title(dateFormat(today, 'mmmm dS'), 'Schedule')
+	+title(dateFormat(today, 'mmmm d'), 'Schedule')
 
 block content
 	div.row
@@ -9,7 +9,7 @@ block content
 			+scheduleNav(yesterday, today, tomorrow)
 
 		if games.all.length == 0
-			h5.col-8.offset-2.text-center There are no games scheduled for #{dateFormat(today, 'mmmm dS')}.
+			h5.col-8.offset-2.text-center There are no games scheduled for #{dateFormat(today, 'mmmm d')}.
 		else
 			if games.interesting.length > 0
 				each interestingGame in games.interesting
