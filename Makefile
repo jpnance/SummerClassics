@@ -11,5 +11,8 @@ schedule:
 games:
 	docker exec classix-cron sh -c "cd /app/bin && node games.js"
 
+finalize:
+	docker exec -e FINALIZE=true classix-cron sh -c "cd /app/bin && node games.js"
+
 projections:
 	docker exec classix-cron sh -c "cd /app/bin && node projections.js"
