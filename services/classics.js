@@ -202,15 +202,19 @@ module.exports.showStandings = function(request, response) {
 			});
 
 			users.forEach(function(user) {
+				if (!standingsMap[user.username].projections) {
+					standingsMap[user.username].projections = [];
+				}
+
+				if (!projection || !projection.data) {
+					return;
+				}
+
 				var projectionsUserIndex = projection.data[0].indexOf(user.displayName);
 
 				projection.data.forEach(function(projection, i) {
 					if (i == 0) {
 						return;
-					}
-
-					if (!standingsMap[user.username].projections) {
-						standingsMap[user.username].projections = [];
 					}
 
 					standingsMap[user.username].projections.push(projection[projectionsUserIndex]);
