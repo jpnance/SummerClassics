@@ -3,6 +3,9 @@ version: '3.6'
 services:
     web:
         container_name: classix-web
+        profiles:
+            - main
+            - postseason
         image: node:14-alpine
         volumes:
             - .:/app
@@ -14,12 +17,17 @@ services:
 
     mongo:
         container_name: classix-mongo
+        profiles:
+            - main
+            - postseason
         image: mongo:3.6.8
         volumes:
             - classix-data:/data/db
 
     cron:
         container_name: classix-cron
+        profiles:
+            - main
         image: node:14-alpine
         volumes:
             - .:/app
