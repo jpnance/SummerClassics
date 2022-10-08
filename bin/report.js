@@ -15,6 +15,7 @@ var report = {
 	users: [],
 	teams: [],
 	monthMap: {
+		3: 'March',
 		4: 'April',
 		5: 'May',
 		6: 'June',
@@ -27,6 +28,8 @@ var report = {
 	total: {
 		overall: { wins: 0, losses: 0 },
 		oneRun: { wins: 0, losses: 0 },
+		withHome: { wins: 0, losses: 0 },
+		withAway: { wins: 0, losses: 0 },
 		pickedAgainst: {},
 		months: {
 			3: { wins: 0, losses: 0 },
@@ -49,6 +52,8 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 		report[user.username] = {
 			overall: { wins: 0, losses: 0 },
 			oneRun: { wins: 0, losses: 0 },
+			withHome: { wins: 0, losses: 0 },
+			withAway: { wins: 0, losses: 0 },
 			pickedAgainst: {},
 			months: {
 				3: { wins: 0, losses: 0 },
@@ -84,6 +89,10 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 			var username = classic.user.username;
 			var totalOverallSummary = report.total.overall;
 			var userOverallSummary = report[username].overall;
+			var totalWithHomeSummary = report.total.withHome;
+			var userWithHomeSummary = report[username].withHome;
+			var totalWithAwaySummary = report.total.withAway;
+			var userWithAwaySummary = report[username].withAway;
 			var totalOneRunSummary = report.total.oneRun;
 			var userOneRunSummary = report[username].oneRun;
 
@@ -91,6 +100,8 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 				if (pick.status.abstractGameCode != 'F') {
 					return;
 				}
+
+				/* ---- */
 
 				if ((pick.home.team == classic.team && pick.home.score > pick.away.score) || (pick.away.team == classic.team && pick.away.score > pick.home.score)) {
 					totalOverallSummary.wins++;
@@ -111,6 +122,29 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 					else {
 						totalOneRunSummary.losses++;
 						userOneRunSummary.losses++;
+					}
+				}
+
+				/* ---- */
+
+				if (pick.home.team == classic.team) {
+					if (pick.home.score > pick.away.score) {
+						totalWithHomeSummary.wins++;
+						userWithHomeSummary.wins++;
+					}
+					else if (pick.away.score > pick.home.score) {
+						totalWithHomeSummary.losses++;
+						userWithHomeSummary.losses++;
+					}
+				}
+				else if (pick.away.team == classic.team) {
+					if (pick.away.score > pick.home.score) {
+						totalWithAwaySummary.wins++;
+						userWithAwaySummary.wins++;
+					}
+					else if (pick.home.score > pick.away.score) {
+						totalWithAwaySummary.losses++;
+						userWithAwaySummary.losses++;
 					}
 				}
 
