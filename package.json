@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/jpnance/SummerClassics#readme",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.1",
     "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "dateformat": "^3.0.3",
