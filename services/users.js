@@ -93,7 +93,7 @@ module.exports.signUp = function(request, response) {
 				user.save(function(error) {
 					if (!error) {
 						Classic.initialize(user, process.env.SEASON).then(function() {
-							response.redirect('/');
+							response.redirect('/users');
 						});
 					}
 					else {
@@ -142,11 +142,11 @@ module.exports.update = function(request, response) {
 				else {
 					if (user.seasons.includes(parseInt(process.env.SEASON))) {
 						Classic.initialize(user, process.env.SEASON).then(function() {
-							response.redirect('/');
+							response.redirect('/users');
 						});
 					}
 					else {
-						response.redirect('/');
+						response.redirect('/users');
 					}
 				}
 			});
