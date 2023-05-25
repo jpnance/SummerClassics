@@ -115,7 +115,12 @@ gameSchema.methods.syncWithApi = function() {
 
 			var playerPromises = [];
 
-			var data = JSON.parse(response.text);
+			try {
+				var data = JSON.parse(response.text);
+			} catch (error) {
+				reject('probably unexpected end of input');
+				return;
+			}
 
 			if (!data.liveData || !data.liveData.linescore || !data.liveData.linescore.teams) {
 				resolve('fine');
@@ -154,7 +159,13 @@ gameSchema.methods.syncWithApi = function() {
 								return;
 							}
 
-							var playerData = JSON.parse(response.text);
+							try {
+								var playerData = JSON.parse(response.text);
+							} catch (error) {
+								reject2('probably unexpected end of input');
+								return;
+							}
+
 							var player = playerData.people[0];
 
 							var newPlayer = {
@@ -213,7 +224,7 @@ gameSchema.methods.syncWithApi = function() {
 				}
 			}
 
-			Promise.all(playerPromises).then(function() {
+			Promise.allSettled(playerPromises).then(function() {
 				thisGame.save(function(error) {
 					if (error) {
 						reject(error);

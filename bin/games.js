@@ -35,7 +35,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 		gamePromises.push(game.syncWithApi());
 	});
 
-	Promise.all(gamePromises).then(function() {
+	Promise.allSettled(gamePromises).then(function() {
 		Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
 			var classicPromises = [];
 
@@ -54,7 +54,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 				}));
 			});
 
-			Promise.all(classicPromises).then(function() {
+			Promise.allSettled(classicPromises).then(function() {
 				mongoose.disconnect();
 			});
 		});
