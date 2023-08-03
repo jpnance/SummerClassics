@@ -222,6 +222,10 @@ gameSchema.methods.syncWithApi = function() {
 					thisGame.home.winner = true;
 					thisGame.away.winner = false;
 				}
+				else {
+					reject('there\'s no tying in baseball');
+					return;
+				}
 			}
 
 			Promise.allSettled(playerPromises).then(function() {
