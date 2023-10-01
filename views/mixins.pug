@@ -181,7 +181,7 @@ mixin teamRow(game, side, classes)
 								span.d-none.d-sm-inline.d-md-none #{game[side].team.abbreviation}
 						div.pitcher.mb-0.text-nowrap
 							if game[side].probablePitcher
-								a(href='http://m.mlb.com/player/' + game[side].probablePitcher._id class=classes.pitcherText target='_blank')
+								a(href='http://www.mlb.com/player/' + game[side].probablePitcher._id class=classes.pitcherText target='_blank')
 									+pitcher(game[side].probablePitcher, game.date)
 							else
 								span(class=classes.pitcherText)
