@@ -33,6 +33,12 @@ if (process.env.FORCE_UPDATE_FOR_GAME_ID) {
 Game.find(conditions).sort('startTime').exec(function(error, games) {
 	var gamePromises = [];
 
+	if (!games) {
+		console.log('not sure why but we didn\'t find any games; bailing out');
+		mongoose.disconnect();
+		process.exit();
+	}
+
 	games.forEach(function(game) {
 		gamePromises.push(game.syncWithApi());
 	});
