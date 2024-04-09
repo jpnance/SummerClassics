@@ -36,6 +36,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 
 	if (!games) {
 		console.log('not sure why but we didn\'t find any games; bailing out');
+		console.log('----------')
 		coinflipperAlert('games came back empty');
 		mongoose.disconnect();
 		process.exit();
