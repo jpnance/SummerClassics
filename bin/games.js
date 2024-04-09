@@ -1,3 +1,5 @@
+console.log('starting games.js');
+
 var dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
 
 var request = require('superagent');
@@ -36,6 +38,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 	});
 
 	Promise.allSettled(gamePromises).then(function() {
+		console.log('every game promise got settled');
 		Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
 			var classicPromises = [];
 
@@ -55,10 +58,15 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 			});
 
 			Promise.allSettled(classicPromises).then(function() {
+				console.log('every classic promise got settled');
 				mongoose.disconnect();
-			});
+			}).catch(function(error) {
+				console.log('not every classic promise got settled; here\'s the error');
+				console.log(error);
+      });
 		});
 	}).catch(function(error) {
+		console.log('not every game promise got settled; here\'s the error');
 		console.log(error);
 	});
 });
