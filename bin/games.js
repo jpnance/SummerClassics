@@ -9,8 +9,12 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
+var startTime = (new Date()).toISOString();
+
+setTimeout(coinflipperAlert.bind(null, `script that started at ${startTime} is taking a long time`), 60000);
+
 console.log('----------')
-console.log(`starting games.js at ${(new Date()).toISOString()}`);
+console.log(`starting games.js at ${startTime}`);
 
 var dateCushion = new Date();
 dateCushion.setDate(dateCushion.getDate() + 3);
@@ -31,15 +35,15 @@ if (process.env.FORCE_UPDATE_FOR_GAME_ID) {
 	conditions = { '_id': process.env.FORCE_UPDATE_FOR_GAME_ID };
 }
 
-Game.find(conditions).sort('startTime').exec(function(error, games) {
+Game.find(conditions).sort('startTime').exec(async function(error, games) {
 	var gamePromises = [];
 
 	if (!games) {
+		await coinflipperAlert('games came back empty');
+
 		console.log('not sure why but we didn\'t find any games; bailing out');
 		console.log('----------')
-		coinflipperAlert('games came back empty');
-		mongoose.disconnect();
-		process.exit();
+		disconnectAndExit();
 	}
 
 	games.forEach(function(game) {
@@ -70,26 +74,38 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 			Promise.allSettled(classicPromises).then(function() {
 				console.log('every classic promise got settled');
 				console.log('----------')
-				mongoose.disconnect();
-			}).catch(function(error) {
+
+				disconnectAndExit();
+			}).catch(async function(error) {
+				await coinflipperAlert('some classic promises didn\'t get settled');
+
 				console.log('not every classic promise got settled; here\'s the error');
-				coinflipperAlert('some classic promises didn\'t get settled');
 				console.log(error);
 				console.log('----------')
+
+				disconnectAndExit();
       });
 		});
-	}).catch(function(error) {
+	}).catch(async function(error) {
+		await coinflipperAlert('some game promises didn\'t get settled');
+
 		console.log('not every game promise got settled; here\'s the error');
-		coinflipperAlert('some game promises didn\'t get settled');
 		console.log(error);
 		console.log('----------')
+
+		disconnectAndExit();
 	});
 });
 
-function coinflipperAlert(message) {
-	request
+async function coinflipperAlert(message) {
+	return request
 		.post('https://ntfy.sh/coinflipper')
 		.set('Content-Type', 'application/x-www-form-urlencoded')
 		.send(`${(new Date()).toISOString()} ${message}`)
 		.then(response => {});
+}
+
+function disconnectAndExit() {
+	mongoose.disconnect();
+	process.exit();
 }
