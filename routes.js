@@ -48,8 +48,8 @@ module.exports = function(app) {
 	app.get('/picks', classics.showAllForUser);
 	app.get('/picks.json', classics.all);
 	app.get('/picks/:teamAbbreviation([A-Z][A-Z][A-Z]?)', classics.showAllForTeam);
-	app.get('/picks/:username([a-z]+)', classics.showAllForUser);
-	app.get('/picks/:username([a-z]+).json', classics.allForUser);
+	app.get('/picks/:username([a-z-]+)', classics.showAllForUser);
+	app.get('/picks/:username([a-z-]+).json', classics.allForUser);
 	app.get('/pick/:teamId/:gameId', classics.pick);
 	app.get('/unpick/:teamId/:gameId', classics.unpick);
 	app.get('/standings', classics.showStandings);
