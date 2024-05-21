@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 var startTime = (new Date()).toISOString();
 
-setTimeout(coinflipperAlert.bind(null, `script that started at ${startTime} is taking a long time`), 60000);
+setInterval(coinflipperAlert.bind(null, `script that started at ${startTime} is taking a long time`), 60000);
 
 console.log('----------')
 console.log(`starting games.js at ${startTime}`);
