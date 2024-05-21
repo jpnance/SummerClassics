@@ -83,7 +83,7 @@ gameSchema.methods.isCool = function(hours) {
 };
 
 gameSchema.methods.isFinal = function() {
-	return this.status && (this.status.statusCode == 'F' || this.status.statusCode == 'FR');
+	return this.status && (this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.statusCode == 'FG');
 };
 
 gameSchema.methods.isFinalAndCool = function() {
@@ -91,7 +91,7 @@ gameSchema.methods.isFinalAndCool = function() {
 };
 
 gameSchema.methods.isOver = function() {
-	return this.status.statusCode == 'O' || this.status.statusCode == 'F' || this.status.statusCode == 'FR';
+	return this.status.statusCode == 'O' || this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.statusCode == 'FG';
 };
 
 gameSchema.methods.syncWithApi = function() {
@@ -203,7 +203,7 @@ gameSchema.methods.syncWithApi = function() {
 
 			playerPromises.push(Status.updateOne(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR') {
+			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || this.statusCode == 'FG') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 
@@ -213,7 +213,7 @@ gameSchema.methods.syncWithApi = function() {
 				thisGame.inning.half = data.liveData.linescore.inningHalf;
 			}
 
-			if (thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR') {
+			if (thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || this.statusCode == 'FG') {
 				if (thisGame.away.score > thisGame.home.score) {
 					thisGame.away.winner = true;
 					thisGame.home.winner = false;
