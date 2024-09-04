@@ -148,7 +148,6 @@ module.exports.showStandings = function(request, response) {
 
 			var standingsMap = {};
 			var standings = [];
-			var projections = {};
 
 			classics.forEach(function(classic) {
 				if (!standingsMap[classic.user.username]) {
@@ -227,7 +226,7 @@ module.exports.showStandings = function(request, response) {
 
 			standings = standings.sort(Classic.standingsSort);
 
-			response.render('standings', { session: session, standings: standings, projections: projections });
+			response.render('standings', { session: session, standings: standings });
 		});
 	});
 };
