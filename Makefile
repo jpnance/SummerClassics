@@ -3,7 +3,7 @@ ci:
 
 seed:
 	@echo "Use something like:"
-	@echo "docker exec -i classix-mongo sh -c \"mongorestore --drop --archive\" < ~/backups/classix/classix.dump"
+	@echo "docker exec -i classix-mongo sh -c \"mongorestore --drop --archive\" < ~/backups/classix.dump"
 
 schedule:
 	docker exec classix-cron sh -c "cd /app/bin && node schedule.js"
