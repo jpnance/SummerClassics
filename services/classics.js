@@ -135,10 +135,13 @@ module.exports.showAllForTeam = function(request, response) {
 
 module.exports.showStandings = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
+		var season = request.params.season || process.env.SEASON;
+		console.log(season);
+
 		var dataPromises = [
-			Classic.find({ season: process.env.SEASON }).populate('user'),
-			User.find({ seasons: process.env.SEASON }).select('displayName username').sort('displayName'),
-			Projection.findById(process.env.SEASON)
+			Classic.find({ season: season }).populate('user'),
+			User.find({ seasons: season }).select('displayName username').sort('displayName'),
+			Projection.findById(season)
 		];
 
 		Promise.all(dataPromises).then(function(values) {
