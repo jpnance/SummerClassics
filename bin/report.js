@@ -1,5 +1,7 @@
 // begin by fetching https://classics.coinflipper.org/picks.json?apiKey=<API key>&season=<year> into season-data.json
 
+var fs = require('fs');
+
 var dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
 
 var mongoose = require('mongoose');
@@ -193,7 +195,10 @@ User.find({ "seasons": process.env.SEASON }).then((users) => {
 			});
 		});
 
-		console.log(JSON.stringify(report));
+		fs.writeFileSync(`../data/report-${process.env.SEASON}.json`, JSON.stringify(report), (error) => {
+			console.log(error);
+		});
+
 		process.exit();
 	});
 });
