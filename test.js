@@ -45,6 +45,10 @@ Session.withActiveSession = (request, callback) => {
 	});
 };
 
+Game.prototype.syncWithApi = function() {
+	return Promise.resolve(this);
+};
+
 const mockRequest = (data) => {
 	const request = {
 		body: {},
