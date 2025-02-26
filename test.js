@@ -16,6 +16,26 @@ const Team = require('./models/Team');
 const User = require('./models/User');
 
 const users = require('./services/users');
+const schedule = require('./services/schedule');
+
+const now = new Date();
+const yesterday = new Date(now);
+const tomorrow = new Date(now);
+
+Date.prototype.toDateString = function() {
+	let gameYear = this.getFullYear();
+	let gameMonth = this.getMonth();
+	let gameDate = this.getDate();
+
+	return gameYear + '-' + (gameMonth + 1 < 10 ? '0' : '') + (gameMonth + 1) + '-' + (gameDate < 10 ? '0' : '') + gameDate;
+};
+
+yesterday.setDate(now.getDate() - 1);
+tomorrow.setDate(now.getDate() + 1);
+
+process.env.SEASON = now.getFullYear();
+process.env.OPENING_DAY = yesterday.toDateString();
+process.env.FINAL_DAY = tomorrow.toDateString();
 
 Session.withActiveSession = (request, callback) => {
 	callback(null, {
@@ -109,6 +129,27 @@ const seedTeamData = () => {
 	return Promise.all(teams.map(team => Team.findByIdAndUpdate(team.id, team, { upsert: true })));
 };
 
+const seedScheduleData = () => {
+	const gameDate = (new Date()).toISOString();
+	const gameStartDateIso = new Date(gameDate);
+	const gameStartDateLocal = new Date(gameDate);
+
+	gameStartDateLocal.setHours(gameStartDateIso.getHours() - 8);
+
+	const games = [
+		{
+			gamePk: 123456,
+			season: process.env.SEASON,
+			startTime: gameStartDateIso,
+			date: gameStartDateLocal.toDateString(),
+			'away.team': 117,
+			'home.team': 119
+		}
+	];
+
+	return Promise.all(games.map(game => Game.findByIdAndUpdate(game.gamePk, game, { upsert: true })));
+};
+
 const createDefaultUser = () => {
 	const request = mockRequest({
 		body: {
@@ -123,6 +164,16 @@ const createDefaultUser = () => {
 	const response = mockResponse();
 
 	users.signUp(request, response);
+
+	return response.done;
+};
+
+const loadScheduleForToday = () => {
+	const request = mockRequest();
+
+	const response = mockResponse();
+
+	schedule.showAllForDate(request, response);
 
 	return response.done;
 };
@@ -152,8 +203,11 @@ const test = (testPromise) => {
 const testHappyPath =
 	resetDatabase
 		.then(seedTeamData)
+		.then(seedScheduleData)
 		.then(createDefaultUser)
-		.catch(e => { console.log(e); });
+		.then(loadScheduleForToday)
+		.then(console.log)
+		.catch(console.error);
 
 test(testHappyPath)
 	.then(disconnectAndExit)
