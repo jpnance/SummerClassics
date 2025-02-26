@@ -90,15 +90,12 @@ module.exports.signUp = function(request, response) {
 					user.makeUneligibleFor(process.env.SEASON);
 				}
 
-				user.save(function(error) {
-					if (!error) {
-						Classic.initialize(user, process.env.SEASON).then(function() {
-							response.redirect('/users');
-						});
-					}
-					else {
-						response.status(400).send(error);
-					}
+				user.save().then((user) => {
+					Classic.initialize(user, process.env.SEASON).then(function() {
+						response.redirect('/users');
+					});
+				}).catch((error) => {
+					response.status(400).send(error);
 				});
 			}
 		}
