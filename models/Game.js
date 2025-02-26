@@ -229,14 +229,7 @@ gameSchema.methods.syncWithApi = function() {
 			}
 
 			Promise.allSettled(playerPromises).then(function() {
-				thisGame.save(function(error) {
-					if (error) {
-						reject(error);
-					}
-					else {
-						resolve(thisGame);
-					}
-				});
+				thisGame.save().then(resolve).catch(reject);
 			}).catch(function(error) {
 				console.log(error);
 			});
