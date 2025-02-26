@@ -1,5 +1,5 @@
 ci:
-	docker run --rm -v $(PWD):/app node:14-alpine sh -c "cd /app && npm ci"
+	docker run --rm -v $(PWD):/app node:22-alpine sh -c "cd /app && npm ci"
 
 seed:
 	@echo "Use something like:"
