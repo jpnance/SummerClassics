@@ -38,14 +38,6 @@ process.env.SEASON = now.getFullYear();
 process.env.OPENING_DAY = yesterday.toDateString();
 process.env.FINAL_DAY = tomorrow.toDateString();
 
-Session.withActiveSession = (request, callback) => {
-	callback(null, {
-		user: {
-			admin: true
-		}
-	});
-};
-
 Game.prototype.syncWithApi = function() {
 	return Promise.resolve(this);
 };
@@ -106,6 +98,12 @@ const mockResponse = () => {
 	return response;
 };
 
+const mockWithActiveSession = (user) => {
+	return (request, callback) => {
+		callback(null, { user: user });
+	};
+};
+
 const resetDatabase = Promise.all([
 	Classic.collection.drop(),
 	Game.collection.drop(),
@@ -116,6 +114,12 @@ const resetDatabase = Promise.all([
 	Team.collection.drop(),
 	User.collection.drop(),
 ]);
+
+const resetWithActiveSession = () => {
+	Session.withActiveSession = mockWithActiveSession({
+		admin: true,
+	});
+};
 
 const seedTeamData = () => {
 	const teams = [
@@ -182,6 +186,14 @@ const createDefaultUser = () => {
 	return response.done;
 };
 
+const logInAsDefaultUser = () => {
+	return User.findOne({ username: 'patrick-nance' }).then((user) => {
+		Session.withActiveSession = mockWithActiveSession({
+			_id: user._id
+		});
+	});
+};
+
 const loadScheduleForToday = () => {
 	const request = mockRequest();
 
@@ -192,21 +204,42 @@ const loadScheduleForToday = () => {
 	return response.done;
 };
 
-const makePick = (data) => {
-	const game = data.games.all[0];
+const makePick = (side) => {
+	return (data) => {
+		const game = data.games.all[0];
 
-	const request = mockRequest({
-		params: {
-			gameId: game._id,
-			teamId: game.away.team._id
-		}
-	});
+		const request = mockRequest({
+			params: {
+				gameId: game._id,
+				teamId: game[side].team._id
+			}
+		});
 
-	const response = mockResponse();
+		const response = mockResponse();
 
-	classics.pick(request, response);
+		classics.pick(request, response);
 
-	return response.done;
+		return response.done;
+	};
+};
+
+const unpick = (side) => {
+	return (data) => {
+		const game = data.games.all[0];
+
+		const request = mockRequest({
+			params: {
+				gameId: game._id,
+				teamId: game[side].team._id
+			}
+		});
+
+		const response = mockResponse();
+
+		classics.unpick(request, response);
+
+		return response.done;
+	};
 };
 
 const disconnectAndExit = (data) => {
@@ -233,13 +266,17 @@ const test = (testPromise, description) => {
 
 const testHappyPath =
 	resetDatabase
+		.then(resetWithActiveSession)
 		.then(seedTeamData)
 		.then(seedScheduleData)
 		.then(createDefaultUser)
+		.then(logInAsDefaultUser)
 		.then(loadScheduleForToday)
-		.then(makePick)
-		.then(console.log)
-		.catch(console.error);
+		.then(makePick('away'))
+		.then(loadScheduleForToday)
+		.then(makePick('home'))
+		.then(loadScheduleForToday)
+		.then(unpick('home'));
 
 test(testHappyPath, 'happy path')
 	.then(disconnectAndExit)
