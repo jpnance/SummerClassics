@@ -221,14 +221,14 @@ const displayErrorAndExit = (error) => {
 
 const print = (message) => {
 	return () => {
-		process.stdout.write(message);
+		console.log(message);
 	};
 };
 
-const test = (testPromise) => {
+const test = (testPromise, description) => {
 	return testPromise
-		.then(print('.'))
-		.catch(print('x'));
+		.then(print(`✓ ${description}`))
+		.catch(print(`× ${description}`));
 };
 
 const testHappyPath =
@@ -241,5 +241,5 @@ const testHappyPath =
 		.then(console.log)
 		.catch(console.error);
 
-test(testHappyPath)
+test(testHappyPath, 'happy path')
 	.then(disconnectAndExit)
