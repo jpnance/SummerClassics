@@ -7,7 +7,7 @@ mongoose.connect(mongoUri);
 
 const User = require('./models/User');
 
-User.find({}).then(handleUsers).then(console.log).then(disconnect);
+User.find({}).then(handleUsers).then(disconnect);
 
 function handleUsers(users) {
 	return Promise.all(users.map(convertUsername));
