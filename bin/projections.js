@@ -6,7 +6,7 @@ var Projection = require('../models/Projection');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI);
 
 var date = new Date();
 date.setDate(date.getDate() - 1);

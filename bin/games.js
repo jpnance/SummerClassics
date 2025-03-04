@@ -7,7 +7,7 @@ var Classic = require('../models/Classic');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI);
 
 var startTime = (new Date()).toISOString();
 
