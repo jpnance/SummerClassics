@@ -130,20 +130,17 @@ module.exports.update = function(request, response) {
 				}
 			}
 
-			user.save(function(error) {
-				if (error) {
-					response.send(error);
+			user.save().then(function(user) {
+				if (user.seasons.includes(parseInt(process.env.SEASON))) {
+					Classic.initialize(user, process.env.SEASON).then(function() {
+						response.redirect('/users');
+					});
 				}
 				else {
-					if (user.seasons.includes(parseInt(process.env.SEASON))) {
-						Classic.initialize(user, process.env.SEASON).then(function() {
-							response.redirect('/users');
-						});
-					}
-					else {
-						response.redirect('/users');
-					}
+					response.redirect('/users');
 				}
+			}).catch(function(error) {
+				response.send(error);
 			});
 		});
 	});
