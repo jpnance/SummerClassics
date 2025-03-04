@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 
-Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
+Classic.find({ season: process.env.SEASON }).populate('picks').then(function(classics) {
 	var classicPromises = [];
 
 	classics.forEach(function(classic) {
@@ -27,4 +27,7 @@ Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(err
 	Promise.all(classicPromises).then(function() {
 		mongoose.disconnect();
 	});
+}).catch(function(error) {
+	console.error(error);
+	process.exit();
 });

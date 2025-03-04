@@ -37,17 +37,15 @@ module.exports.add = function(request, response) {
 module.exports.edit = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		if (session && (request.params.username == session.user.username || session.user.admin)) {
-			User.findOne({ username: request.params.username }).populate('notifications').exec(function(error, user) {
+			User.findOne({ username: request.params.username }).populate('notifications').then(function(user) {
 				var responseData = {
 					user: user,
 					session: session
 				};
 
-				if (error) {
-					response.send(error);
-				}
-
 				response.render('users/edit', responseData);
+			}).catch(function(error) {
+				response.send(error);
 			});
 		}
 		else {
@@ -90,11 +88,11 @@ module.exports.signUp = function(request, response) {
 					user.makeUneligibleFor(process.env.SEASON);
 				}
 
-				user.save().then((user) => {
+				user.save().then(function(user) {
 					Classic.initialize(user, process.env.SEASON).then(function() {
 						response.redirect('/users');
 					});
-				}).catch((error) => {
+				}).catch(function(error) {
 					response.status(400).send(error);
 				});
 			}
