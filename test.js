@@ -242,6 +242,16 @@ const unpick = (side) => {
 	};
 };
 
+const visitStandingsPage = () => {
+	const request = mockRequest();
+
+	const response = mockResponse();
+
+	classics.showStandings(request, response);
+
+	return response.done;
+};
+
 const disconnectAndExit = (data) => {
 	console.log();
 	mongoose.disconnect();
@@ -258,14 +268,14 @@ const print = (message) => {
 	};
 };
 
-const test = (testPromise, description) => {
-	return testPromise
+const test = (testFunction, description) => {
+	return testFunction()
 		.then(print(`✓ ${description}`))
 		.catch(print(`× ${description}`));
 };
 
-const testHappyPath =
-	resetDatabase
+function testHappyPath() {
+	return resetDatabase
 		.then(resetWithActiveSession)
 		.then(seedTeamData)
 		.then(seedScheduleData)
@@ -277,6 +287,16 @@ const testHappyPath =
 		.then(makePick('home'))
 		.then(loadScheduleForToday)
 		.then(unpick('home'));
+}
+
+function testStandingsPage() {
+	return resetDatabase
+		.then(resetWithActiveSession)
+		.then(createDefaultUser)
+		.then(logInAsDefaultUser)
+		.then(visitStandingsPage);
+}
 
 test(testHappyPath, 'happy path')
+	.then(test(testStandingsPage, 'standings page'))
 	.then(disconnectAndExit)
