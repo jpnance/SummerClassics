@@ -8,8 +8,10 @@ module.exports.dismiss = function(request, response) {
 			return;
 		}
 
-		Notification.findOneAndUpdate({ _id: request.params.notificationId, user: session.user._id }, { '$set': { read: true } }, function(error, notification) {
+		Notification.findOneAndUpdate({ _id: request.params.notificationId, user: session.user._id }, { '$set': { read: true } }).then(function(notification) {
 			response.send({ success: true });
+		}).catch(function(error) {
+			response.sendStatus(500);
 		});
 	});
 };
