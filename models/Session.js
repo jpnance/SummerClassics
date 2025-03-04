@@ -21,22 +21,6 @@ sessionSchema.virtual('user', {
 	justOne: true
 });
 
-sessionSchema.statics.closeActiveSession = function(request, callback) {
-	if (request.cookies.sessionId) {
-		this.findByIdAndUpdate(request.cookies.sessionId, { active: false, userAgent: request.headers['user-agent'], ipAddress: request.connection.remoteAddress, lastActivity: Date.now() }).populate('user').exec(function(error, session) {
-			if (error) {
-				callback(error);
-			}
-			else {
-				callback(null);
-			}
-		});
-	}
-	else {
-		callback(null);
-	}
-};
-
 sessionSchema.statics.withActiveSession = function(request, callback) {
 	if (request.cookies.sessionKey) {
 		apiRequest
