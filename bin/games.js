@@ -52,7 +52,7 @@ Game.find(conditions).sort('startTime').then(async function(games) {
 	Promise.allSettled(gamePromises).then(function() {
 		console.log('every game promise got settled');
 
-		Classic.find({ season: process.env.SEASON }).populate('picks').(function(classics) {
+		Classic.find({ season: process.env.SEASON }).populate('picks').then(function(classics) {
 			var classicPromises = [];
 
 			classics.forEach(function(classic) {
