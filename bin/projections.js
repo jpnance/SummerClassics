@@ -15,11 +15,21 @@ var yesterdayString = date.getFullYear() + (date.getMonth() + 1).toString().padS
 
 request.get('https://lflrankings.com/classix/get_data.php?d=' + yesterdayString, function(error, response) {
 	var data = JSON.parse(response.text).data;
+
 	var projection = {
 		data: data
 	};
 
-	Projection.findByIdAndUpdate(process.env.SEASON, projection, { upsert: true }).then(function() {
+	var updatePromise;
+
+	if (data.season == process.env.SEASON) {
+		updatePromise = Projection.findByIdAndUpdate(process.env.SEASON, projection, { upsert: true });
+	}
+	else {
+		updatePromise = Promise.resolve('no projection data for the current season');
+	}
+
+	updatePromise.then(function() {
 		mongoose.disconnect();
-	});;
+	});
 });
