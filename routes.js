@@ -76,13 +76,19 @@ var showReport = function(request, response) {
 	var season = request.params.season || process.env.SEASON;
 
 	fs.readFile(`./data/report-${season}.json`, 'utf8', (error, data) => {
-		var reportData = JSON.parse(data);
+		if (error) {
+			// at some point, maybe we'll have a real "no report generated yet" page (or, better yet, generate a nightly one)
+			response.redirect('/');
+		}
+		else {
+			var reportData = JSON.parse(data);
 
-		reportData.users.sort((a, b) => stringCompare(a.displayName, b.displayName));
-		reportData.teams.sort((a, b) => stringCompare(a.abbreviation, b.abbreviation));
+			reportData.users.sort((a, b) => stringCompare(a.displayName, b.displayName));
+			reportData.teams.sort((a, b) => stringCompare(a.abbreviation, b.abbreviation));
 
-		Session.withActiveSession(request, function(error, session) {
-			response.render('report', { session: session, reportData: reportData });
-		});
+			Session.withActiveSession(request, function(error, session) {
+				response.render('report', { session: session, reportData: reportData });
+			});
+		}
 	});
 };
