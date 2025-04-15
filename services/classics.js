@@ -135,7 +135,6 @@ module.exports.showAllForTeam = function(request, response) {
 module.exports.showStandings = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
 		var season = request.params.season || process.env.SEASON;
-		console.log(season);
 
 		var dataPromises = [
 			Classic.find({ season: season }).populate('user'),
