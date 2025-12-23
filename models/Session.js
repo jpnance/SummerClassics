@@ -32,12 +32,19 @@ sessionSchema.statics.withActiveSession = function(request, callback) {
 				}).populate({
 					path: 'notifications',
 					match: { read: false },
-					populate: {
-						path: 'game classic',
-						populate: {
-							path: 'team home.team away.team'
-						}
-					}
+					populate: [
+						{
+							path: 'game',
+							populate: [
+								{ path: 'away.team' },
+								{ path: 'home.team' }
+							],
+						},
+						{
+							path: 'classic',
+							populate: { path: 'team' }
+						},
+					]
 				}).then(function(user) {
 					callback(null, { username: user.username, user: user });
 				});
