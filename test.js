@@ -82,7 +82,7 @@ const mockResponse = () => {
 	};
 
 	response.status = (code) => {
-		if (code >= 400 && code <= 499) {
+		if ([400, 404, 500].includes(code)) {
 			return {
 				send: (error) => {
 					reject(`HTTP ${code}: ${error}`);
