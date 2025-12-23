@@ -88,6 +88,27 @@ const resetDatabase = Promise.all([
 	User.collection.drop(),
 ]);
 
+const seedTeamData = () => {
+	const teams = [
+		{
+			id: 117,
+			name: 'Houston Astros',
+			abbreviation: 'HOU',
+			locationName: 'Houston',
+			teamName: 'Astros'
+		},
+		{
+			id: 119,
+			name: 'Los Angeles Dodgers',
+			abbreviation: 'LAD',
+			locationName: 'Los Angeles',
+			teamName: 'Dodgers'
+		}
+	];
+
+	return Promise.all(teams.map(team => Team.findByIdAndUpdate(team.id, team, { upsert: true })));
+};
+
 const createDefaultUser = () => {
 	const request = mockRequest({
 		body: {
@@ -130,6 +151,7 @@ const test = (testPromise) => {
 
 const testHappyPath =
 	resetDatabase
+		.then(seedTeamData)
 		.then(createDefaultUser)
 		.catch(e => { console.log(e); });
 
