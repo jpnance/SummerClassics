@@ -18,9 +18,14 @@ module.exports.showAllForUser = function(request, response) {
 			}
 			else {
 				User.findOne({ username: request.params.username }).select('username firstName lastName').then(function(user) {
-					resolve(user);
+					if (!user) {
+						reject({ error: 'who' });
+					}
+					else {
+						resolve(user);
+					}
 				}).catch(function(error) {
-					reject({ error: 'who' });
+					reject(error);
 				});
 			}
 		});
@@ -73,12 +78,7 @@ module.exports.showAllForUser = function(request, response) {
 
 module.exports.showAllForTeam = function(request, response) {
 	Session.withActiveSession(request, function(error, session) {
-		Team.findOne({ abbreviation: request.params.teamAbbreviation }, function(error, team) {
-			if (error) {
-				response.sendStatus(500);
-				return;
-			}
-
+		Team.findOne({ abbreviation: request.params.teamAbbreviation }).then(function(team) {
 			if (!team) {
 				response.sendStatus(404);
 				return;
@@ -126,6 +126,8 @@ module.exports.showAllForTeam = function(request, response) {
 
 				response.render('classics/team', { session: session, users: processedUsers, team: team });
 			});
+		}).catch(function(error) {
+			response.sendStatus(500);
 		});
 	});
 };
@@ -403,9 +405,14 @@ module.exports.allForUser = function(request, response) {
 		}
 		else {
 			User.findOne({ username: request.params.username }).select('username firstName lastName').then(function(user) {
-				resolve(user);
+				if (!user) {
+					reject({ error: 'who' });
+				}
+				else {
+					resolve(user);
+				}
 			}).catch(function(error) {
-				reject({ error: 'who' });
+				reject(error);
 			});
 		}
 	});
