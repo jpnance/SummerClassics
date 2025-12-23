@@ -83,7 +83,7 @@ gameSchema.methods.isCool = function(hours) {
 };
 
 gameSchema.methods.isFinal = function() {
-	return this.status && (this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.status.statusCode == 'FG');
+	return this.status && (this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.status.statusCode == 'FG' || this.status.statusCode == 'FO');
 };
 
 gameSchema.methods.isFinalAndCool = function() {
@@ -91,7 +91,7 @@ gameSchema.methods.isFinalAndCool = function() {
 };
 
 gameSchema.methods.isOver = function() {
-	return this.status.statusCode == 'O' || this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.status.statusCode == 'FG';
+	return this.status.statusCode == 'O' || this.status.statusCode == 'F' || this.status.statusCode == 'FR' || this.status.statusCode == 'FG' || this.status.statusCode == 'FO';
 };
 
 gameSchema.methods.syncWithApi = function() {
@@ -203,7 +203,7 @@ gameSchema.methods.syncWithApi = function() {
 
 			playerPromises.push(Status.updateOne(data.gameData.status, { '$set': { example: thisGame._id } }, { upsert: true }));
 
-			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || thisGame.status.statusCode == 'FG') {
+			if (thisGame.status.statusCode == 'I' || thisGame.status.statusCode == 'MA' || thisGame.status.statusCode == 'MF' || thisGame.status.statusCode == 'MI' || thisGame.status.statusCode == 'O' || thisGame.status.statusCode == 'UR' || thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || thisGame.status.statusCode == 'FG' || thisGame.status.statusCode == 'FO') {
 				thisGame.away.score = data.liveData.linescore.teams.away.runs;
 				thisGame.home.score = data.liveData.linescore.teams.home.runs;
 
@@ -213,7 +213,7 @@ gameSchema.methods.syncWithApi = function() {
 				thisGame.inning.half = data.liveData.linescore.inningHalf;
 			}
 
-			if (thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || thisGame.status.statusCode == 'FG') {
+			if (thisGame.status.statusCode == 'F' || thisGame.status.statusCode == 'FR' || thisGame.status.statusCode == 'FG' || thisGame.status.statusCode == 'FO') {
 				if (thisGame.away.score > thisGame.home.score) {
 					thisGame.away.winner = true;
 					thisGame.home.winner = false;

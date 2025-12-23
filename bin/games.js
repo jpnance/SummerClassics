@@ -21,7 +21,7 @@ dateCushion.setDate(dateCushion.getDate() + 3);
 
 var conditions = {
 	'status.statusCode': {
-		'$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG']
+		'$nin': ['F', 'FT', 'CR', 'FR', 'CI', 'FG', 'FO']
 	},
 	season: parseInt(process.env.SEASON),
 	startTime: { '$lt': dateCushion }
