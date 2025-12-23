@@ -74,7 +74,6 @@ module.exports = function(app) {
 
 var showReport = function(request, response) {
 	var season = request.params.season || process.env.SEASON;
-	console.log(season);
 
 	fs.readFile(`./data/report-${season}.json`, 'utf8', (error, data) => {
 		var reportData = JSON.parse(data);
