@@ -17,13 +17,10 @@ module.exports.showAllForUser = function(request, response) {
 				}
 			}
 			else {
-				User.findOne({ username: request.params.username }).select('username firstName lastName').exec(function(error, user) {
-					if (user) {
-						resolve(user);
-					}
-					else {
-						reject({ error: 'who' });
-					}
+				User.findOne({ username: request.params.username }).select('username firstName lastName').then(function(user) {
+					resolve(user);
+				}).catch(function(error) {
+					reject({ error: 'who' });
 				});
 			}
 		});
@@ -405,13 +402,10 @@ module.exports.allForUser = function(request, response) {
 			reject({ error: 'not querying for anything' });
 		}
 		else {
-			User.findOne({ username: request.params.username }).select('username firstName lastName').exec(function(error, user) {
-				if (user) {
-					resolve(user);
-				}
-				else {
-					reject({ error: 'who' });
-				}
+			User.findOne({ username: request.params.username }).select('username firstName lastName').then(function(user) {
+				resolve(user);
+			}).catch(function(error) {
+				reject({ error: 'who' });
 			});
 		}
 	});

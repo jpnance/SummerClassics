@@ -6,7 +6,7 @@ var Notification = require('../models/Notification');
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 
-User.findOne({ username: 'jpnance' }).exec(function(error, user) {
+User.findOne({ username: 'jpnance' }).then(function(user) {
 	if (error) { console.log(error); process.exit() }
 
 	var notification = new Notification({
@@ -21,4 +21,7 @@ User.findOne({ username: 'jpnance' }).exec(function(error, user) {
 	notification.save().then(function() {
 		mongoose.disconnect();
 	});
+}).catch(function(error) {
+	console.error(error);
+	process.exit();
 });

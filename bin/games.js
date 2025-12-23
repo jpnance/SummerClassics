@@ -35,7 +35,7 @@ if (process.env.FORCE_UPDATE_FOR_GAME_ID) {
 	conditions = { '_id': process.env.FORCE_UPDATE_FOR_GAME_ID };
 }
 
-Game.find(conditions).sort('startTime').exec(async function(error, games) {
+Game.find(conditions).sort('startTime').then(async function(games) {
 	var gamePromises = [];
 
 	if (!games) {
@@ -52,7 +52,7 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 	Promise.allSettled(gamePromises).then(function() {
 		console.log('every game promise got settled');
 
-		Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
+		Classic.find({ season: process.env.SEASON }).populate('picks').(function(classics) {
 			var classicPromises = [];
 
 			classics.forEach(function(classic) {
@@ -81,7 +81,10 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 				console.log(error);
 
 				disconnectAndExit();
-      });
+			});
+		}).catch(function(error) {
+			console.error(error);
+			process.exit();
 		});
 	}).catch(async function(error) {
 		await coinflipperAlert('some game promises didn\'t get settled');
@@ -91,6 +94,9 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 
 		disconnectAndExit();
 	});
+}).catch(function(error) {
+	console.error(error);
+	process.exit();
 });
 
 async function coinflipperAlert(message) {
