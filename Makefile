@@ -5,6 +5,9 @@ seed:
 	@echo "Use something like:"
 	@echo "docker exec -i classix-mongo sh -c \"mongorestore --drop --archive\" < ~/backups/classix.dump"
 
+teams:
+	docker exec classix-cron sh -c "cd /app/bin && node teams.js"
+
 schedule:
 	docker exec classix-cron sh -c "cd /app/bin && node schedule.js"
 
