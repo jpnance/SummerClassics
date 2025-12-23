@@ -1,6 +1,3 @@
-console.log('----------')
-console.log(`starting games.js at ${(new Date()).toISOString()}`);
-
 var dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
 
 var request = require('superagent');
@@ -11,6 +8,9 @@ var Classic = require('../models/Classic');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+
+console.log('----------')
+console.log(`starting games.js at ${(new Date()).toISOString()}`);
 
 var dateCushion = new Date();
 dateCushion.setDate(dateCushion.getDate() + 3);
@@ -36,6 +36,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 
 	if (!games) {
 		console.log('not sure why but we didn\'t find any games; bailing out');
+		coinflipperAlert('games came back empty');
 		mongoose.disconnect();
 		process.exit();
 	}
@@ -46,6 +47,7 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 
 	Promise.allSettled(gamePromises).then(function() {
 		console.log('every game promise got settled');
+
 		Classic.find({ season: process.env.SEASON }).populate('picks').exec(function(error, classics) {
 			var classicPromises = [];
 
@@ -70,13 +72,23 @@ Game.find(conditions).sort('startTime').exec(function(error, games) {
 				mongoose.disconnect();
 			}).catch(function(error) {
 				console.log('not every classic promise got settled; here\'s the error');
+				coinflipperAlert('some classic promises didn\'t get settled');
 				console.log(error);
 				console.log('----------')
       });
 		});
 	}).catch(function(error) {
 		console.log('not every game promise got settled; here\'s the error');
+		coinflipperAlert('some game promises didn\'t get settled');
 		console.log(error);
 		console.log('----------')
 	});
 });
+
+function coinflipperAlert(message) {
+	request
+		.post('https://ntfy.sh/coinflipper')
+		.set('Content-Type', 'application/x-www-form-urlencoded')
+		.send(`${(new Date()).toISOString()} ${message}`)
+		.then(response => {});
+}
