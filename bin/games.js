@@ -42,7 +42,6 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 		await coinflipperAlert('games came back empty');
 
 		console.log('not sure why but we didn\'t find any games; bailing out');
-		console.log('----------')
 		disconnectAndExit();
 	}
 
@@ -73,7 +72,6 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 
 			Promise.allSettled(classicPromises).then(function() {
 				console.log('every classic promise got settled');
-				console.log('----------')
 
 				disconnectAndExit();
 			}).catch(async function(error) {
@@ -81,7 +79,6 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 
 				console.log('not every classic promise got settled; here\'s the error');
 				console.log(error);
-				console.log('----------')
 
 				disconnectAndExit();
       });
@@ -91,7 +88,6 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 
 		console.log('not every game promise got settled; here\'s the error');
 		console.log(error);
-		console.log('----------')
 
 		disconnectAndExit();
 	});
@@ -106,6 +102,8 @@ async function coinflipperAlert(message) {
 }
 
 function disconnectAndExit() {
+	console.log('----------')
+
 	mongoose.disconnect();
 	process.exit();
 }
