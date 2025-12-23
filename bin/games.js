@@ -58,14 +58,7 @@ Game.find(conditions).sort('startTime').then(async function(games) {
 			classics.forEach(function(classic) {
 				classicPromises.push(new Promise(function(resolve, reject) {
 					classic.scoreAndResolve(process.env.FINALIZE).then(function() {
-						classic.save(function(error) {
-							if (!error) {
-								resolve('good');
-							}
-							else {
-								reject(error);
-							}
-						});
+						classic.save().then(resolve).catch(reject);
 					});
 				}));
 			});
