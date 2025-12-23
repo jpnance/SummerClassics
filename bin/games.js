@@ -94,6 +94,10 @@ Game.find(conditions).sort('startTime').exec(async function(error, games) {
 });
 
 async function coinflipperAlert(message) {
+	if (process.env.NODE_ENV != 'production') {
+		return Promise.resolve();
+	}
+
 	return request
 		.post('https://ntfy.sh/coinflipper')
 		.set('Content-Type', 'application/x-www-form-urlencoded')
