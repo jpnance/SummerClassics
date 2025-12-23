@@ -17,6 +17,7 @@ const User = require('./models/User');
 
 const users = require('./services/users');
 const schedule = require('./services/schedule');
+const classics = require('./services/classics');
 
 const now = new Date();
 const yesterday = new Date(now);
@@ -138,7 +139,12 @@ const seedTeamData = () => {
 };
 
 const seedScheduleData = () => {
-	const gameDate = (new Date()).toISOString();
+	const oneHourAgo = new Date();
+
+	oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+
+	const gameDate = oneHourAgo.toISOString();
+
 	const gameStartDateIso = new Date(gameDate);
 	const gameStartDateLocal = new Date(gameDate);
 
@@ -186,6 +192,23 @@ const loadScheduleForToday = () => {
 	return response.done;
 };
 
+const makePick = (data) => {
+	const game = data.games.all[0];
+
+	const request = mockRequest({
+		params: {
+			gameId: game._id,
+			teamId: game.away.team._id
+		}
+	});
+
+	const response = mockResponse();
+
+	classics.pick(request, response);
+
+	return response.done;
+};
+
 const disconnectAndExit = (data) => {
 	console.log();
 	mongoose.disconnect();
@@ -214,6 +237,7 @@ const testHappyPath =
 		.then(seedScheduleData)
 		.then(createDefaultUser)
 		.then(loadScheduleForToday)
+		.then(makePick)
 		.then(console.log)
 		.catch(console.error);
 
