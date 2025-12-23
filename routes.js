@@ -62,22 +62,28 @@ module.exports = function(app) {
 	app.get('/notifications', notifications.showAll);
 	app.get('/notifications/dismiss/:notificationId', notifications.dismiss);
 
-	app.get('/report', function(request, response) {
-		fs.readFile('./data/report.json', 'utf8', (error, data) => {
-			var reportData = JSON.parse(data);
-
-			reportData.users.sort((a, b) => stringCompare(a.displayName, b.displayName));
-			reportData.teams.sort((a, b) => stringCompare(a.abbreviation, b.abbreviation));
-
-			Session.withActiveSession(request, function(error, session) {
-				response.render('report', { session: session, reportData: reportData });
-			});
-		});
-	});
+	app.get('/report', showReport);
+	app.get('/report/:season', showReport);
 
 	app.get('/rules', function(request, response) {
 		Session.withActiveSession(request, function(error, session) {
 			response.render('rules', { session: session });
+		});
+	});
+};
+
+var showReport = function(request, response) {
+	var season = request.params.season || process.env.SEASON;
+	console.log(season);
+
+	fs.readFile(`./data/report-${season}.json`, 'utf8', (error, data) => {
+		var reportData = JSON.parse(data);
+
+		reportData.users.sort((a, b) => stringCompare(a.displayName, b.displayName));
+		reportData.teams.sort((a, b) => stringCompare(a.abbreviation, b.abbreviation));
+
+		Session.withActiveSession(request, function(error, session) {
+			response.render('report', { session: session, reportData: reportData });
 		});
 	});
 };
