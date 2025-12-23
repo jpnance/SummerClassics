@@ -1,42 +1,42 @@
 version: '3.6'
 
 services:
-    web:
-        container_name: classix-web
-        profiles:
-            - main
-            - postseason
-        image: node:22-alpine
-        volumes:
-            - .:/app
-            - ../ssl:/ssl
-        working_dir: /app
-        ports:
-            - $PORT:$PORT
-        command: node index.js
+  web:
+    container_name: classix-web
+    profiles:
+      - main
+      - postseason
+    image: node:22-alpine
+    volumes:
+      - .:/app
+      - ../ssl:/ssl
+    working_dir: /app
+    ports:
+      - $PORT:$PORT
+    command: node index.js
 
-    mongo:
-        container_name: classix-mongo
-        profiles:
-            - main
-            - postseason
-        image: mongo:8.0.4
-        volumes:
-            - classix-data:/data/db
+  mongo:
+    container_name: classix-mongo
+    profiles:
+      - main
+      - postseason
+    image: mongo:8.0.4
+    volumes:
+      - classix-data:/data/db
 
-    cron:
-        container_name: classix-cron
-        profiles:
-            - main
-        image: node:22-alpine
-        volumes:
-            - .:/app
-        command: sh -c "crontab /app/etc/crontab && crond -f"
+  cron:
+    container_name: classix-cron
+    profiles:
+      - main
+    image: node:22-alpine
+    volumes:
+      - .:/app
+    command: sh -c "crontab /app/etc/crontab && crond -f"
 
 volumes:
-    classix-data:
-        name: classix-data
+  classix-data:
+    name: classix-data
 
 networks:
-    default:
-        name: coinflipper
+  default:
+    name: coinflipper
