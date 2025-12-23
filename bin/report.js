@@ -6,7 +6,7 @@ var dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.MONGODB_URI);
 
 var Team = require('../models/Team');
 var User = require('../models/User');
