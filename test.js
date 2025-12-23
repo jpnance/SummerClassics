@@ -81,6 +81,10 @@ const mockResponse = () => {
 		fulfill(data);
 	};
 
+	response.sendStatus = (code) => {
+		response.status(code).send('Unknown error');
+	};
+
 	response.status = (code) => {
 		if ([400, 404, 500].includes(code)) {
 			return {
