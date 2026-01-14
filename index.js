@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+var { attachSession } = require('./auth/middleware');
+app.use(attachSession);
+
 var router = express.Router();
 
 /*

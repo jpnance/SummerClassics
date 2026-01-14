@@ -89,3 +89,11 @@ html(lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml')
 
 		div.container.pb-3
 			block content
+
+		div#modal.modal.fade
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						h5.modal-title Error
+						button.close(type='button' data-dismiss='modal'): span &times;
+					div.modal-body Default error message

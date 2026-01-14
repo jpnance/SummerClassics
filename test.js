@@ -10,7 +10,6 @@ const Game = require('./models/Game');
 const Notification = require('./models/Notification');
 const Player = require('./models/Player');
 const Projection = require('./models/Projection');
-const Session = require('./models/Session');
 const Status = require('./models/Status');
 const Team = require('./models/Team');
 const User = require('./models/User');
@@ -42,12 +41,15 @@ Game.prototype.syncWithApi = function() {
 	return Promise.resolve(this);
 };
 
+let currentSession = null;
+
 const mockRequest = (data) => {
 	const request = {
 		body: {},
 		cookies: {},
 		headers: {},
-		params: {}
+		params: {},
+		session: currentSession
 	};
 
 	Object.assign(request, data);
@@ -98,12 +100,6 @@ const mockResponse = () => {
 	return response;
 };
 
-const mockWithActiveSession = (user) => {
-	return (request, callback) => {
-		callback(null, { user: user });
-	};
-};
-
 const resetDatabase = Promise.all([
 	Classic.collection.drop(),
 	Game.collection.drop(),
@@ -115,10 +111,12 @@ const resetDatabase = Promise.all([
 	User.collection.drop(),
 ]);
 
-const resetWithActiveSession = () => {
-	Session.withActiveSession = mockWithActiveSession({
-		admin: true,
-	});
+const setAdminSession = () => {
+	currentSession = {
+		user: {
+			admin: true,
+		}
+	};
 };
 
 const seedTeamData = () => {
@@ -188,9 +186,10 @@ const createDefaultUser = () => {
 
 const logInAsDefaultUser = () => {
 	return User.findOne({ username: 'patrick-nance' }).then((user) => {
-		Session.withActiveSession = mockWithActiveSession({
-			_id: user._id
-		});
+		currentSession = {
+			username: user.username,
+			user: user
+		};
 	});
 };
 
@@ -276,7 +275,7 @@ const test = (testFunction, description) => {
 
 function testHappyPath() {
 	return resetDatabase
-		.then(resetWithActiveSession)
+		.then(setAdminSession)
 		.then(seedTeamData)
 		.then(seedScheduleData)
 		.then(createDefaultUser)
@@ -291,7 +290,7 @@ function testHappyPath() {
 
 function testStandingsPage() {
 	return resetDatabase
-		.then(resetWithActiveSession)
+		.then(setAdminSession)
 		.then(createDefaultUser)
 		.then(logInAsDefaultUser)
 		.then(visitStandingsPage);
