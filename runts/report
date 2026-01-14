@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -it classix-cron node /app/bin/report.js

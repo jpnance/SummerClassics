@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -it -e FINALIZE=true classix-cron node /app/bin/games.js
