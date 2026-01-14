@@ -1,0 +1,6 @@
+#!/bin/bash
+
+container="classix-mongo"
+db="classix"
+
+docker exec -it ${container} mongosh ${db}
