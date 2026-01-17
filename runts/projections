@@ -1,3 +1,2 @@
 #!/bin/bash
-
-docker exec -it classix-cron node /app/bin/projections.js
+docker compose run --rm web node bin/projections.js

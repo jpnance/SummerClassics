@@ -1,3 +1,2 @@
 #!/bin/bash
-
-docker exec -it classix-cron node /app/bin/schedule.js
+docker compose run --rm web node bin/schedule.js

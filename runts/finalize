@@ -1,3 +1,2 @@
 #!/bin/bash
-
-docker exec -it -e FINALIZE=true classix-cron node /app/bin/games.js
+docker compose run --rm -e FINALIZE=true web node bin/games.js
