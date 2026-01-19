@@ -18,17 +18,6 @@ app.use(attachSession);
 
 var router = express.Router();
 
-/*
-router.use(function(request, response, next) {
-	if (request.path != '/preview' && (!request.cookies.gateKey || request.cookies.gateKey != process.env.GATE_KEY)) {
-		response.render('gate');
-	}
-	else {
-		next();
-	}
-});
-*/
-
 app.use(router);
 
 app.set('view engine', 'pug');

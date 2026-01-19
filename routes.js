@@ -24,13 +24,6 @@ var stringCompare = function(a, b) {
 module.exports = function(app) {
 	app.get('/', schedule.showAllForDate);
 
-	app.get('/preview', function(request, response) {
-		response.cookie('gateKey', process.env.GATE_KEY).redirect('/');
-	});
-	app.get('/unpreview', function(request, response) {
-		response.clearCookie('gateKey').redirect('/');
-	});
-
 	app.get('/login', users.loginPrompt);
 
 	app.get('/users', requireAdmin, users.showAll);
