@@ -1,3 +1,4 @@
+slug: classix
 domain: classix.coinflipper.org
 port: 9895
 type: node
@@ -10,6 +11,9 @@ up_cmd: "docker compose up -d"
 
 # For backups (omit to skip backups)
 backup_cmd: "docker exec classix-mongo mongodump --archive --gzip > ~/backups/classix/classix.gz"
+
+# For metadata generation (used with monotonic alerting)
+mongo_container: classix-mongo
 
 # Mongo-specific: collections that should never shrink (for alerting)
 # Only relevant if backup_cmd does a mongodump
