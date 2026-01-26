@@ -13,34 +13,39 @@ async function attachSession(request, response, next) {
 		return next();
 	}
 
-	var sessionResponse = await apiRequest
-		.post(process.env.LOGIN_SERVICE_INTERNAL + '/sessions/retrieve')
-		.send({ key: request.cookies.sessionKey });
+	try {
+		var sessionResponse = await apiRequest
+			.post(process.env.LOGIN_SERVICE_INTERNAL + '/sessions/retrieve')
+			.send({ key: request.cookies.sessionKey });
 
-	if (sessionResponse.body?.user) {
-		var user = await User.findOne({
-			username: sessionResponse.body.user.username
-		}).populate({
-			path: 'notifications',
-			match: { read: false },
-			populate: [
-				{
-					path: 'game',
-					populate: [
-						{ path: 'away.team' },
-						{ path: 'home.team' }
-					],
-				},
-				{
-					path: 'classic',
-					populate: { path: 'team' }
-				},
-			]
-		});
+		if (sessionResponse.body?.user) {
+			var user = await User.findOne({
+				username: sessionResponse.body.user.username
+			}).populate({
+				path: 'notifications',
+				match: { read: false },
+				populate: [
+					{
+						path: 'game',
+						populate: [
+							{ path: 'away.team' },
+							{ path: 'home.team' }
+						],
+					},
+					{
+						path: 'classic',
+						populate: { path: 'team' }
+					},
+				]
+			});
 
-		if (user) {
-			request.session = { username: user.username, user: user };
+			if (user) {
+				request.session = { username: user.username, user: user };
+			}
 		}
+	} catch (err) {
+		// Log but don't crash - treat as unauthenticated
+		console.error('Auth service error:', err.message);
 	}
 
 	next();
