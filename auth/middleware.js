@@ -14,9 +14,16 @@ async function attachSession(request, response, next) {
 	}
 
 	try {
-		var sessionResponse = await apiRequest
+		var apiReq = apiRequest
 			.post(process.env.LOGIN_SERVICE_INTERNAL + '/sessions/retrieve')
 			.send({ key: request.cookies.sessionKey });
+
+		// In development, allow self-signed certificates for local login service
+		if (process.env.NODE_ENV === 'dev') {
+			apiReq.disableTLSCerts();
+		}
+
+		var sessionResponse = await apiReq;
 
 		if (sessionResponse.body?.user) {
 			var user = await User.findOne({
