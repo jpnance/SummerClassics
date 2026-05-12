@@ -185,7 +185,7 @@ gameSchema.methods.syncWithApi = function() {
 							}).catch(function() {
 								reject2('dunno sorry');
 							});
-						}).timeout({ response: 5000, deadline: 60000 }).retry(3);
+						});
 					}));
 				});
 			}
@@ -233,7 +233,7 @@ gameSchema.methods.syncWithApi = function() {
 			}).catch(function(error) {
 				console.log(error);
 			});
-		}).timeout({ response: 5000, deadline: 60000 }).retry(3);
+		});
 	});
 };
 
