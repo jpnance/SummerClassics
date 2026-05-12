@@ -11,7 +11,12 @@ mongoose.connect(process.env.MONGODB_URI);
 
 var startTime = (new Date()).toISOString();
 
-setInterval(coinflipperAlert.bind(null, `script that started at ${startTime} is taking a long time`), 60000);
+var alertInterval = setInterval(coinflipperAlert.bind(null, `script that started at ${startTime} is taking a long time`), 60000);
+
+var hardTimeout = setTimeout(async function() {
+	await coinflipperAlert(`script that started at ${startTime} timed out and was force-killed after 5 minutes`);
+	disconnectAndExit();
+}, 300000);
 
 console.log('----------')
 console.log(`starting games.js at ${startTime}`);
@@ -105,6 +110,9 @@ async function coinflipperAlert(message) {
 }
 
 function disconnectAndExit() {
+	clearInterval(alertInterval);
+	clearTimeout(hardTimeout);
+
 	console.log('----------')
 
 	mongoose.disconnect();
